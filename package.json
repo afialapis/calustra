@@ -1,0 +1,46 @@
+{
+  "name": "calustra",
+  "private": true,
+  "description": "Database to Web",
+  "author": "Donato Lorenzo <donato@afialapis.com>",
+  "contributors": [
+    "Donato Lorenzo <donato@afialapis.com>"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "conn:clean": "pnpm run clean --filter calustra-conn",
+    "conn:lint": "pnpm run lint --filter calustra-conn",
+    "conn:test": "pnpm run test --filter calustra-conn",
+    "conn:lib": "pnpm run lib --filter calustra-conn",
+    "conn:dist": "pnpm run dist --filter calustra-conn",
+    "conn:prepare": "pnpm run prepare --filter calustra-conn",
+
+    "orm:clean": "pnpm run clean --filter calustra-orm",
+    "orm:lint": "pnpm run lint --filter calustra-orm",
+    "orm:test": "pnpm run test --filter calustra-orm",
+    "orm:lib": "pnpm run lib --filter calustra-orm",
+    "orm:dist": "pnpm run dist --filter calustra-orm",
+    "orm:prepare": "pnpm run prepare --filter calustra-orm",
+    
+    "router:clean": "pnpm run clean --filter calustra-router",
+    "router:lint": "pnpm run lint --filter calustra-router",
+    "router:test": "pnpm run test --filter calustra-router",
+    "router:lib": "pnpm run lib --filter calustra-router",
+    "router:dist": "pnpm run dist --filter calustra-router",
+    "router:prepare": "pnpm run prepare --filter calustra-router",
+
+
+    "clean": "pnpm run conn:clean && pnpm run orm:clean && pnpm run router:clean",
+    "lint": "pnpm run conn:lint && pnpm run orm:lint && pnpm run router:lint",
+    "test": "pnpm run conn:test && pnpm run orm:test && pnpm run router:test",
+    "lib": "pnpm run conn:lib && pnpm run orm:lib && pnpm run router:lib",
+    "dist": "pnpm run conn:dist && pnpm run orm:dist && pnpm run router:dist",
+    "all:prepare": "pnpm run conn:prepare && pnpm run orm:prepare && pnpm run router:prepare",
+    "all:publish": "pnpm publish --filter calustra-conn && pnpm publish --filter calustra-orm && pnpm publish --filter calustra-router",
+
+    "purge": "pnpm run clean && rm -fr pnpm-lock.yaml node_modules packages/conn/node_modules packages/orm/node_modules packages/router/node_modules",
+    "reset": "pnpm run purge && pnpm i"
+  },
+  "devDependencies": {
+  }
+}

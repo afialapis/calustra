@@ -1,0 +1,23 @@
+# Thumbnails
+._*
+
+### IDE ###
+*.sublime-workspace
+*.sublime-project
+.vscode
+
+# npm
+node_modules
+.tmp
+npm-debug.log*
+**/.pnpm-debug.log
+
+# others
+**/dist
+**/lib
+**/issues
+**/codepen
+**/.npmignore
+**/TODO.lst
+**/.old
+**/test/bundle.js

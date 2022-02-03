@@ -1,0 +1,68 @@
+{
+  "name": "calustra-orm",
+  "version": "0.0.11",
+  "description": "A small ORM for those out there who still feel good typing some raw SQL",
+  "author": "Donato Lorenzo <donato@afialapis.com>",
+  "contributors": [
+    "Donato Lorenzo <donato@afialapis.com>"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afialapis/calustra.git",
+    "directory": "packages/orm"
+  },
+  "bugs": {
+    "url": "https://github.com/afialapis/calustra/issues"
+  },
+  "homepage": "https://calustra.afialapis.com/",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "main": "lib/index.js",
+  "cjs": "dist/calustra-orm.cjs.js",
+  "module": "dist/calustra-orm.es.js",
+  "scripts": {
+    "lint": "eslint src",
+
+    "test-clean": "rm -f test/bundle.js",
+    "test-build": "rollup -c rollup.test.js",
+    "test": "npm run test-clean && npm run test-build && ./node_modules/mocha/bin/mocha test/bundle.js",   
+
+    "lib-clean": "rm -rf lib && mkdir lib",
+    "lib-build": "babel src -d lib",
+    "lib": "npm run lib-clean && npm run lib-build",
+
+    "dist-clean": "rm -rf dist && mkdir dist",
+    "dist-build": "rollup -c",    
+    "dist": "npm run dist-clean && npm run dist-build",
+    
+    "clean": "npm run test-clean && npm run lib-clean && npm run dist-clean",
+    "prepare": "npm run lint && npm run test && npm run lib && npm run dist"
+  },
+  "keywords": [
+    "js",
+    "orm",
+    "sql"
+  ],
+  "dependencies": {
+    "calustra-conn": "workspace:../conn",
+    "intre": "^1.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/eslint-parser": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^21.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.5",
+    "@rollup/plugin-replace": "^3.0.0",
+    "eslint": "^7.6.0",
+    "mocha": "^9.1.3",
+    "rollup": "^2.58.0",
+    "rollup-plugin-node-externals": "^2.2.0",
+    "rollup-plugin-terser": "^7.0.2"    
+  }
+}
