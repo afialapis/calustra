@@ -1,6 +1,6 @@
 {
   "name": "calustra-conn",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "A DB connector",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [

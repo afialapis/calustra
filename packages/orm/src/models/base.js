@@ -110,7 +110,7 @@ class ModelBase extends ModelConfig {
 
     let allow= true
     if (this.config.triggers.beforeInsert != undefined) {
-      [params, options, allow]= await this.config.triggers.beforeInsert(params, options)
+      [params, options, allow]= await this.config.triggers.beforeInsert(this.db, params, options)
     }
 
     return Promise.resolve([
@@ -120,7 +120,7 @@ class ModelBase extends ModelConfig {
 
   async afterInsert(id, params, options) {
     if (this.config.triggers.afterInsert != undefined) {
-      id= await this.config.triggers.afterInsert(id, params, options)
+      id= await this.config.triggers.afterInsert(this.db, id, params, options)
     }
 
     return Promise.resolve(
@@ -164,7 +164,7 @@ class ModelBase extends ModelConfig {
 
     let allow= true
     if (this.config.triggers.beforeUpdate != undefined) {
-      [params, filter, options, allow]= await this.config.triggers.beforeUpdate(params, filter, options)
+      [params, filter, options, allow]= await this.config.triggers.beforeUpdate(this.db, params, filter, options)
     }
 
     return Promise.resolve([
@@ -175,7 +175,7 @@ class ModelBase extends ModelConfig {
 
   async afterUpdate(rows, params, filter, options) {
     if (this.config.triggers.afterUpdate != undefined) {
-      rows= await this.config.ustomHooks.afterUpdate(rows, params, filter, options)
+      rows= await this.config.ustomHooks.afterUpdate(this.db, rows, params, filter, options)
     }    
 
     return Promise.resolve(
@@ -233,7 +233,7 @@ class ModelBase extends ModelConfig {
     }
 
     if (this.config.triggers.beforeDelete != undefined) {
-      [filter, options, allow] = await this.config.triggers.beforeDelete(filter, options)
+      [filter, options, allow] = await this.config.triggers.beforeDelete(this.db, filter, options)
     }
 
     return Promise.resolve([
@@ -243,7 +243,7 @@ class ModelBase extends ModelConfig {
 
   async afterDelete(rows, filter, options) {
     if (this.config.triggers.afterDelete != undefined) {
-      rows = await this.config.triggers.afterDelete(rows, filter, options)
+      rows = await this.config.triggers.afterDelete(this.db, rows, filter, options)
     }
 
     return Promise.resolve(
