@@ -83,12 +83,15 @@ module.exports = [
     file: packageJSON.browser,
     format: 'umd',
     name: 'calustraQuery',
-    globals: {}
+    globals: {
+      'farrapa-colors': 'farrapaColors'
+    }
   }, false),
   baseCfg({
     file: minifyExtension(packageJSON.browser),
     format: 'umd',
     name: 'calustraQuery',
-    globals: {}
+    globals: {
+      'farrapa-colors': 'farrapaColors'}
   }, true)    
 ]
