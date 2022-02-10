@@ -5,7 +5,7 @@ class CalustraConnPG extends CalustraConnBase {
 
   constructor (config) {
     super(config)
-    this.db = getDb(config)
+    this.db = getDb(config, this.log)
     this.log.info(`Using database ${config?.connection?.database}`)
   }
 

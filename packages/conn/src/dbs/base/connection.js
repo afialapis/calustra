@@ -13,7 +13,8 @@ class CalustraConnBase {
       this.log= new Logger(options?.log || 'info')
     } else {
       this.log = options.log
-    }       
+    }
+    this.log.debug(`Initing connection: ${JSON.stringify(this.config.connection)}`)
   }
 
   get dialect() {
