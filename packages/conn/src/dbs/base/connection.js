@@ -14,7 +14,7 @@ class CalustraConnBase {
     } else {
       this.log = options.log
     }
-    this.log.debug(`Initing connection: ${JSON.stringify(this.config.connection)}`)
+    this.log.info(`Initing connection: ${JSON.stringify(this.config.connection)}`)
   }
 
   get dialect() {
@@ -44,7 +44,7 @@ class CalustraConnBase {
         const elapsed = parseFloat( (Date.now() - started) / 1000.0 ).toFixed(2)
         this.log.debug(this.formatQuery(query, values))
         const msg= msg_callback(data, elapsed)
-        this.log.verbose(msg)
+        this.log.info(msg)
       }
 
       return data
