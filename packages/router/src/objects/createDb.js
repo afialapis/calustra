@@ -1,6 +1,6 @@
 "use strict";
 
-import {getConnection} from 'calustra-conn'
+import {getConnection} from 'calustra'
 import isCalustraConn from '../util/isCalustraConn'
 
 function createDb(dbOrConfig) {

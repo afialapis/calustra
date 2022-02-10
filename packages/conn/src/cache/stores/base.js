@@ -6,19 +6,19 @@ class CacheStore {
   }
 
   hasItem(key) {
-    throw 'calustra-conn: CacheStore.hasItem() not implemented'
+    throw 'calustra: CacheStore.hasItem() not implemented'
   }
 
   setItem(key, value) {
-    throw 'calustra-conn: CacheStore.setItem() not implemented'
+    throw 'calustra: CacheStore.setItem() not implemented'
   }
 
   getItem(key) {
-    throw 'calustra-conn: CacheStore.getItem() not implemented'
+    throw 'calustra: CacheStore.getItem() not implemented'
   }
 
   unsetItem(key) {
-    throw 'calustra-conn: CacheStore.unsetItem() not implemented'
+    throw 'calustra: CacheStore.unsetItem() not implemented'
   }
 
   getOrSetItem(key, callback) {

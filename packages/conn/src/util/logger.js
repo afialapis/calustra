@@ -17,7 +17,7 @@ class Logger {
 
   _log(color, lvl, msg) {
     if (this.level>=lvl) {
-      console.log(color(`[calustra-conn] ${msg}`))
+      console.log(color(`[calustra] ${msg}`))
     }
   }
 

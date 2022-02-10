@@ -15,12 +15,12 @@
     "query:dist": "pnpm run dist --filter calustra-query",
     "query:prepare": "pnpm run prepare --filter calustra-query",
 
-    "conn:clean": "pnpm run clean --filter calustra-conn",
-    "conn:lint": "pnpm run lint --filter calustra-conn",
-    "conn:test": "pnpm run test --filter calustra-conn",
-    "conn:lib": "pnpm run lib --filter calustra-conn",
-    "conn:dist": "pnpm run dist --filter calustra-conn",
-    "conn:prepare": "pnpm run prepare --filter calustra-conn",
+    "conn:clean": "pnpm run clean --filter calustra",
+    "conn:lint": "pnpm run lint --filter calustra",
+    "conn:test": "pnpm run test --filter calustra",
+    "conn:lib": "pnpm run lib --filter calustra",
+    "conn:dist": "pnpm run dist --filter calustra",
+    "conn:prepare": "pnpm run prepare --filter calustra",
 
     "orm:clean": "pnpm run clean --filter calustra-orm",
     "orm:lint": "pnpm run lint --filter calustra-orm",
@@ -42,7 +42,7 @@
     "lib": "pnpm run query:lib && pnpm run conn:lib && pnpm run orm:lib && pnpm run router:lib",
     "dist": "pnpm run query:dist && pnpm run conn:dist && pnpm run orm:dist && pnpm run router:dist",
     "all:prepare": "pnpm run query:prepare && pnpm run conn:prepare && pnpm run orm:prepare && pnpm run router:prepare",
-    "all:publish": "pnpm publish --filter calustra-query && pnpm publish --filter calustra-conn && pnpm publish --filter calustra-orm && pnpm publish --filter calustra-router",
+    "all:publish": "pnpm publish --filter calustra-query && pnpm publish --filter calustra && pnpm publish --filter calustra-orm && pnpm publish --filter calustra-router",
 
     "purge": "pnpm run clean && rm -fr pnpm-lock.yaml node_modules packages/query/node_modules packages/conn/node_modules packages/orm/node_modules packages/router/node_modules",
     "reset": "pnpm run purge && pnpm i"

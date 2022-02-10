@@ -1,10 +1,10 @@
 
 
-![CalustraConn logo](https://calustra.afialapis.com/assets/images/logo/calustra-conn_name.png)
+![CalustraConn logo](https://calustra.afialapis.com/assets/images/logo/calustra_name.png)
 
-[![NPM Version](https://badge.fury.io/js/calustra-conn.svg)](https://www.npmjs.com/package/calustra-conn)
-[![Dependency Status](https://david-dm.org/afialapis/calustra-conn.svg)](https://david-dm.org/afialapis/calustra-conn)
-[![NPM Downloads](https://img.shields.io/npm/dm/calustra-conn.svg?style=flat)](https://www.npmjs.com/package/calustra-conn)
+[![NPM Version](https://badge.fury.io/js/calustra.svg)](https://www.npmjs.com/package/calustra)
+[![Dependency Status](https://david-dm.org/afialapis/calustra.svg)](https://david-dm.org/afialapis/calustra)
+[![NPM Downloads](https://img.shields.io/npm/dm/calustra.svg?style=flat)](https://www.npmjs.com/package/calustra)
 
 # Table of Contents
 
@@ -19,5 +19,5 @@
 # Install
 
 ```
-npm install calustra-conn --save-dev
+npm install calustra --save-dev
 ```

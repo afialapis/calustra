@@ -1,4 +1,4 @@
-import {getConnection} from 'calustra-conn'
+import {getConnection} from 'calustra'
 import router_test_prepare from './units/prepare'
 import router_test_start from './units/start'
 import router_test_fetch from './units/fetch'

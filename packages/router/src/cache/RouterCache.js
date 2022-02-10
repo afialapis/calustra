@@ -7,7 +7,7 @@ import cacheKey from './cacheKey'
 const _ROUTER_CACHE = {
   /*
     [db_key]: { 
-      'db': <calustra-conn>,
+      'db': <calustra>,
       'models': {
         [name]: <calustra-orm model>,
       }

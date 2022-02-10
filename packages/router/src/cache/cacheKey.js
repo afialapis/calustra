@@ -2,18 +2,18 @@
 import isCalustraConn from '../util/isCalustraConn'
 
 function _cacheKeyForConfigPostgres(config) {
-  return `dialect:postgres;host:${config.host};port:${config.port};database:${config.database}`
+  return `dialect:postgres;host:${config?.connection?.host};port:${config?.connection?.port};database:${config?.connection?.database}`
 }
 
 function _cacheKeyForConfigSqlite(config) {
-  return `dialect:sqlite;filename:${config.filename}`
+  return `dialect:sqlite;filename:${config?.connection?.filename}`
 }
 
 function _cacheKeyForConfig(config) {
-  if (config.dialect=='postgres') {
+  if (config?.connection?.dialect=='postgres') {
     return _cacheKeyForConfigPostgres(config)
   }
-  if (config.dialect=='sqlite') {
+  if (config?.connection?.dialect=='sqlite') {
     return _cacheKeyForConfigSqlite(config)
   }  
   return `no_dialect`

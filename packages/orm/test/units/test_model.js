@@ -1,5 +1,5 @@
 import assert from 'assert'
-import {getConnection} from 'calustra-conn'
+import {getConnection} from 'calustra'
 import {getModel} from '../../src/index'
 
 

@@ -6,7 +6,7 @@ import merge from '../../util/merge'
 function getDb (config, logger) {
   const conn = merge(defaults.connection, config?.connection || {})
 
-  const cache_key= `calustra-conn-${conn?.dialect}-${conn?.database}-${conn?.host}-${conn?.port}-${conn?.user}`
+  const cache_key= `calustra-${conn?.dialect}-${conn?.database}-${conn?.host}-${conn?.port}-${conn?.user}`
 
   logger.debug(`Connection will be cached as ${cache_key}`)
 
@@ -15,7 +15,7 @@ function getDb (config, logger) {
     const pgp = pgPromise()
     const db  = pgp(conn)
     
-    logger.verbose(db)
+    //logger.verbose(db)
 
     return db
   })

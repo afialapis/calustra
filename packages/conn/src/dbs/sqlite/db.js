@@ -27,7 +27,7 @@ function _initDb (config) {
 function getDb (config, logger) {
   const conn = merge(defaults.connection, config?.connection || {})
 
-  const cache_key= `calustra-conn-${conn?.dialect}-${conn?.filename}`
+  const cache_key= `calustra-${conn?.dialect}-${conn?.filename}`
 
   logger.debug(`Connection will be cached as ${cache_key}`)
 
