@@ -26,10 +26,10 @@ class ModelLT extends ModelBase {
 
     await this.db.execute(query, ivalues, options)
 
-    const ndata= this.db.selectOne('select last_insert_rowid() as last_id')
+    const ndata= await this.db.selectOne('select last_insert_rowid() as last_id')
     
     const id= await this.afterInsert(ndata.last_id, params, options)
-    
+
     if (id == null) {
       const msg = this.tablename + ': cannot save ' + JSON.stringify(data)
       this.db.log.error(msg)
