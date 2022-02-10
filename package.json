@@ -8,6 +8,13 @@
   ],
   "license": "MIT",
   "scripts": {
+    "query:clean": "pnpm run clean --filter calustra-query",
+    "query:lint": "pnpm run lint --filter calustra-query",
+    "query:test": "pnpm run test --filter calustra-query",
+    "query:lib": "pnpm run lib --filter calustra-query",
+    "query:dist": "pnpm run dist --filter calustra-query",
+    "query:prepare": "pnpm run prepare --filter calustra-query",
+
     "conn:clean": "pnpm run clean --filter calustra-conn",
     "conn:lint": "pnpm run lint --filter calustra-conn",
     "conn:test": "pnpm run test --filter calustra-conn",
@@ -29,16 +36,15 @@
     "router:dist": "pnpm run dist --filter calustra-router",
     "router:prepare": "pnpm run prepare --filter calustra-router",
 
+    "clean": "pnpm run query:clean && pnpm run conn:clean && pnpm run orm:clean && pnpm run router:clean",
+    "lint": "pnpm run query:lint && pnpm run conn:lint && pnpm run orm:lint && pnpm run router:lint",
+    "test": "pnpm run query:test && pnpm run conn:test && pnpm run orm:test && pnpm run router:test",
+    "lib": "pnpm run query:lib && pnpm run conn:lib && pnpm run orm:lib && pnpm run router:lib",
+    "dist": "pnpm run query:dist && pnpm run conn:dist && pnpm run orm:dist && pnpm run router:dist",
+    "all:prepare": "pnpm run query:prepare && pnpm run conn:prepare && pnpm run orm:prepare && pnpm run router:prepare",
+    "all:publish": "pnpm publish --filter calustra-query && pnpm publish --filter calustra-conn && pnpm publish --filter calustra-orm && pnpm publish --filter calustra-router",
 
-    "clean": "pnpm run conn:clean && pnpm run orm:clean && pnpm run router:clean",
-    "lint": "pnpm run conn:lint && pnpm run orm:lint && pnpm run router:lint",
-    "test": "pnpm run conn:test && pnpm run orm:test && pnpm run router:test",
-    "lib": "pnpm run conn:lib && pnpm run orm:lib && pnpm run router:lib",
-    "dist": "pnpm run conn:dist && pnpm run orm:dist && pnpm run router:dist",
-    "all:prepare": "pnpm run conn:prepare && pnpm run orm:prepare && pnpm run router:prepare",
-    "all:publish": "pnpm publish --filter calustra-conn && pnpm publish --filter calustra-orm && pnpm publish --filter calustra-router",
-
-    "purge": "pnpm run clean && rm -fr pnpm-lock.yaml node_modules packages/conn/node_modules packages/orm/node_modules packages/router/node_modules",
+    "purge": "pnpm run clean && rm -fr pnpm-lock.yaml node_modules packages/query/node_modules packages/conn/node_modules packages/orm/node_modules packages/router/node_modules",
     "reset": "pnpm run purge && pnpm i"
   },
   "devDependencies": {

@@ -4,7 +4,7 @@ import cache from '../../cache'
 import merge from '../../util/merge'
 
 function _initDb (config) {
-  const mconfig = merge(defaults, config)
+  const mconfig = merge(defaults.connection, config.connection)
   const pgp     = pgPromise()
   const db      = pgp(mconfig)
 
@@ -12,10 +12,11 @@ function _initDb (config) {
 }
 
 function getDb (config) {
-  const cache_key= JSON.stringify(config)
+  const conn = config?.connection || {}
+  const cache_key= `calustra-conn-${conn?.dialect}-${conn?.database}-${conn?.host}-${conn?.port}-${conn?.user}`
 
   const db= cache.getOrSetItem(cache_key, () => {
-    return _initDb (config)
+    return _initDb (conn)
   })
 
   return db

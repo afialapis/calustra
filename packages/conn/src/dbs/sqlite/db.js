@@ -4,7 +4,7 @@ import cache from '../../cache'
 import merge from '../../util/merge'
 
 function _initDb (config) {
-  const mconfig = merge(defaults, config)
+  const mconfig = merge(defaults.connection, config.connection)
 
   if (mconfig.verbose) {
     sqlite3.verbose()
@@ -27,10 +27,11 @@ function _initDb (config) {
 }
 
 function getDb (config) {
-  const cache_key= JSON.stringify(config)
+  const conn = config?.connection || {}
+  const cache_key= `calustra-conn-${conn?.dialect}-${conn?.filename}`
 
   const db= cache.getOrSetItem(cache_key, () => {
-    return _initDb (config)
+    return _initDb (conn)
   })
 
   return db

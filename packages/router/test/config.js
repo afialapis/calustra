@@ -1,18 +1,28 @@
 export default {
   db: {
     postgres: {
-      dialect:  'postgres',
-      host:     'localhost',
-      port:     5432,
-      database: 'calustra',
-      user:     'postgres',
-      password: 'postgres'
+      connection: {
+        dialect:  'postgres',
+        host:     'localhost',
+        port:     5432,
+        database: 'calustra',
+        user:     'postgres',
+        password: 'postgres'
+      },
+      options: {
+        log: 'warn'
+      }
     },
     sqlite: {
-      dialect:  'sqlite',
-      filename: '/tmp/calustra.router.sqlite',
-      verbose: true,
-      cached: true
+      connection: {
+        dialect:  'sqlite',
+        filename: '/tmp/calustra.router.sqlite',
+        verbose: true,
+        cached: true
+      },
+      options: {
+        log: 'warn'
+      }
     }
   },
   server: {
@@ -20,3 +30,4 @@ export default {
     url: '/api'
   }
 }
+

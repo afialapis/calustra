@@ -1,7 +1,7 @@
 {
-  "name": "calustra-router",
+  "name": "calustra-query",
   "version": "0.0.14",
-  "description": "A router",
+  "description": "some query parsing utils",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
     "Donato Lorenzo <donato@afialapis.com>"
@@ -9,7 +9,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/afialapis/calustra.git"
+    "url": "https://github.com/afialapis/calustra.git",
+    "directory": "packages/conn"
   },
   "bugs": {
     "url": "https://github.com/afialapis/calustra/issues"
@@ -20,8 +21,12 @@
     "dist"
   ],
   "main": "lib/index.js",
-  "cjs": "dist/calustra-router.cjs.js",
-  "module": "dist/calustra-router.es.js",
+  "publishConfig": {
+    "main": "lib/index.js"
+  },
+  "cjs": "dist/calustra-query.cjs.js",
+  "module": "dist/calustra-query.es.js",
+  "browser": "dist/calustra-query.umd.js",
   "scripts": {
     "lint": "eslint src",
 
@@ -46,9 +51,7 @@
     "sql"
   ],
   "dependencies": {
-    "calustra-conn": "workspace:../conn",
-    "calustra-orm": "workspace:../orm",
-    "koa-router": "10.1.1"
+    "farrapa-colors": "^1.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
@@ -60,11 +63,10 @@
     "@rollup/plugin-node-resolve": "^13.0.5",
     "@rollup/plugin-replace": "^3.0.0",
     "eslint": "^7.6.0",
-    "koa": "^2.13.3",
     "mocha": "^9.1.3",
-    "node-fetch": "^2.6.1",
     "rollup": "^2.58.0",
     "rollup-plugin-node-externals": "^2.2.0",
     "rollup-plugin-terser": "^7.0.2"    
   }
 }
+

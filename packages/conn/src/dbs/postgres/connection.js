@@ -3,9 +3,10 @@ import {getDb} from './db'
 
 class CalustraConnPG extends CalustraConnBase {
 
-  constructor (config, options) {
-    super(config, options)
+  constructor (config) {
+    super(config)
     this.db = getDb(config)
+    this.log.info(`Using database ${config?.connection?.database}`)
   }
 
   get dialect() {

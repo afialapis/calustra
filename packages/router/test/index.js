@@ -12,7 +12,7 @@ function _router_test_unit(db, server) {
 
   const conn= getConnection(db)
 
-  describe(`DiBiRouter: Prepare things for testing ${db.dialect}`, function() {
+  describe(`DiBiRouter: Prepare things for testing ${db.connection.dialect}`, function() {
     
     router_test_prepare (conn, data)
 

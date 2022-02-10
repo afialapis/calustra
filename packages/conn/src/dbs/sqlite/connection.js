@@ -5,9 +5,10 @@ import {getDb} from './db'
 
 class CalustraConnLT extends CalustraConnBase {
 
-  constructor (config, options) {
-    super(config, options)
+  constructor (config) {
+    super(config)
     this.db = getDb(config)
+    this.log.info(`Using database ${config?.connection?.filename}`)
   }
 
   get dialect() {

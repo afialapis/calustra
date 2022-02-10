@@ -1,10 +1,10 @@
-import { GRAY, CYAN, YELLOW, RED } from 'farrapa-colors'
+import { gray, cyan, yellow, red } from 'farrapa-colors'
 
 const KEYWORDS = {
-  'SELECT': GRAY,
-  'UPDATE': CYAN,
-  'INSERT': YELLOW,
-  'DELETE': RED,
+  'SELECT': gray,
+  'UPDATE': cyan,
+  'INSERT': yellow,
+  'DELETE': red,
 }
 
 const formatQuery = (qry, params) => {

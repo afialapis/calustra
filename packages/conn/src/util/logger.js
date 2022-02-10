@@ -1,4 +1,4 @@
-import {RED, LIGHT_RED, YELLOW, LIGHT_GREEN, LIGHT_BLUE, LIGHT_CYAN} from 'farrapa-colors'
+import {red, blue, cyan, magenta, yellow, gray} from 'farrapa-colors'
 
 const LEVELS= {
   none   : 0,
@@ -17,32 +17,32 @@ class Logger {
 
   _log(color, lvl, msg) {
     if (this.level>=lvl) {
-      console.log(color(msg))
+      console.log(color(`[calustra-conn] ${msg}`))
     }
   }
 
   silly(msg) {
-    this._log(LIGHT_CYAN, 6, msg)
+    this._log(gray, 6, msg)
   }
 
   debug(msg) {
-    this._log(LIGHT_BLUE, 5, msg)
+    this._log(magenta, 5, msg)
   }
 
   verbose(msg) {
-    this._log(LIGHT_GREEN, 4, msg)
+    this._log(cyan, 4, msg)
   }
 
   info(msg) {
-    this._log(YELLOW, 3, msg)
+    this._log(blue, 3, msg)
   }
 
   warn(msg) {
-    this._log(LIGHT_RED, 2, msg)
+    this._log(yellow, 2, msg)
   }
 
   error(msg) {
-    this._log(RED, 1, msg)
+    this._log(red, 1, msg)
   }
 }
 

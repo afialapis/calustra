@@ -1,14 +1,16 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "query|value|options|schema|tableName|^_" }]*/
 
-import formatQuery from '../../util/format'
+import {formatQuery, queryDescription} from 'calustra-query'
 import Logger       from '../../util/logger'
+
 
 class CalustraConnBase {
  
-  constructor (config, options) {
+  constructor (config) {
     this.config= config
+    const options = config?.options || {}
     if (options?.log==undefined || typeof options?.log == 'string') {
-      this.log= new Logger(options?.log)
+      this.log= new Logger(options?.log || 'info')
     } else {
       this.log = options.log
     }       
@@ -40,8 +42,8 @@ class CalustraConnBase {
       if (options?.log!==false) {
         const elapsed = parseFloat( (Date.now() - started) / 1000.0 ).toFixed(2)
         this.log.debug(this.formatQuery(query, values))
-        const msg= msg_callback(data)
-        this.log.debug(`${msg} (time: ${elapsed})`)
+        const msg= msg_callback(data, elapsed)
+        this.log.verbose(msg)
       }
 
       return data
@@ -61,7 +63,10 @@ class CalustraConnBase {
         const data = await callback()
         return data
       }, 
-      (_data) => 'Query done') 
+      (_data, time) => {
+        const desc= queryDescription(query, undefined, time)
+        return desc
+      })
   }
 
   async _executeAndCount (query, values, options, callback) {
@@ -72,7 +77,10 @@ class CalustraConnBase {
         return res
 
       }, 
-      (rows) => `Query done. ${rows} affected.`) 
+      (rows, time) => {
+        const desc= queryDescription(query, rows, time)
+        return desc
+      })      
   }  
 
   async _select (query, values, options, callback) {
@@ -84,7 +92,10 @@ class CalustraConnBase {
         return data
       }, 
 
-      (data) => `Returned ${data.length} rows`) 
+      (data, time) => {
+        const desc= queryDescription(query, data.length, time) 
+        return desc
+      }) 
 
   }
 

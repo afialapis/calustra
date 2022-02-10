@@ -1,19 +1,21 @@
 import CalustraConnPG from './postgres/connection'
 import CalustraConnLT from './sqlite/connection'
 
-function getConnection (config, options) {
+function getConnection (config) {
 
-  if (config.dialect == 'postgres') {
-    const conn= new CalustraConnPG(config, options)
+  const dialect = config?.connection?.dialect 
+
+  if (dialect == 'postgres') {
+    const conn= new CalustraConnPG(config)
     return conn
   }
 
-  if (config.dialect == 'sqlite') {
-    const conn= new CalustraConnLT(config, options)
+  if (dialect == 'sqlite') {
+    const conn= new CalustraConnLT(config)
     return conn
   }
 
-  throw `getConnection: ${config.dialect} is not a supported dialect`
+  throw `getConnection: ${dialect} is not a supported dialect`
 }
 
 

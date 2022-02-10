@@ -4,7 +4,7 @@ import {getConnection} from '../../src'
 function test_crud(config, data) {
   let conn= undefined
 
-  describe(`${config.dialect}: Test crud`, function() {
+  describe(`${config.connection.dialect}: Test crud`, function() {
 
     it('should create the database connection', function() {
       conn = getConnection(config)
