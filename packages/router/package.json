@@ -1,6 +1,6 @@
 {
   "name": "calustra-router",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "A router",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -42,8 +42,8 @@
     "sql"
   ],
   "dependencies": {
-    "calustra": "workspace:^0.0.18",
-    "calustra-orm": "workspace:^0.0.18",
+    "calustra": "workspace:../conn",
+    "calustra-orm": "workspace:../orm",
     "koa-router": "10.1.1"
   },
   "devDependencies": {

@@ -65,12 +65,18 @@ class RouterCache {
   }
 
   getModel(selector, tablename) {
-    const key= this._getKeyFor(selector)
+    const the_tablename = tablename!=undefined 
+      ? tablename
+      : selector
+    const the_selector = tablename!=undefined 
+    ? selector
+    : undefined
+    const key= this._getKeyFor(the_selector)
     if (key!=undefined) {
       try {
-        return _ROUTER_CACHE[key]['models'][tablename]
+        return _ROUTER_CACHE[key]['models'][the_tablename]
       } catch(e) {
-        console.error(`[calustra-router] Could not find model for ${tablename} in ${key}`)
+        console.error(`[calustra-router] Could not find model for ${the_tablename} in ${key}`)
       }
     }
 

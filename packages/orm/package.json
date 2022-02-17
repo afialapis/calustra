@@ -1,6 +1,6 @@
 {
   "name": "calustra-orm",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "A small ORM for those out there who still feel good typing some raw SQL",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -43,7 +43,7 @@
     "sql"
   ],
   "dependencies": {
-    "calustra": "workspace:^0.0.18",
+    "calustra": "workspace:../conn",
     "intre": "^1.0.3"
   },
   "devDependencies": {
