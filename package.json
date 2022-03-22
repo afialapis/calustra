@@ -14,28 +14,24 @@
     "query:lib": "pnpm run lib --filter calustra-query",
     "query:dist": "pnpm run dist --filter calustra-query",
     "query:prepare": "pnpm run prepare --filter calustra-query",
-
     "conn:clean": "pnpm run clean --filter ./packages/conn",
     "conn:lint": "pnpm run lint --filter ./packages/conn",
     "conn:test": "pnpm run test --filter ./packages/conn",
     "conn:lib": "pnpm run lib --filter ./packages/conn",
     "conn:dist": "pnpm run dist --filter ./packages/conn",
     "conn:prepare": "pnpm run prepare --filter ./packages/conn",
-
     "orm:clean": "pnpm run clean --filter calustra-orm",
     "orm:lint": "pnpm run lint --filter calustra-orm",
     "orm:test": "pnpm run test --filter calustra-orm",
     "orm:lib": "pnpm run lib --filter calustra-orm",
     "orm:dist": "pnpm run dist --filter calustra-orm",
     "orm:prepare": "pnpm run prepare --filter calustra-orm",
-    
     "router:clean": "pnpm run clean --filter calustra-router",
     "router:lint": "pnpm run lint --filter calustra-router",
     "router:test": "pnpm run test --filter calustra-router",
     "router:lib": "pnpm run lib --filter calustra-router",
     "router:dist": "pnpm run dist --filter calustra-router",
     "router:prepare": "pnpm run prepare --filter calustra-router",
-
     "clean": "pnpm run query:clean && pnpm run conn:clean && pnpm run orm:clean && pnpm run router:clean",
     "lint": "pnpm run query:lint && pnpm run conn:lint && pnpm run orm:lint && pnpm run router:lint",
     "test": "pnpm run query:test && pnpm run conn:test && pnpm run orm:test && pnpm run router:test",
@@ -43,10 +39,15 @@
     "dist": "pnpm run query:dist && pnpm run conn:dist && pnpm run orm:dist && pnpm run router:dist",
     "all:prepare": "pnpm run query:prepare && pnpm run conn:prepare && pnpm run orm:prepare && pnpm run router:prepare",
     "all:publish": "pnpm publish --filter calustra-query && pnpm publish --filter ./packages/conn && pnpm publish --filter calustra-orm && pnpm publish --filter calustra-router",
-
     "purge": "pnpm run clean && rm -fr pnpm-lock.yaml node_modules packages/query/node_modules packages/conn/node_modules packages/orm/node_modules packages/router/node_modules",
     "reset": "pnpm run purge && pnpm i"
   },
-  "devDependencies": {
+  "pnpm": {
+    "overrides": {
+      "tar@<4.4.18": ">=4.4.18",
+      "tar@<4.4.16": ">=4.4.16",
+      "tar@<3.2.2": ">=3.2.2",
+      "tar@<3.2.3": ">=3.2.3"
+    }
   }
 }

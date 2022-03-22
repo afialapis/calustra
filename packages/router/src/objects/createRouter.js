@@ -9,10 +9,20 @@ const _packBodyData = (data, body_field) => {
   }
 }
 
+const _def_get_uid = (ctx) => {
+  let uid= ctx.headers['user-id']
+  if (uid!=undefined) {
+    return uid
+  }
+  return undefined
+}
+
+
 const createRouter = (model, options) => {
   /*
     options: {
-      body_field: 'result'
+      body_field: 'result',
+      get_uid: (ctx) => <int>
     }
   */
 
@@ -20,6 +30,11 @@ const createRouter = (model, options) => {
     constructor() {
       this.name= model.tablename
       this.model= model
+    }
+
+    _get_uid(ctx) {
+      const call= options.get_uid || _def_get_uid
+      return call(ctx)
     }
 
     async read(ctx) {
@@ -55,7 +70,7 @@ const createRouter = (model, options) => {
     }
     
     async save(ctx) {
-      const uid = ctx.headers['user-id']
+      const uid = this._get_uid(ctx)
       const params = ctx.request.fields
       params.created_by = uid
       // TODO : handle transactions
@@ -65,7 +80,7 @@ const createRouter = (model, options) => {
     }
     
     async update(ctx) {
-      const uid = ctx.headers['user-id']
+      const uid = this._get_uid(ctx)
       const params = ctx.request.fields
       params.last_update_by = uid
       // TODO : handle transactions
@@ -75,7 +90,7 @@ const createRouter = (model, options) => {
     }
     
     async remove(ctx) {
-      //const uid = ctx.headers['user-id']
+      //const uid = this._get_uid(ctx)
       const params = ctx.request.fields
       // TODO : handle transactions
       const model_options= {transaction: undefined}    
