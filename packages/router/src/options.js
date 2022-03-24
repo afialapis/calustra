@@ -7,8 +7,12 @@ const DEFAULTS= {
     }
     return undefined
   },
-  require_user_id: false // applies to every route
-
+  auth: {
+    require: false,
+    action: 'redirect', // 'error'
+    redirect_path: '/',
+    error_code: 401
+  }
 }
 
 function makeOptions(options) {

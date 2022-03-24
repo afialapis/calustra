@@ -59,7 +59,7 @@ async function calustraRouter(dbOrConfig, tables= '*', prefix= '/api', schema= '
 
     // attah it to relative path for the table
     const tab_path = `${prefix}/${tab?.route || tab.name}`
-    calustra_router.attachTo(router,  tab_path, tab.require_user_id /*, ['find', 'key_list', 'remove']*/)    
+    calustra_router.attachTo(router,  tab_path, tab.auth /*, ['find', 'key_list', 'remove']*/)    
   })
 
   // Return the router

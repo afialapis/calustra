@@ -7,7 +7,12 @@
     name: "table_name",
     schema: "public", // optional
     route: "custom/url",
-    require_user_id: false, 
+    auth: {
+      require: false,
+      action: 'redirect', // 'error'
+      redirect_path: '/',
+      error_code: 401
+    },    
     options: {
       
       useCalustraRouterDates: true/false,
