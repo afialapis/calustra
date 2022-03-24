@@ -7,6 +7,7 @@
     name: "table_name",
     schema: "public", // optional
     route: "custom/url",
+    require_user_id: false, 
     options: {
       
       useCalustraRouterDates: true/false,

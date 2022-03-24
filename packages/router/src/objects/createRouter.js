@@ -9,20 +9,12 @@ const _packBodyData = (data, body_field) => {
   }
 }
 
-const _def_get_uid = (ctx) => {
-  let uid= ctx.headers['user-id']
-  if (uid!=undefined) {
-    return uid
-  }
-  return undefined
-}
-
-
 const createRouter = (model, options) => {
   /*
     options: {
       body_field: 'result',
-      get_uid: (ctx) => <int>
+      get_user_id: (ctx) => <int>,
+      require_user_id: false // applies to every route
     }
   */
 
@@ -32,12 +24,28 @@ const createRouter = (model, options) => {
       this.model= model
     }
 
-    _get_uid(ctx) {
-      const call= options.get_uid || _def_get_uid
+    _get_user_id(ctx) {
+      const call= options.get_user_id
       return call(ctx)
     }
 
-    async read(ctx) {
+    _check_auth(ctx, require_user_id) {
+      const check = (require_user_id===true) || (options.require_user_id === true)
+      if (check) {
+        const uid= this._get_user_id(ctx)
+        if (uid===undefined) {
+          this.model.db.log('Unauthorized access')
+          return ctx.throw(
+            401,
+            null,
+            {}
+          )
+        }
+      }
+    }
+
+    async read(ctx, require_user_id) {
+      this._check_auth(ctx, require_user_id)
       const params = queryStringToJson(ctx.request.url)
       // TODO : handle transactions
       const model_options= {transaction: undefined}
@@ -45,7 +53,8 @@ const createRouter = (model, options) => {
       ctx.body = _packBodyData(data, options.body_field)
     }
     
-    async key_list(ctx) {
+    async key_list(ctx, require_user_id) {
+      this._check_auth(ctx, require_user_id)
       // TODO : handle transactions
       const params = queryStringToJson(ctx.request.url)
       const model_options= {transaction: undefined}
@@ -53,7 +62,8 @@ const createRouter = (model, options) => {
       ctx.body = _packBodyData(data, options.body_field)
     }
     
-    async find(ctx) {    
+    async find(ctx, require_user_id) { 
+      this._check_auth(ctx, require_user_id)   
       const params = queryStringToJson(ctx.request.url)
       // TODO : handle transactions
       const model_options= {transaction: undefined}    
@@ -61,7 +71,8 @@ const createRouter = (model, options) => {
       ctx.body = _packBodyData(data, options.body_field)
     }
 
-    async distinct(ctx) {
+    async distinct(ctx, require_user_id) {
+      this._check_auth(ctx, require_user_id)
       const params = queryStringToJson(ctx.request.url)
       // TODO : handle transactions
       const model_options= {transaction: undefined}
@@ -69,8 +80,9 @@ const createRouter = (model, options) => {
       ctx.body = _packBodyData(data, options.body_field)
     }
     
-    async save(ctx) {
-      const uid = this._get_uid(ctx)
+    async save(ctx, require_user_id) {
+      this._check_auth(ctx, require_user_id)
+      const uid = this._get_user_id(ctx)
       const params = ctx.request.fields
       params.created_by = uid
       // TODO : handle transactions
@@ -79,8 +91,9 @@ const createRouter = (model, options) => {
       ctx.body= _packBodyData(data, options.body_field)
     }
     
-    async update(ctx) {
-      const uid = this._get_uid(ctx)
+    async update(ctx, require_user_id) {
+      this._check_auth(ctx, require_user_id)
+      const uid = this._get_user_id(ctx)
       const params = ctx.request.fields
       params.last_update_by = uid
       // TODO : handle transactions
@@ -89,8 +102,9 @@ const createRouter = (model, options) => {
       ctx.body= _packBodyData(data, options.body_field)
     }
     
-    async remove(ctx) {
-      //const uid = this._get_uid(ctx)
+    async remove(ctx, require_user_id) {
+      this._check_auth(ctx, require_user_id)
+      //const uid = this._get_user_id(ctx)
       const params = ctx.request.fields
       // TODO : handle transactions
       const model_options= {transaction: undefined}    
@@ -98,24 +112,24 @@ const createRouter = (model, options) => {
       ctx.body = _packBodyData(data, options.body_field)
     }
 
-    attachTo(router, path, avoid) {
+    attachTo(router, path, require_user_id, avoid) {
       if (avoid==undefined)
         avoid= []
       
       if (avoid.indexOf('find')<0) 
-        router.get (`${path}/find`     , ctx => this.find(ctx))
+        router.get (`${path}/find`     , (ctx) => this.find(ctx, require_user_id))
       if (avoid.indexOf('read')<0)
-        router.get (`${path}/read`     , ctx => this.read(ctx))
+        router.get (`${path}/read`     , (ctx) => this.read(ctx, require_user_id))
       if (avoid.indexOf('distinct')<0)
-        router.get (`${path}/distinct` , ctx => this.distinct(ctx))
+        router.get (`${path}/distinct` , (ctx) => this.distinct(ctx, require_user_id))
       if (avoid.indexOf('save')<0)
-        router.post(`${path}/save`     , ctx => this.save(ctx))
+        router.post(`${path}/save`     , (ctx) => this.save(ctx, require_user_id))
       if (avoid.indexOf('update')<0)
-        router.post(`${path}/update`   , ctx => this.update(ctx))
+        router.post(`${path}/update`   , (ctx) => this.update(ctx, require_user_id))
       if (avoid.indexOf('remove')<0)
-        router.post(`${path}/remove`   , (ctx) => this.remove(ctx))
+        router.post(`${path}/remove`   , (ctx) => this.remove(ctx, require_user_id))
       if (avoid.indexOf('key_list')<0)
-        router.get (`${path}/key_list` , (ctx) => this.key_list(ctx))    
+        router.get (`${path}/key_list` , (ctx) => this.key_list(ctx, require_user_id))
     }
     
   }
