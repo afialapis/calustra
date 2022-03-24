@@ -15,7 +15,7 @@ const createRouter = (model, options) => {
       body_field: 'result',
       get_user_id: (ctx) => <int>,
       auth: {
-        require: false,
+        require: false, // true / false / read-only
         action: 'redirect', // 'error'
         redirect_path: '/',
         error_code: 401
@@ -34,7 +34,7 @@ const createRouter = (model, options) => {
       return call(ctx)
     }
 
-    _check_auth(ctx, auth) {
+    _check_auth(ctx, auth, op) {
       const glob_auth= options.auth || {}
       const tab_auth= auth || {}
 
@@ -43,7 +43,9 @@ const createRouter = (model, options) => {
         ...tab_auth
       }
 
-      if (opt.require===true) {
+      const check= (opt.require===true) || (opt.require==='read-only' && op==='w')
+
+      if (check) {
         const uid= this._get_user_id(ctx)
         if (uid===undefined) {
 
@@ -65,7 +67,7 @@ const createRouter = (model, options) => {
     }
 
     async read(ctx, auth) {
-      this._check_auth(ctx, auth)
+      this._check_auth(ctx, auth, 'r')
       const params = queryStringToJson(ctx.request.url)
       // TODO : handle transactions
       const model_options= {transaction: undefined}
@@ -74,7 +76,7 @@ const createRouter = (model, options) => {
     }
     
     async key_list(ctx, auth) {
-      this._check_auth(ctx, auth)
+      this._check_auth(ctx, auth, 'r')
       // TODO : handle transactions
       const params = queryStringToJson(ctx.request.url)
       const model_options= {transaction: undefined}
@@ -83,7 +85,7 @@ const createRouter = (model, options) => {
     }
     
     async find(ctx, auth) { 
-      this._check_auth(ctx, auth)   
+      this._check_auth(ctx, auth, 'r')   
       const params = queryStringToJson(ctx.request.url)
       // TODO : handle transactions
       const model_options= {transaction: undefined}    
@@ -92,7 +94,7 @@ const createRouter = (model, options) => {
     }
 
     async distinct(ctx, auth) {
-      this._check_auth(ctx, auth)
+      this._check_auth(ctx, auth, 'r')
       const params = queryStringToJson(ctx.request.url)
       // TODO : handle transactions
       const model_options= {transaction: undefined}
@@ -101,7 +103,7 @@ const createRouter = (model, options) => {
     }
     
     async save(ctx, auth) {
-      this._check_auth(ctx, auth)
+      this._check_auth(ctx, auth, 'w')
       const uid = this._get_user_id(ctx)
       const params = ctx.request.fields
       params.created_by = uid
@@ -112,7 +114,7 @@ const createRouter = (model, options) => {
     }
     
     async update(ctx, auth) {
-      this._check_auth(ctx, auth)
+      this._check_auth(ctx, auth, 'w')
       const uid = this._get_user_id(ctx)
       const params = ctx.request.fields
       params.last_update_by = uid
@@ -123,7 +125,7 @@ const createRouter = (model, options) => {
     }
     
     async remove(ctx, auth) {
-      this._check_auth(ctx, auth)
+      this._check_auth(ctx, auth, 'w')
       //const uid = this._get_user_id(ctx)
       const params = ctx.request.fields
       // TODO : handle transactions

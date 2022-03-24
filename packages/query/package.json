@@ -1,6 +1,6 @@
 {
   "name": "calustra-query",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "some query parsing utils",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [

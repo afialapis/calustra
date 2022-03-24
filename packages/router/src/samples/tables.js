@@ -8,7 +8,7 @@
     schema: "public", // optional
     route: "custom/url",
     auth: {
-      require: false,
+      require: false,     // true / false / 'read-only'
       action: 'redirect', // 'error'
       redirect_path: '/',
       error_code: 401

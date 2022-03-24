@@ -8,7 +8,7 @@ const DEFAULTS= {
     return undefined
   },
   auth: {
-    require: false,
+    require: false,     // true / false / 'read-only'
     action: 'redirect', // 'error'
     redirect_path: '/',
     error_code: 401
