@@ -34,7 +34,7 @@ const createRouter = (model, options) => {
       if (check) {
         const uid= this._get_user_id(ctx)
         if (uid===undefined) {
-          this.model.db.log('Unauthorized access')
+          this.model.db.log.error('Unauthorized access')
           return ctx.throw(
             401,
             null,
