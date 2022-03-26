@@ -7,7 +7,9 @@ class CalustraConnLT extends CalustraConnBase {
 
   constructor (config) {
     super(config)
-    this.db = getDb(config, this.log)
+    const [db, uncache] = getDb(config, this.log)
+    this.db= db
+    this.uncache= uncache
     this.log.info(`Using database ${config?.connection?.filename}`)
   }
 
@@ -21,6 +23,7 @@ class CalustraConnLT extends CalustraConnBase {
 
   close () {
     this.db.close()
+    this.uncache()
   }
   
   

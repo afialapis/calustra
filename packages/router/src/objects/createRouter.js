@@ -1,23 +1,16 @@
 import queryStringToJson from '../util/queryStringToJson'
 
-const _packBodyData = (data, body_field) => {
-  if (body_field == undefined) {
-    return data
-  }
-  return {
-    [body_field]: data
-  }
-}
 
-const createRouter = (model, options) => {
+
+const createRouter = (model, router_options) => {
   /*
-    options: {
+    router_options: {
       body_field: 'result',
-      get_user_id: (ctx) => <int>,
-      auth: {
+      getUserId: (ctx) => <int>,
+      authUser: {
         require: false, // true / false / read-only
         action: 'redirect', // 'error'
-        redirect_path: '/',
+        redirect_url: '/',
         error_code: 401
       }            
     }
@@ -29,129 +22,184 @@ const createRouter = (model, options) => {
       this.model= model
     }
 
-    _get_user_id(ctx) {
-      const call= options.get_user_id
-      return call(ctx)
+    _packBodyData(data) {
+      const body_field= router_options?.body_field
+      if (body_field == undefined) {
+        return data
+      }
+      return {
+        [body_field]: data
+      }
     }
 
-    _check_auth(ctx, auth, op) {
-      const glob_auth= options.auth || {}
-      const tab_auth= auth || {}
 
-      const opt= {
-        ...glob_auth,
-        ...tab_auth
+
+    async _checkUserInfo(ctx, options, op, callback) {
+      /*
+        options is like:
+
+        useUserFields: {
+          use: false,
+          fieldnames: {
+            created_by: 'created_by', 
+            last_update_by: 'last_update_by'
+          },
+        },
+
+        getUserId: (ctx) => {
+          let uid= ctx.headers['user-id']
+          if (uid!=undefined) {
+            return uid
+          }
+          return undefined
+        },
+
+        authUser: {
+          require: false,     // true / false / 'read-only'
+          action: 'redirect', // 'error'
+          redirect_url: '/',
+          error_code: 401
+        },   
+        
+      */
+
+      const getUserId = options.getUserId || router_options.getUserId
+      const uid= getUserId(ctx)
+
+      const authUser = {
+        ...router_options.authUser,
+        ...options.authUser,
       }
+      const checkAuth= (authUser.require===true) || (authUser.require==='read-only' && op==='w')
 
-      const check= (opt.require===true) || (opt.require==='read-only' && op==='w')
+      if (checkAuth) {
 
-      if (check) {
-        const uid= this._get_user_id(ctx)
         if (uid===undefined) {
 
-          if (opt.action=='error') {
+          if (authUser.action=='error') {
             
-            this.model.db.log.error(`Unauthorized access. Throwing error ${opt.error_code}`)
-            return ctx.throw(
-              opt.error_code,
+            this.model.db.log.error(`Unauthorized access. Throwing error ${authUser.error_code}`)
+            ctx.throw(
+              authUser.error_code,
               null,
               {}
             )
-
           } else {
-            this.model.db.log.error(`Unauthorized access. Redirecting to ${opt.redirect_path}`)
-            ctx.redirect(opt.redirect_path)
+            this.model.db.log.error(`Unauthorized access. Redirecting to ${authUser.redirect_url}`)
+            ctx.redirect(authUser.redirect_url)
           }
         }
       }
+
+      let fieldnames= {}
+      if (options?.useUserFields?.use===true) {
+        fieldnames= options?.useUserFields?.fieldnames || {
+          created_by: 'created_by', 
+          last_update_by: 'last_update_by'
+        }
+      }
+
+      const uinfo= {
+        uid: uid,
+        fieldnames
+      }
+
+      await callback(uinfo)
     }
 
-    async read(ctx, auth) {
-      this._check_auth(ctx, auth, 'r')
-      const params = queryStringToJson(ctx.request.url)
-      // TODO : handle transactions
-      const model_options= {transaction: undefined}
-      const data = await this.model.read(params, model_options)
-      ctx.body = _packBodyData(data, options.body_field)
+    async read(ctx, options) {
+      await this._checkUserInfo(ctx, options, 'r', async (_uinfo) => {
+        const params = queryStringToJson(ctx.request.url)
+        // TODO : handle transactions
+        const model_options= {transaction: undefined}
+        const data = await this.model.read(params, model_options)
+        ctx.body = this._packBodyData(data)
+      })
     }
     
-    async key_list(ctx, auth) {
-      this._check_auth(ctx, auth, 'r')
-      // TODO : handle transactions
-      const params = queryStringToJson(ctx.request.url)
-      const model_options= {transaction: undefined}
-      const data = await this.model.keyList(params, model_options)    
-      ctx.body = _packBodyData(data, options.body_field)
+    async key_list(ctx, options) {
+      await this._checkUserInfo(ctx, options, 'r', async (_uinfo) => {
+        // TODO : handle transactions
+        const params = queryStringToJson(ctx.request.url)
+        const model_options= {transaction: undefined}
+        const data = await this.model.keyList(params, model_options)    
+        ctx.body = this._packBodyData(data)
+      })
     }
     
-    async find(ctx, auth) { 
-      this._check_auth(ctx, auth, 'r')   
-      const params = queryStringToJson(ctx.request.url)
-      // TODO : handle transactions
-      const model_options= {transaction: undefined}    
-      const data = await this.model.find(params.id, model_options)
-      ctx.body = _packBodyData(data, options.body_field)
+    async find(ctx, options) { 
+      await this._checkUserInfo(ctx, options, 'r', async (_uinfo) => {
+        const params = queryStringToJson(ctx.request.url)
+        // TODO : handle transactions
+        const model_options= {transaction: undefined}    
+        const data = await this.model.find(params.id, model_options)
+        ctx.body = this._packBodyData(data)
+      })
     }
 
-    async distinct(ctx, auth) {
-      this._check_auth(ctx, auth, 'r')
-      const params = queryStringToJson(ctx.request.url)
-      // TODO : handle transactions
-      const model_options= {transaction: undefined}
-      const data = await this.model.distinct(params.distinct_field, params, model_options)
-      ctx.body = _packBodyData(data, options.body_field)
+    async distinct(ctx, options) {
+      await this._checkUserInfo(ctx, options, 'r', async (_uinfo) => {
+        const params = queryStringToJson(ctx.request.url)
+        // TODO : handle transactions
+        const model_options= {transaction: undefined}
+        const data = await this.model.distinct(params.distinct_field, params, model_options)
+        ctx.body = this._packBodyData(data)
+      })
     }
     
-    async save(ctx, auth) {
-      this._check_auth(ctx, auth, 'w')
-      const uid = this._get_user_id(ctx)
-      const params = ctx.request.fields
-      params.created_by = uid
-      // TODO : handle transactions
-      const model_options= {transaction: undefined}
-      const data = await this.model.insert(params, model_options)
-      ctx.body= _packBodyData(data, options.body_field)
+    async save(ctx, options) {
+      await this._checkUserInfo(ctx, options, 'w', async (uinfo) => {
+        const params = ctx.request.fields
+        if (uinfo?.fieldnames?.created_by) {
+          params[uinfo.fieldnames.created_by] = uinfo.uid
+        }
+        // TODO : handle transactions
+        const model_options= {transaction: undefined}
+        const data = await this.model.insert(params, model_options)
+        ctx.body= this._packBodyData(data)
+      })
     }
     
-    async update(ctx, auth) {
-      this._check_auth(ctx, auth, 'w')
-      const uid = this._get_user_id(ctx)
-      const params = ctx.request.fields
-      params.last_update_by = uid
-      // TODO : handle transactions
-      const model_options= {transaction: undefined}    
-      const data = await this.model.update(params, {id: params.id}, model_options)
-      ctx.body= _packBodyData(data, options.body_field)
+    async update(ctx, options) {
+      await this._checkUserInfo(ctx, options, 'w', async (uinfo) => {
+        const params = ctx.request.fields
+        if (uinfo?.fieldnames?.last_update_by) {
+          params[uinfo.fieldnames.last_update_by] = uinfo.uid
+        }
+        // TODO : handle transactions
+        const model_options= {transaction: undefined}    
+        const data = await this.model.update(params, {id: params.id}, model_options)
+        ctx.body= this._packBodyData(data)
+      })
     }
     
-    async remove(ctx, auth) {
-      this._check_auth(ctx, auth, 'w')
-      //const uid = this._get_user_id(ctx)
-      const params = ctx.request.fields
-      // TODO : handle transactions
-      const model_options= {transaction: undefined}    
-      const data = await this.model.delete({id: params.id}, model_options)
-      ctx.body = _packBodyData(data, options.body_field)
+    async remove(ctx, options) {
+      await this._checkUserInfo(ctx, options, 'w', async (_uinfo) => {
+        const params = ctx.request.fields
+        // TODO : handle transactions
+        const model_options= {transaction: undefined}    
+        const data = await this.model.delete({id: params.id}, model_options)
+        ctx.body = this._packBodyData(data)
+      })
     }
 
-    attachTo(router, path, auth, avoid) {
-      if (avoid==undefined)
-        avoid= []
+    attachTo(router, path, options) {
+      const avoid = options?.avoid || []
       
       if (avoid.indexOf('find')<0) 
-        router.get (`${path}/find`     , (ctx) => this.find(ctx, auth))
+        router.get (`${path}/find`     , (ctx) => this.find(ctx, options))
       if (avoid.indexOf('read')<0)
-        router.get (`${path}/read`     , (ctx) => this.read(ctx, auth))
+        router.get (`${path}/read`     , (ctx) => this.read(ctx, options))
       if (avoid.indexOf('distinct')<0)
-        router.get (`${path}/distinct` , (ctx) => this.distinct(ctx, auth))
+        router.get (`${path}/distinct` , (ctx) => this.distinct(ctx, options))
       if (avoid.indexOf('save')<0)
-        router.post(`${path}/save`     , (ctx) => this.save(ctx, auth))
+        router.post(`${path}/save`     , (ctx) => this.save(ctx, options))
       if (avoid.indexOf('update')<0)
-        router.post(`${path}/update`   , (ctx) => this.update(ctx, auth))
+        router.post(`${path}/update`   , (ctx) => this.update(ctx, options))
       if (avoid.indexOf('remove')<0)
-        router.post(`${path}/remove`   , (ctx) => this.remove(ctx, auth))
+        router.post(`${path}/remove`   , (ctx) => this.remove(ctx, options))
       if (avoid.indexOf('key_list')<0)
-        router.get (`${path}/key_list` , (ctx) => this.key_list(ctx, auth))
+        router.get (`${path}/key_list` , (ctx) => this.key_list(ctx, options))
     }
     
   }

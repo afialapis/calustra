@@ -33,7 +33,7 @@ function getDb (config, logger) {
 
   const db= cache.getOrSetItem(cache_key, () => _initDb (conn))
 
-  return db
+  return [db, () => cache.unsetItem(cache_key)]
 }
 
 export {getDb}

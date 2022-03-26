@@ -1,9 +1,8 @@
 import Koa from 'koa'
-import config from './config'
 
 let server
 
-const start = (routes) => {
+const start = (config, routes) => {
 
   const app = new Koa()
 
@@ -11,7 +10,7 @@ const start = (routes) => {
     app.use(routes)
   }
 
-  server= app.listen(config.server.port, function () {
+  server= app.listen(config.port, function () {
     //console.info('Listening on port ' + config.server.port)
   })
 }

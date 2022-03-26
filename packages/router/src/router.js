@@ -1,66 +1,40 @@
 import Router    from 'koa-router'
 import {routerCache} from './cache'
-import {createDb} from './objects/createDb'
-import createModel from './objects/createModel'
-import createRouter from './objects/createRouter'
-import { makeOptions } from './options'
+import createOptions from './objects/createOptions'
+import createDb from './objects/createDb'
+import createCrudList from './objects/createCrudList'
+import createRoutesForCrud from './objects/createRoutesForCrud'
+import createRoutesForQueries from './objects/createRoutesForQueries'
 
 
-async function calustraRouter(dbOrConfig, tables= '*', prefix= '/api', schema= 'public', options) {
+async function calustraRouter(dbOrConfig, options) {
 
-  /*
-    options: {
-      body_field: 'result'
-    }
-  */
-
- const roptions= makeOptions(options)
+ const router_options= createOptions(options)
 
   // Init db object and cache it
   const db= createDb(dbOrConfig)
   routerCache.saveDb(db)
-    
-  // Build tableList depending on tables param
-  let tableList = []
-  if (tables==='*') {
-    const readFromDb= await db.getTableNames(schema)
-    tableList= readFromDb.map((t) => {
-      return {
-        name: t,
-        options: {}
-      }
-    })
-  } else if (typeof tables == 'string') {
-    tableList.push({name: tables, options: {}})
-  } else {
-    for (let tab of tables) {
-      if (typeof tab == 'string') {
-        tableList.push({name: tab, options: {}})
-      } else {
-        tableList.push(tab)
-      }
-    }
-  }
+
+
+  // Build crudList depending on tables param
+  const crudList = await createCrudList(db, router_options.crud, router_options.schema)
 
   // Init the Koa Router
   const router = new Router()
+  
+  // create models and routes for each table
+  const promises= crudList.map((table) => 
+    createRoutesForCrud(db, table, router, router_options)
+  )
 
-  const promises= tableList.map((tab) => createModel(db, tab.name, tab.options))
-
+  // read all models returned by createRoutesForCrud
   const models= await Promise.all(promises)
+  
+  // cache the models
+  models.map((model) => routerCache.saveModel(db, model.tablename, model))
 
-  models.map((model, idx) => {
-    const tab= tableList[idx]
-
-    routerCache.saveModel(db, tab.name, model)
-
-    // Create the router
-    const calustra_router= createRouter(model, roptions)
-
-    // attah it to relative path for the table
-    const tab_path = `${prefix}/${tab?.route || tab.name}`
-    calustra_router.attachTo(router,  tab_path, tab.auth /*, ['find', 'key_list', 'remove']*/)    
-  })
+  // create routes for queries
+  await createRoutesForQueries(db, router, router_options)
 
   // Return the router
   return router

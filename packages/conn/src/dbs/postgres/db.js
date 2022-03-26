@@ -20,7 +20,7 @@ function getDb (config, logger) {
     return db
   })
 
-  return db
+  return [db, () => cache.unsetItem(cache_key)]
 }
 
 export {getDb}

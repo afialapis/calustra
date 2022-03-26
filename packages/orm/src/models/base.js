@@ -104,7 +104,7 @@ class ModelBase extends ModelConfig {
   }
 
   async beforeInsert(params, options) {
-    if (this.useDatesOn) {
+    if (this.useDateFieldsOn) {
       params[this.datesCreatedField]= this.getNow()
     }
 
@@ -158,7 +158,7 @@ class ModelBase extends ModelConfig {
 
 
   async beforeUpdate(params, filter, options) {
-    if (this.useDatesOn) {
+    if (this.useDateFieldsOn) {
       params[this.datesUpdatedField]= this.getNow()
     }
 

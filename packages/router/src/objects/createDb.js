@@ -12,4 +12,4 @@ function createDb(dbOrConfig) {
   return db
 }
 
-export {createDb}
+export default createDb

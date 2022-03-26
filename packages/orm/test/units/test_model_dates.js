@@ -11,7 +11,7 @@ THEN ON ANOTHER TEST TRY CUSTOM HOOKS
 
 function test_model_dates(config, data) {
   const model_options= {
-    useDates: true
+    useDateFields: true
   }
   
   let conn= undefined, TestModel= undefined

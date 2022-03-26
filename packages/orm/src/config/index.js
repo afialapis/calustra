@@ -10,18 +10,18 @@ class ModelConfig {
     this.config     = {}
 
     this.config.triggers= options?.triggers || {}
-    this.config.checkBeforeDelete= options?.checkBeforeDelete
+    this.config.checkBeforeDelete= options?.checkBeforeDelete || false
 
     
-    let useDates= merge(defaults.useDates)
-    if (options?.useDates != undefined) {
-      if (typeof options.useDates == 'object') {
-        useDates= merge(defaults.useDates, options.useDates)
-      } else if (typeof options.useDates == 'boolean') {
-        useDates.use = options.useDates
+    let useDateFields= merge(defaults.useDateFields)
+    if (options?.useDateFields != undefined) {
+      if (typeof options.useDateFields == 'object') {
+        useDateFields= merge(defaults.useDateFields, options.useDateFields)
+      } else if (typeof options.useDateFields == 'boolean') {
+        useDateFields.use = options.useDateFields
       }
     }
-    this.config.useDates= useDates
+    this.config.useDateFields= useDateFields
     
   }
 
@@ -42,27 +42,27 @@ class ModelConfig {
     })
   }
 
-  get useDatesOn() {
-    return this.config.useDates.use===true
+  get useDateFieldsOn() {
+    return this.config.useDateFields.use===true
   }
 
   get datesCreatedField() {
-    if (this.useDatesOn) {
-      return this.config.useDates.fieldnames.created_at
+    if (this.useDateFieldsOn) {
+      return this.config.useDateFields.fieldnames.created_at
     }
     return undefined
   }
 
   get datesUpdatedField() {
-    if (this.useDatesOn) {
-      return this.config.useDates.fieldnames.last_update_at
+    if (this.useDateFieldsOn) {
+      return this.config.useDateFields.fieldnames.last_update_at
     }
     return undefined
   }  
   
   getNow() {
     try {
-      return this.config.useDates.now()
+      return this.config.useDateFields.now()
     } catch(e) {
       return undefined
     }

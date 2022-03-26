@@ -5,7 +5,10 @@ class CalustraConnPG extends CalustraConnBase {
 
   constructor (config) {
     super(config)
-    this.db = getDb(config, this.log)
+    const [db, uncache] = getDb(config, this.log)
+    this.db= db
+    this.uncache= uncache
+
     this.log.info(`Using database ${config?.connection?.database}`)
   }
 
@@ -20,6 +23,7 @@ class CalustraConnPG extends CalustraConnBase {
   close () {
     // Gotta do nothing if we use .query() ?
     this.db.$pool.end()
+    this.uncache()
   }
 
   async execute (query, values, options) {

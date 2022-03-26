@@ -24,7 +24,7 @@ class CacheStore {
   getOrSetItem(key, callback) {
     if (! this.hasItem(key)) {
       const value= callback()
-      this.setItem(value)
+      this.setItem(key, value)
       return value
     }
 

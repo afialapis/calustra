@@ -20,7 +20,7 @@ class CacheRawStore extends CacheSore {
 
   unsetItem(key) {
     if (this.hasItem(key)) {
-      delete this._cache.key
+      delete this._cache[key]
     }
   }
 }

@@ -2,20 +2,48 @@
   
   "table_name",
 
-
   {
     name: "table_name",
     schema: "public", // optional
     route: "custom/url",
-    auth: {
-      require: false,     // true / false / 'read-only'
-      action: 'redirect', // 'error'
-      redirect_path: '/',
-      error_code: 401
-    },    
+
     options: {
-      
-      useCalustraRouterDates: true/false,
+
+      avoid: ['find', 'key_list', 'remove'],
+
+      useUserFields: {
+        use: false,
+        fieldnames: {
+          created_by: 'created_by', 
+          last_update_by: 'last_update_by'
+        },
+      },
+
+      getUserId: (ctx) => {
+        let uid= ctx.headers['user-id']
+        if (uid!=undefined) {
+          return uid
+        }
+        return undefined
+      },
+
+      authUser: {
+        require: false,     // true / false / 'read-only'
+        action: 'redirect', // 'error'
+        redirect_url: '/',
+        error_code: 401
+      },   
+
+      // calustra-orm options
+
+      useDateFields: {
+        use: false,
+        fieldnames: {
+          created_at: 'created_at', 
+          last_update_at: 'last_update_at'
+        },
+        now: () => 0 // epoch_now()
+      },
 
       checkBeforeDelete: [
         "another_table.field_id"
@@ -32,8 +60,7 @@
 
         beforeDelete : undefined,
         afterDelete  : undefined
-      },
-
+      }
     }
   }
 
