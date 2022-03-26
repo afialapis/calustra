@@ -24,7 +24,7 @@ async function calustraRouter(dbOrConfig, options) {
   
   // create models and routes for each table
   const promises= crudList.map((table) => 
-    createRoutesForCrud(db, table, router, router_options)
+    createRoutesForCrud(db, table, router, router_options, db.log)
   )
 
   // read all models returned by createRoutesForCrud
@@ -34,7 +34,7 @@ async function calustraRouter(dbOrConfig, options) {
   models.map((model) => routerCache.saveModel(db, model.tablename, model))
 
   // create routes for queries
-  await createRoutesForQueries(db, router, router_options)
+  await createRoutesForQueries(db, router, router_options, db.log)
 
   // Return the router
   return router

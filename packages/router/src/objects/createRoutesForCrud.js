@@ -2,7 +2,7 @@ import queryStringToJson from '../util/queryStringToJson'
 import createModel from './createModel'
 
 
-async function createRoutesForCrud(db, table, router, router_options) {
+async function createRoutesForCrud(db, table, router, router_options, logger) {
   /*
     router_options: {
       body_field: 'result',
@@ -71,14 +71,14 @@ async function createRoutesForCrud(db, table, router, router_options) {
 
         if (authUser.action=='error') {
           
-          model.db.log.error(`Unauthorized access. Throwing error ${authUser.error_code}`)
+          logger.error(`Unauthorized access. Throwing error ${authUser.error_code}`)
           ctx.throw(
             authUser.error_code,
             null,
             {}
           )
         } else {
-          model.db.log.error(`Unauthorized access. Redirecting to ${authUser.redirect_url}`)
+          logger.error(`Unauthorized access. Redirecting to ${authUser.redirect_url}`)
           ctx.redirect(authUser.redirect_url)
         }
       }

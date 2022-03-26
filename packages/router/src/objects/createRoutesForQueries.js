@@ -1,4 +1,4 @@
-async function createRoutesForQueries(db, router, router_options) {
+async function createRoutesForQueries(db, router, router_options, logger) {
   /*
     queries is a list of [{
     
@@ -30,12 +30,14 @@ async function createRoutesForQueries(db, router, router_options) {
       if (uid===undefined) {
 
         if (authUser.action=='error') {
+          logger.error(`Unauthorized access. Throwing error ${authUser.error_code}`)
           return ctx.throw(
             authUser.error_code,
             null,
             {}
           )
         } else {
+          logger.error(`Unauthorized access. Redirecting to ${authUser.redirect_url}`)
           return ctx.redirect(authUser.redirect_url)
         }
       }

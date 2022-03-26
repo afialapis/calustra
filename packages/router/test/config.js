@@ -73,23 +73,27 @@ export default {
         }
       }]
     },
-    /*
+    
     with_auth_queries: {
       prefix: '/all',
       tables: '*',
       schema: 'public',
       body_field: undefined,
-      queries: [{
-        url: 'query/one',
+      queries: [
+      {
+        url: '/query/one',
         method: 'GET',
-        callback: (ctx, db) => {},
+        callback: (_ctx, _db) => {},
         authUser: {
           require: true,
           action: 'redirect',
           redirect_url: '/'
-        },          
+        },   
+        _test_check: async (response, assert) => {
+          assert.strictEqual(response.status, 404)
+        }       
       }]
-    }, */  
+    },  
   }
 }
 
