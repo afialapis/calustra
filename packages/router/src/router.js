@@ -17,14 +17,14 @@ async function calustraRouter(dbOrConfig, options) {
 
 
   // Build crudList depending on tables param
-  const crudList = await createCrudList(db, router_options.crud, router_options.schema)
+  const crudList = await createCrudList(db, router_options.crud.routes, router_options.schema)
 
   // Init the Koa Router
   const router = new Router()
   
   // create models and routes for each table
   const promises= crudList.map((table) => 
-    createRoutesForCrud(db, table, router, router_options, db.log)
+    createRoutesForCrud(db, table, router, router_options.crud.prefix, router_options, db.log)
   )
 
   // read all models returned by createRoutesForCrud

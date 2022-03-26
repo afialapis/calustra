@@ -1,7 +1,7 @@
-async function createCrudList(db, crud, schema= 'public') {
+async function createCrudList(db, routes, schema= 'public') {
   // Build crudList depending on crud param
   let crudList = []
-  if (crud==='*') {
+  if (routes==='*') {
     const readFromDb= await db.getTableNames(schema)
     crudList= readFromDb.map((t) => {
       return {
@@ -9,10 +9,10 @@ async function createCrudList(db, crud, schema= 'public') {
         options: {}
       }
     })
-  } else if (typeof crud == 'string') {
-    crudList.push({name: crud, options: {}})
+  } else if (typeof routes == 'string') {
+    crudList.push({name: routes, options: {}})
   } else {
-    for (let tab of crud) {
+    for (let tab of routes) {
       if (typeof tab == 'string') {
         crudList.push({name: tab, options: {}})
       } else {

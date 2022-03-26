@@ -1,29 +1,33 @@
 async function createRoutesForQueries(db, router, router_options, logger) {
   /*
-    queries is a list of [{
-    
-      url: '/crud/todos/fake',
-      method: 'POST',
-      callback: q_todos_insert_fake,
-      authUser: {
-        require: true,
-        action: 'redirect',
-        redirect_url: '/'
-      },         
-    
-    }]
+    router_options.queries
+    {
+      prefix: '',
+      routes: a list of [{
+      
+        url: '/crud/todos/fake',
+        method: 'POST',
+        callback: q_todos_insert_fake,
+        authUser: {
+          require: true,
+          action: 'redirect',
+          redirect_url: '/'
+        },         
+      
+      }]
+    }
   */
 
-  const _query_callback = async (ctx, query) => {
-    const getUserId = query?.getUserId || router_options.getUserId
+  const _route_callback = async (ctx, route) => {
+    const getUserId = route?.getUserId || router_options.getUserId
     const uid= getUserId(ctx)
 
     const authUser = {
       require: false,
       ...router_options?.authUser || {},
-      ...query?.authUser || {},
+      ...route?.authUser || {},
     }
-    const checkAuth= (authUser.require===true) || (authUser.require==='read-only' && query.method==='POST')
+    const checkAuth= (authUser.require===true) || (authUser.require==='read-only' && route.method==='POST')
 
     if (checkAuth) {
 
@@ -43,24 +47,31 @@ async function createRoutesForQueries(db, router, router_options, logger) {
       }
     }
 
-    const result= await query.callback(ctx, db)
+    const result= await route.callback(ctx, db)
     return result
   }
 
   const queries= router_options?.queries
 
-  if (queries == undefined || queries.length==0) {
+  if (queries == undefined) {
     return
   }
 
-  queries.map(query => {
-    
-    const url = `${router_options.prefix}/${query.url}`.replace(/\/\//g, "/")
+  const routes = queries?.routes
+  if (routes == undefined || routes.length == 0) {
+    return
+  }
 
-    if (query.method == 'POST') {
-      router.post(url, (ctx) => _query_callback(ctx, query))
+  const prefix = queries?.prefix || ''
+
+  routes.map(route => {
+    
+    const url = `${prefix}/${route.url}`.replace(/\/\//g, "/")
+
+    if (route.method == 'POST') {
+      router.post(url, (ctx) => _route_callback(ctx, route))
     } else {
-      router.get(url, (ctx) => _query_callback(ctx, query))
+      router.get(url, (ctx) => _route_callback(ctx, route))
     }
 
   })

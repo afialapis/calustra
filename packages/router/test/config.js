@@ -35,64 +35,80 @@ export default {
   // calustra configs to be tested
   calustra: {
     simple: {
-      prefix: '/simple',
-      tables: ['test_01'],
-      schema: 'public',
-      body_field: undefined
-    },
-    all: {
-      prefix: '/all',
-      tables: '*',
-      schema: 'public',
-      body_field: 'rebody'
-    },
-    options: {
-      prefix: '/api',
-      tables: [{
-        name: "test_01",
-        schema: "public",
-      }],
-      schema: 'public',
-      body_field: undefined
-    },
-    with_noauth_queries: {
-      prefix: '/all',
-      tables: '*',
       schema: 'public',
       body_field: undefined,
-      queries: [{
-        url: '/query/one',
-        method: 'GET',
-        callback: async (ctx, db) => {
-          const res= await db.selectOne('select * from test_01 where name = $1', ['Peter'], {})
-          ctx.body= res
-        },
-        _test_check: async (response, assert) => {
-          const result = await response.json()
-          assert.strictEqual(result.name, 'Peter')
-        }
-      }]
+      crud: {
+        prefix: '/simple',
+        routes: ['test_01'],
+      }      
+    },
+    all: {
+      schema: 'public',
+      body_field: 'rebody',
+      crud: {
+        prefix: '/all',
+        routes: '*',
+      }
+    },
+    options: {
+      schema: 'public',
+      body_field: undefined,
+      crud: {
+        prefix: '/api',
+        routes: [{
+          name: "test_01",
+          schema: "public",
+        }],
+      }
+    },
+    with_noauth_queries: {
+      schema: 'public',
+      body_field: undefined,
+      crud: {      
+        prefix: '/all',
+        routes: '*',
+      },
+      queries: {
+        prefix: '',
+        routes: [{
+          url: '/query/one',
+          method: 'GET',
+          callback: async (ctx, db) => {
+            const res= await db.selectOne('select * from test_01 where name = $1', ['Peter'], {})
+            ctx.body= res
+          },
+          _test_check: async (response, assert) => {
+            const result = await response.json()
+            assert.strictEqual(result.name, 'Peter')
+          }
+        }]
+      }
     },
     
     with_auth_queries: {
-      prefix: '/all',
-      tables: '*',
       schema: 'public',
       body_field: undefined,
-      queries: [
-      {
-        url: '/query/one',
-        method: 'GET',
-        callback: (_ctx, _db) => {},
-        authUser: {
-          require: true,
-          action: 'redirect',
-          redirect_url: '/'
-        },   
-        _test_check: async (response, assert) => {
-          assert.strictEqual(response.status, 404)
-        }       
-      }]
+      crud: {      
+        prefix: '/all',
+        routes: '*',
+      },
+      queries: {
+        prefix: '',
+        routes: [
+          {
+            url: '/query/one',
+            method: 'GET',
+            callback: (_ctx, _db) => {},
+            authUser: {
+              require: true,
+              action: 'redirect',
+              redirect_url: '/'
+            },   
+            _test_check: async (response, assert) => {
+              assert.strictEqual(response.status, 404)
+            }       
+          }]
+      }
     },  
   }
 }

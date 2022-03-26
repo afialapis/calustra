@@ -2,7 +2,7 @@ import queryStringToJson from '../util/queryStringToJson'
 import createModel from './createModel'
 
 
-async function createRoutesForCrud(db, table, router, router_options, logger) {
+async function createRoutesForCrud(db, table, router, prefix, router_options, logger) {
   /*
     router_options: {
       body_field: 'result',
@@ -178,7 +178,7 @@ async function createRoutesForCrud(db, table, router, router_options, logger) {
 
 
 
-  const url = `${router_options.prefix}/${table?.url || table.name}`.replace(/\/\//g, "/")
+  const url = `${prefix}/${table?.url || table.name}`.replace(/\/\//g, "/")
   const avoid = table?.options?.avoid || []
   
   if (avoid.indexOf('find')<0) 

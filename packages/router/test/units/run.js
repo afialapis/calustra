@@ -17,7 +17,7 @@ function router_test_run (db, server, name, calustra) {
 
   it(`[RUN][${name}][FETCH] should fetch test_01 from crud (READ)`, async function() {
 
-    const url= `http://localhost:${server.port}${calustra.prefix}/test_01/read`
+    const url= `http://localhost:${server.port}${calustra.crud.prefix}/test_01/read`
     const response= await fetch(url)
     let result= await response.json()
     if (calustra.body_field != undefined) {
@@ -27,13 +27,13 @@ function router_test_run (db, server, name, calustra) {
 
   })
 
-  const queries= calustra?.queries || []
+  const queries= calustra?.queries?.routes || []
   if (queries.length>0) {
     const query= queries[0]
 
     it(`[RUN][${name}][FETCH] should fetch query on ${query.url}`, async function() {
       
-      const url= `http://localhost:${server.port}${calustra.prefix}${query.url}`
+      const url= `http://localhost:${server.port}${calustra.queries.prefix}${query.url}`
       const response= await fetch(url)
       await query._test_check(response, assert)
     })
