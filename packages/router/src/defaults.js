@@ -76,7 +76,10 @@ module.exports= {
    */
   crud: {
     prefix: '',
-    routes: '*'
+    routes: '*',
+    /*
+    authUser: {},
+    */
   },
   
   /**

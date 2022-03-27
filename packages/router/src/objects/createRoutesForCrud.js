@@ -2,7 +2,7 @@ import queryStringToJson from '../util/queryStringToJson'
 import createModel from './createModel'
 
 
-async function createRoutesForCrud(db, table, router, prefix, router_options, logger) {
+async function createRoutesForCrud(db, route, router, prefix, router_options, logger) {
   /*
     router_options: {
       body_field: 'result',
@@ -15,7 +15,7 @@ async function createRoutesForCrud(db, table, router, prefix, router_options, lo
       }            
     }
 
-    table.options is like:
+    route.options is like:
 
       useUserFields: {
         use: false,
@@ -41,7 +41,7 @@ async function createRoutesForCrud(db, table, router, prefix, router_options, lo
       },   
 
   */
-  const model= await createModel(db, table.name, table?.options || {})
+  const model= await createModel(db, route.name, route?.options || {})
       
   const _packBodyData = (data) => {
     const body_field= router_options?.body_field
@@ -55,13 +55,14 @@ async function createRoutesForCrud(db, table, router, prefix, router_options, lo
   
 
   const _checkUserInfo = async (ctx, op, callback) => {
-    const getUserId = table?.options?.getUserId || router_options.getUserId
+    const getUserId = route?.options?.getUserId || router_options.getUserId
     const uid= getUserId(ctx)
 
     const authUser = {
       require: false,
       ...router_options?.authUser || {},
-      ...table?.options?.authUser || {},
+      ...router_options?.crud?.authUser || {},
+      ...route?.options?.authUser || {},
     }
     const checkAuth= (authUser.require===true) || (authUser.require==='read-only' && op==='w')
 
@@ -85,8 +86,8 @@ async function createRoutesForCrud(db, table, router, prefix, router_options, lo
     }
 
     let fieldnames= {}
-    if (table?.options?.useUserFields?.use===true) {
-      fieldnames= table?.options?.useUserFields?.fieldnames || {
+    if (route?.options?.useUserFields?.use===true) {
+      fieldnames= route?.options?.useUserFields?.fieldnames || {
         created_by: 'created_by', 
         last_update_by: 'last_update_by'
       }
@@ -178,8 +179,8 @@ async function createRoutesForCrud(db, table, router, prefix, router_options, lo
 
 
 
-  const url = `${prefix}/${table?.url || table.name}`.replace(/\/\//g, "/")
-  const avoid = table?.options?.avoid || []
+  const url = `${prefix}/${route?.url || route.name}`.replace(/\/\//g, "/")
+  const avoid = route?.options?.avoid || []
   
   if (avoid.indexOf('find')<0) 
     router.get (`${url}/find`     , (ctx) => find(ctx))
