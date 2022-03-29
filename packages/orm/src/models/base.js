@@ -130,13 +130,16 @@ class ModelBase extends ModelConfig {
 
 
   async insert(data, poptions) {
+    if (data == undefined) {
+      throw Error(`[calustra] ${this.tablenanme}.insert() received data=undefined`)
+    }
 
     data= filterObj(data, this.fields)
 
     let [params, options, goon] = await this.beforeInsert(data, poptions)
 
     if (! goon)
-      return []
+      return undefined
     
     const [query, ivalues]= prepare_query_insert(this.tablename, this.fields, params, /*returning*/ true) 
 
@@ -175,7 +178,7 @@ class ModelBase extends ModelConfig {
 
   async afterUpdate(rows, params, filter, options) {
     if (this.config.triggers.afterUpdate != undefined) {
-      rows= await this.config.ustomHooks.afterUpdate(this.db, rows, params, filter, options)
+      rows= await this.config.triggers.afterUpdate(this.db, rows, params, filter, options)
     }    
 
     return Promise.resolve(
@@ -185,7 +188,10 @@ class ModelBase extends ModelConfig {
 
 
   async update(data, filt, poptions) {
-
+    if (data == undefined) {
+      throw Error(`[calustra] ${this.tablenanme}.insert() received data=undefined`)
+    }
+    
     data= filterObj(data, this.fields)
     delete data.id
 

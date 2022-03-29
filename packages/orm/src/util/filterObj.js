@@ -1,4 +1,8 @@
 export default (obj, onlyFields) => {
+  if (obj == undefined || onlyFields == undefined) {
+    return obj
+  }
+
   let out = {}
   
   Object.keys(obj)
