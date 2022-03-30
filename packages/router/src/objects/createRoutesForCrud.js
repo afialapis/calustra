@@ -179,7 +179,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
 
   const url = `${prefix}/${route?.url || route.name}`.replace(/\/\//g, "/")
 
-  logger.debug(`Routing table ${route.name} to ${url}`)
+  logger.info(`Routing table ${route.name} to ${url}`)
 
   const avoid = route?.options?.avoid || []
   
