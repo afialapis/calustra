@@ -1,16 +1,16 @@
 function _cacheKeyForConfigPostgres(config) {
-  return `dialect:postgres;host:${config?.connection?.host};port:${config?.connection?.port};database:${config?.connection?.database}`
+  return `dialect:postgres;host:${config?.db?.host};port:${config?.db?.port};database:${config?.db?.database}`
 }
 
 function _cacheKeyForConfigSqlite(config) {
-  return `dialect:sqlite;filename:${config?.connection?.filename}`
+  return `dialect:sqlite;filename:${config?.db?.filename}`
 }
 
 function _cacheKeyForConfig(config) {
-  if (config?.connection?.dialect=='postgres') {
+  if (config?.db?.dialect=='postgres') {
     return _cacheKeyForConfigPostgres(config)
   }
-  if (config?.connection?.dialect=='sqlite') {
+  if (config?.db?.dialect=='sqlite') {
     return _cacheKeyForConfigSqlite(config)
   }  
   return `no_dialect`
