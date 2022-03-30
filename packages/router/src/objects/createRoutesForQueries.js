@@ -68,7 +68,7 @@ async function createRoutesForQueries(connection, router, router_options, logger
     
     const url = `${prefix}/${route.url}`.replace(/\/\//g, "/")
 
-    logger.info(`Routing callback ${route.callback.constructor.name} to ${url}`)
+    logger.info(`Routing callback ${route.callback?.name || ''} to ${url}`)
 
     if (route.method == 'POST') {
       router.post(url, (ctx) => _route_callback(ctx, route))
