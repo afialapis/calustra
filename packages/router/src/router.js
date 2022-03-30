@@ -1,7 +1,8 @@
 import Router    from 'koa-router'
+import {getConnection} from 'calustra'
+
 import {routerCache} from './cache'
 import createOptions from './objects/createOptions'
-import createConnection from './objects/createConnection'
 import createCrudList from './objects/createCrudList'
 import createRoutesForCrud from './objects/createRoutesForCrud'
 import createRoutesForQueries from './objects/createRoutesForQueries'
@@ -12,7 +13,7 @@ async function calustraRouter(connOrConfig, options) {
  const router_options= createOptions(options)
 
   // Init connection object and cache it
-  const conn= createConnection(connOrConfig)
+  const conn= getConnection(connOrConfig)
   routerCache.saveConnection(conn)
 
 

@@ -1,6 +1,3 @@
-
-import isCalustraConn from '../util/isCalustraConn'
-
 function _cacheKeyForConfigPostgres(config) {
   return `dialect:postgres;host:${config?.connection?.host};port:${config?.connection?.port};database:${config?.connection?.database}`
 }
@@ -19,14 +16,8 @@ function _cacheKeyForConfig(config) {
   return `no_dialect`
 }
 
-function _cacheKeyForCalustraConn(conn) {
-  return _cacheKeyForConfig(conn.config)
-}
-
-function cacheKey(connOrConfig) {
-  const key = isCalustraConn(connOrConfig)
-    ? _cacheKeyForCalustraConn(connOrConfig)
-    : _cacheKeyForConfig(connOrConfig)
+function cacheKey(config) {
+  const key = _cacheKeyForConfig(config)
   return key
 }
 
