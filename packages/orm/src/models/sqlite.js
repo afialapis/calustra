@@ -3,8 +3,8 @@ import {filterObj} from '../util'
 import { prepare_query_insert} from '../query'
 
 class ModelLT extends ModelBase {
-  constructor(db, tablename, definition, options) {
-    super(db, tablename, definition, options)
+  constructor(conn, tablename, definition, options) {
+    super(conn, tablename, definition, options)
   }
 
 
@@ -24,18 +24,18 @@ class ModelLT extends ModelBase {
     
     const [query, ivalues]= prepare_query_insert(this.tablename, this.fields, params) 
 
-    await this.db.execute(query, ivalues, options)
+    await this.conn.execute(query, ivalues, options)
 
-    const ndata= await this.db.selectOne('select last_insert_rowid() as last_id')
+    const ndata= await this.conn.selectOne('select last_insert_rowid() as last_id')
     
     const id= await this.afterInsert(ndata.last_id, params, options)
 
     if (id == null) {
       const msg = this.tablename + ': cannot save ' + JSON.stringify(data)
-      this.db.log.error(msg)
+      this.conn.log.error(msg)
     } else {
       if (options?.log!==false) {
-        this.db.log.debug(`Created with Id ${id}`)
+        this.conn.log.debug(`Created with Id ${id}`)
       }
     }
 

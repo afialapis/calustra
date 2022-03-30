@@ -9,11 +9,7 @@ class CalustraConnPG extends CalustraConnBase {
     this.db= db
     this.uncache= uncache
 
-    this.log.info(`Using database ${config?.connection?.database}`)
-  }
-
-  get dialect() {
-    return 'postgres'
+    this.log.info(`Using database ${config?.db?.database}`)
   }
 
   openTransaction() {

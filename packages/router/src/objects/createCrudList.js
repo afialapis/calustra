@@ -1,9 +1,9 @@
-async function createCrudList(db, routes, schema= 'public') {
+async function createCrudList(connection, routes, schema= 'public') {
   // Build crudList depending on crud param
   let crudList = []
   if (routes==='*') {
-    const readFromDb= await db.getTableNames(schema)
-    crudList= readFromDb.map((t) => {
+    const readFromDatabase= await connection.getTableNames(schema)
+    crudList= readFromDatabase.map((t) => {
       return {
         name: t,
         options: {}

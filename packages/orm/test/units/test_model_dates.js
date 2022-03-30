@@ -16,7 +16,7 @@ function test_model_dates(config, data) {
   
   let conn= undefined, TestModel= undefined
 
-  describe(`CalustraOrm for ${config.connection.dialect}. Testing the model automatic dates`, function() {
+  describe(`CalustraOrm for ${config.db.dialect}. Testing the model automatic dates`, function() {
 
     it('should prepare the database for testing', async function() {
       conn = getConnection(config)

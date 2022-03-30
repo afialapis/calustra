@@ -1,8 +1,8 @@
 import ModelBase from './base'
 
 class ModelPG extends ModelBase {
-  constructor(db, tablename, definition, options) {
-    super(db, tablename, definition, options)
+  constructor(conn, tablename, definition, options) {
+    super(conn, tablename, definition, options)
   }
 }
 

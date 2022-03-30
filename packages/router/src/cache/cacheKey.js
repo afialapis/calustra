@@ -23,10 +23,10 @@ function _cacheKeyForCalustraConn(conn) {
   return _cacheKeyForConfig(conn.config)
 }
 
-function cacheKey(dbOrConfig) {
-  const key = isCalustraConn(dbOrConfig)
-    ? _cacheKeyForCalustraConn(dbOrConfig)
-    : _cacheKeyForConfig(dbOrConfig)
+function cacheKey(connOrConfig) {
+  const key = isCalustraConn(connOrConfig)
+    ? _cacheKeyForCalustraConn(connOrConfig)
+    : _cacheKeyForConfig(connOrConfig)
   return key
 }
 

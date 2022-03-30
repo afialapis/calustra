@@ -6,7 +6,7 @@ import {getModel} from '../../src/index'
 function test_model(config, data) { 
   let conn= undefined, TestModel= undefined
 
-  describe(`CalustraOrm for ${config.connection.dialect}. Testing the model`, function() {
+  describe(`CalustraOrm for ${config.db.dialect}. Testing the model`, function() {
 
     it('should prepare the database for testing', async function() {
       conn = getConnection(config)

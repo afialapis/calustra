@@ -1,7 +1,7 @@
 export default {
-  db: {
+  connections: {
     postgres: {
-      connection: {
+      db: {
         dialect:  'postgres',
         host:     'localhost',
         port:     5432,
@@ -9,20 +9,16 @@ export default {
         user:     'postgres',
         password: 'postgres'
       },
-      options: {
-        log: 'warn'
-      }
+      log: 'warn'
     },
     sqlite: {
-      connection: {
+      db: {
         dialect:  'sqlite',
         filename: '/tmp/calustra.router.sqlite',
         verbose: true,
         cached: false
       },
-      options: {
-        log: 'warn'
-      }
+      log: 'warn'
     }
   },
   server: {
@@ -73,8 +69,8 @@ export default {
         routes: [{
           url: '/query/one',
           method: 'GET',
-          callback: async (ctx, db) => {
-            const res= await db.selectOne('select * from test_01 where name = $1', ['Peter'], {})
+          callback: async (ctx, connection) => {
+            const res= await connection.selectOne('select * from test_01 where name = $1', ['Peter'], {})
             ctx.body= res
           },
           _test_check: async (response, assert) => {
@@ -98,7 +94,7 @@ export default {
           {
             url: '/query/one',
             method: 'GET',
-            callback: (_ctx, _db) => {},
+            callback: (_ctx, _connection) => {},
             authUser: {
               require: true,
               action: 'redirect',

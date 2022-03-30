@@ -6,7 +6,7 @@ module.exports= {
     {
       prefix: '/crud,
       routes: Can be:
-        '*' => autodetect and create routes for every table on the db
+        '*' => autodetect and create routes for every table on the daabase
         or
         an array of tables config, where each config can be:
         - a simple string with the table name

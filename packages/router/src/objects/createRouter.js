@@ -78,14 +78,14 @@ const createRouter = (model, router_options) => {
 
           if (authUser.action=='error') {
             
-            this.model.db.log.error(`Unauthorized access. Throwing error ${authUser.error_code}`)
+            this.model.connection.log.error(`Unauthorized access. Throwing error ${authUser.error_code}`)
             ctx.throw(
               authUser.error_code,
               null,
               {}
             )
           } else {
-            this.model.db.log.error(`Unauthorized access. Redirecting to ${authUser.redirect_url}`)
+            this.model.connection.log.error(`Unauthorized access. Redirecting to ${authUser.redirect_url}`)
             ctx.redirect(authUser.redirect_url)
           }
         }

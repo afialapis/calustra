@@ -2,7 +2,7 @@ import queryStringToJson from '../util/queryStringToJson'
 import createModel from './createModel'
 
 
-async function createRoutesForCrud(db, route, router, prefix, router_options, logger) {
+async function createRoutesForCrud(connection, route, router, prefix, router_options, logger) {
   /*
     router_options: {
       body_field: 'result',
@@ -41,7 +41,7 @@ async function createRoutesForCrud(db, route, router, prefix, router_options, lo
       },   
 
   */
-  const model= await createModel(db, route.name, route?.options || {})
+  const model= await createModel(connection, route.name, route?.options || {})
       
   const _packBodyData = (data) => {
     const body_field= router_options?.body_field

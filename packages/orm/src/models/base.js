@@ -8,8 +8,8 @@ import { prepare_query_select,
 import {ModelConfig} from '../config'
 
 class ModelBase extends ModelConfig {
-  constructor(db, tablename, definition, options) {
-    super(db, tablename, definition, options)
+  constructor(conn, tablename, definition, options) {
+    super(conn, tablename, definition, options)
   }
 
   async beforeRead(filter, options) {
@@ -39,7 +39,7 @@ class ModelBase extends ModelConfig {
        /*limit*/ options?.limit, 
        /*offset*/ options?.offset)
 
-    let data= await this.db.select(query, values, options)
+    let data= await this.conn.select(query, values, options)
 
     this.ensureDefs(data)
 
@@ -75,9 +75,9 @@ class ModelBase extends ModelConfig {
     try {
       return data[0].cnt
     } catch(error) {
-      this.db.log.error(`${this.tablename} ERROR:`)
-      this.db.log.error(error.constructor.name)
-      this.db.log.error(error.stack)      
+      this.conn.log.error(`${this.tablename} ERROR:`)
+      this.conn.log.error(error.constructor.name)
+      this.conn.log.error(error.stack)      
     }
 
     return 0
@@ -87,7 +87,7 @@ class ModelBase extends ModelConfig {
   async find(id, options) {
     if (isNaN(id) || id <= 0) {    
       const msg = this.tablename + ': cannot find, invalid Id <' + id + '>'
-      this.db.log.error(msg)
+      this.conn.log.error(msg)
       throw new Error(msg)
     }
 
@@ -97,7 +97,7 @@ class ModelBase extends ModelConfig {
     if (Array.isArray(data)) {
       odata= data[0]
     } else {
-      this.db.log.warn(`${this.tablename}: Id ${id} does not exist`)
+      this.conn.log.warn(`${this.tablename}: Id ${id} does not exist`)
     }
 
     return odata
@@ -110,7 +110,7 @@ class ModelBase extends ModelConfig {
 
     let allow= true
     if (this.config.triggers.beforeInsert != undefined) {
-      [params, options, allow]= await this.config.triggers.beforeInsert(this.db, params, options)
+      [params, options, allow]= await this.config.triggers.beforeInsert(this.conn, params, options)
     }
 
     return Promise.resolve([
@@ -120,7 +120,7 @@ class ModelBase extends ModelConfig {
 
   async afterInsert(id, params, options) {
     if (this.config.triggers.afterInsert != undefined) {
-      id= await this.config.triggers.afterInsert(this.db, id, params, options)
+      id= await this.config.triggers.afterInsert(this.conn, id, params, options)
     }
 
     return Promise.resolve(
@@ -143,16 +143,16 @@ class ModelBase extends ModelConfig {
     
     const [query, ivalues]= prepare_query_insert(this.tablename, this.fields, params, /*returning*/ true) 
 
-    const ndata = await this.db.selectOne(query, ivalues, options)
+    const ndata = await this.conn.selectOne(query, ivalues, options)
 
     const id= await this.afterInsert(ndata.id, params, options)
     
     if (id == null) {
       const msg = this.tablename + ': cannot save ' + JSON.stringify(data)
-      this.db.log.error(msg)
+      this.conn.log.error(msg)
     } else {
       if (options?.log!==false) {
-        this.db.log.debug(`Created with Id ${id}`)
+        this.conn.log.debug(`Created with Id ${id}`)
       }
     }
 
@@ -167,7 +167,7 @@ class ModelBase extends ModelConfig {
 
     let allow= true
     if (this.config.triggers.beforeUpdate != undefined) {
-      [params, filter, options, allow]= await this.config.triggers.beforeUpdate(this.db, params, filter, options)
+      [params, filter, options, allow]= await this.config.triggers.beforeUpdate(this.conn, params, filter, options)
     }
 
     return Promise.resolve([
@@ -178,7 +178,7 @@ class ModelBase extends ModelConfig {
 
   async afterUpdate(rows, params, filter, options) {
     if (this.config.triggers.afterUpdate != undefined) {
-      rows= await this.config.triggers.afterUpdate(this.db, rows, params, filter, options)
+      rows= await this.config.triggers.afterUpdate(this.conn, rows, params, filter, options)
     }    
 
     return Promise.resolve(
@@ -203,20 +203,20 @@ class ModelBase extends ModelConfig {
     const [query, values]= prepare_query_update(this.tablename, this.fields, params, filter)
 
     if (query == undefined) {
-      this.db.log.error(`${this.tablename} ERROR: Nothing to update`)
+      this.conn.log.error(`${this.tablename} ERROR: Nothing to update`)
       return 0
     }
 
-    let count= await this.db.executeAndCount(query, values, options)
+    let count= await this.conn.executeAndCount(query, values, options)
 
     count= await this.afterUpdate(count, params, filter, options)
 
     if (count == 0) {
       const msg = this.tablename + ': no record updated with filter ' + JSON.stringify(filt) + ' -- ' + JSON.stringify(data)
-      this.db.log.warn(msg)
+      this.conn.log.warn(msg)
     } else {
       if (options?.log!==false) {
-        this.db.log.debug(`Updated ${count} records`)
+        this.conn.log.debug(`Updated ${count} records`)
       }
     }
 
@@ -231,7 +231,7 @@ class ModelBase extends ModelConfig {
       let found= 0
       const queries= prepare_queries_before_delete(this.config.checkBeforeDelete)
       for (const query of queries) {
-        const res= await this.db.selectOne(query, [filter.id], options)
+        const res= await this.conn.selectOne(query, [filter.id], options)
         found += res.cnt
       }
 
@@ -239,7 +239,7 @@ class ModelBase extends ModelConfig {
     }
 
     if (this.config.triggers.beforeDelete != undefined) {
-      [filter, options, allow] = await this.config.triggers.beforeDelete(this.db, filter, options)
+      [filter, options, allow] = await this.config.triggers.beforeDelete(this.conn, filter, options)
     }
 
     return Promise.resolve([
@@ -249,7 +249,7 @@ class ModelBase extends ModelConfig {
 
   async afterDelete(rows, filter, options) {
     if (this.config.triggers.afterDelete != undefined) {
-      rows = await this.config.triggers.afterDelete(this.db, rows, filter, options)
+      rows = await this.config.triggers.afterDelete(this.conn, rows, filter, options)
     }
 
     return Promise.resolve(
@@ -263,7 +263,7 @@ class ModelBase extends ModelConfig {
 
     if (! goon) {
       const msg = this.tablename + ': Cannot delete for filter ' + JSON.stringify(filt)
-      this.db.log.warn(msg)
+      this.conn.log.warn(msg)
       return 0
     }  
 
@@ -271,12 +271,12 @@ class ModelBase extends ModelConfig {
 
 
 
-    let count= await this.db.executeAndCount(query, values, options)
+    let count= await this.conn.executeAndCount(query, values, options)
 
     count= await this.afterDelete(count, filter, options)
 
     if (options?.log!==false) {
-      this.db.log.debug(`Deleted ${count} records`)
+      this.conn.log.debug(`Deleted ${count} records`)
     }    
 
     return count

@@ -8,17 +8,16 @@ class CalustraConnBase {
  
   constructor (config) {
     this.config= config
-    const options = config?.options || {}
-    if (options?.log==undefined || typeof options?.log == 'string') {
-      this.log= new Logger(options?.log || 'info')
+    if (config?.log==undefined || typeof config?.log == 'string') {
+      this.log= new Logger(config?.log || 'info')
     } else {
-      this.log = options.log
+      this.log = config.log
     }
-    this.log.info(`Initing connection: ${JSON.stringify(this.config.connection)}`)
+    this.log.info(`Initing connection: ${JSON.stringify(this.config.db)}`)
   }
 
   get dialect() {
-    throw 'CalustraConnBase: get dialect() not implemented"'
+    return this.config?.db?.dialect || 'unknown'
   }
 
   openTransaction() {

@@ -10,11 +10,7 @@ class CalustraConnLT extends CalustraConnBase {
     const [db, uncache] = getDb(config, this.log)
     this.db= db
     this.uncache= uncache
-    this.log.info(`Using database ${config?.connection?.filename}`)
-  }
-
-  get dialect() {
-    return 'sqlite'
+    this.log.info(`Using database ${config?.db?.filename}`)
   }
 
   openTransaction() {

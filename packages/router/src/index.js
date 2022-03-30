@@ -1,7 +1,7 @@
 import calustraRouter from './router'
 import {routerCache} from './cache'
 
-const getDbFromCache= (selector) => routerCache.getDb(selector)
+const getConnectionFromCache= (selector) => routerCache.getConnection(selector)
 const getModelFromCache= (selector, tablename) => routerCache.getModel(selector, tablename)
 
-export {calustraRouter as default, getDbFromCache, getModelFromCache}
+export {calustraRouter as default, getConnectionFromCache, getModelFromCache}

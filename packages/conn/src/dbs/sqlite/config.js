@@ -1,5 +1,5 @@
 module.exports= {
-  connection: {
+  db: {
     dialect:  'sqlite',
     filename: ':memory:',
 
@@ -15,7 +15,6 @@ module.exports= {
     profile: undefined,
     busyTimeout: undefined
   },
-  options: {
-    log: 'debug'
-  }
+  
+  log: 'debug'
 }

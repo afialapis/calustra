@@ -1,4 +1,4 @@
-async function createRoutesForQueries(db, router, router_options, logger) {
+async function createRoutesForQueries(connection, router, router_options, logger) {
   /*
     router_options.queries
     {
@@ -47,7 +47,7 @@ async function createRoutesForQueries(db, router, router_options, logger) {
       }
     }
 
-    const result= await route.callback(ctx, db)
+    const result= await route.callback(ctx, connection)
     return result
   }
 

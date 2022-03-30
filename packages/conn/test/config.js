@@ -1,7 +1,7 @@
 export default {
-  db: {
+  connections: {
     postgres: {
-      connection: {
+      db: {
         dialect:  'postgres',
         host:     'localhost',
         port:     5432,
@@ -9,20 +9,16 @@ export default {
         user:     'postgres',
         password: 'postgres'
       },
-      options: {
-        log: 'warn'
-      }
+      log: 'warn'
     },
     sqlite: {
-      connection: {
+      db: {
         dialect:  'sqlite',
         filename: ':memory:',
         verbose: true,
         cached: true
       },
-      options: {
-        log: 'warn'
-      }
+      log: 'warn'
     }
   }
 }

@@ -5,7 +5,7 @@ import {getConnection} from '../../src'
 function test_inspector(config) {
   let conn= undefined
 
-  describe(`${config.connection.dialect}: Test inspectors`, function() {
+  describe(`${config.db.dialect}: Test inspectors`, function() {
 
     it('should create the database connection', function() {
       conn = getConnection(config)

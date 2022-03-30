@@ -1,8 +1,8 @@
 import {getModel} from 'calustra-orm'
 
-const createModel = async (db, tablename, options) => {
+const createModel = async (connection, tablename, options) => {
 
-  const model= await getModel(db, tablename, options)
+  const model= await getModel(connection, tablename, options)
   return model
 
 }

@@ -6,8 +6,8 @@ import cacheKey from './cacheKey'
 
 const _ROUTER_CACHE = {
   /*
-    [db_key]: { 
-      'db': <calustra>,
+    [conn33_key]: { 
+      'connection': <calustra>,
       'models': {
         [name]: <calustra-orm model>,
       }
@@ -20,16 +20,16 @@ class RouterCache {
   constructor() {
   }
 
-  saveDb(db) {
-    const key= cacheKey(db.config)
+  saveConnection(connection) {
+    const key= cacheKey(connection.config)
     _ROUTER_CACHE[key]= {
-      'db': db,
+      'connection': connection,
       'models': {}
     }
   }
 
-  saveModel(db, tablename, model) {
-    const key= cacheKey(db.config)
+  saveModel(connection, tablename, model) {
+    const key= cacheKey(connection.config)
     _ROUTER_CACHE[key]['models'][tablename]= model
   }
 
@@ -55,10 +55,10 @@ class RouterCache {
     return thekey
   }
 
-  getDb(selector) {
+  getConnection(selector) {
     const key= this._getKeyFor(selector)
     if (key!=undefined) {
-      return _ROUTER_CACHE[key]['db']
+      return _ROUTER_CACHE[key]['connection']
     }
 
     return undefined

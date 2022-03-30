@@ -3,11 +3,11 @@ import data from './data'
 
 let conn
 
-function router_test_prepare (db) {  
+function router_test_prepare (config) {  
 
   it('[PREPARE] create connection', function() {
 
-    conn= getConnection(db)
+    conn= getConnection(config)
 
   })
 

@@ -5,11 +5,11 @@ import CalustraRouter from '../../src'
 import {start, stop} from './server'
 import data from './data'
 
-function router_test_run (db, server, name, calustra) {
+function router_test_run (config, server, name, calustra) {
 
   it(`[RUN][${name}][START] should init crud/queries and server them on ${calustra.prefix}`, async function() {
 
-    const conn= getConnection(db)
+    const conn= getConnection(config)
     const router = await CalustraRouter(conn, calustra)
     start(server, router.routes())
 

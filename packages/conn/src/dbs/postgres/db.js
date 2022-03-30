@@ -4,7 +4,7 @@ import cache from '../../cache'
 import merge from '../../util/merge'
 
 function getDb (config, logger) {
-  const conn = merge(defaults.connection, config?.connection || {})
+  const conn = merge(defaults.db, config.db || {})
 
   const cache_key= `calustra-${conn?.dialect}-${conn?.database}-${conn?.host}-${conn?.port}-${conn?.user}`
 

@@ -3,8 +3,8 @@ import { merge } from "../util"
 
 class ModelConfig {
 
-  constructor(db, tablename, definition, options) {
-    this.db         = db
+  constructor(conn, tablename, definition, options) {
+    this.conn       = conn
     this.tablename  = tablename
     this.definition = definition
     this.config     = {}
