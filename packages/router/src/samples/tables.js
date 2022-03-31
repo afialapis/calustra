@@ -9,7 +9,7 @@
 
     options: {
 
-      avoid: ['find', 'key_list', 'remove'],
+      mode: 'r', // 'rw' / 'ru' (read+update but not delete) / 'w' / 'u'
 
       useUserFields: {
         use: false,

@@ -101,7 +101,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
     await callback(uinfo)
   }
 
-  const read = async (ctx) => {
+  const route_read = async (ctx) => {
     await _checkUserInfo(ctx, 'r', async (_uinfo) => {
       const params = queryStringToJson(ctx.request.url)
       // TODO : handle transactions
@@ -111,7 +111,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
     })
   }
   
-  const key_list = async (ctx) => {
+  const route_key_list = async (ctx) => {
     await _checkUserInfo(ctx, 'r', async (_uinfo) => {
       // TODO : handle transactions
       const params = queryStringToJson(ctx.request.url)
@@ -121,7 +121,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
     })
   }
   
-  const find = async (ctx) => {
+  const route_find = async (ctx) => {
     await _checkUserInfo(ctx, 'r', async (_uinfo) => {
       const params = queryStringToJson(ctx.request.url)
       // TODO : handle transactions
@@ -131,7 +131,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
     })
   }
 
-  const distinct = async (ctx) => {
+  const route_distinct = async (ctx) => {
     await _checkUserInfo(ctx, 'r', async (_uinfo) => {
       const params = queryStringToJson(ctx.request.url)
       // TODO : handle transactions
@@ -141,7 +141,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
     })
   }
   
-  const save = async (ctx) => {
+  const route_save = async (ctx) => {
     await _checkUserInfo(ctx, 'w', async (uinfo) => {
       const params = ctx.request.fields
       if (uinfo?.fieldnames?.created_by) {
@@ -154,7 +154,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
     })
   }
   
-  const update = async (ctx) => {
+  const route_update = async (ctx) => {
     await _checkUserInfo(ctx, 'w', async (uinfo) => {
       const params = ctx.request.fields
       if (uinfo?.fieldnames?.last_update_by) {
@@ -167,7 +167,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
     })
   }
   
-  const remove = async (ctx) => {
+  const route_delete = async (ctx) => {
     await _checkUserInfo(ctx, 'w', async (_uinfo) => {
       const params = ctx.request.fields
       // TODO : handle transactions
@@ -181,22 +181,26 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
 
   logger.info(`Routing table ${route.name} to ${url}`)
 
-  const avoid = route?.options?.avoid || []
+  const mode = route?.options?.mode || 'rw'
+
+  const allowRead = mode.indexOf('r')>=0
+  const allowDelete = mode.indexOf('w')>=0
+  const allowUpsave = (mode.indexOf('u')>=0) || allowDelete
   
-  if (avoid.indexOf('find')<0) 
-    router.get (`${url}/find`     , (ctx) => find(ctx))
-  if (avoid.indexOf('read')<0)
-    router.get (`${url}/read`     , (ctx) => read(ctx))
-  if (avoid.indexOf('distinct')<0)
-    router.get (`${url}/distinct` , (ctx) => distinct(ctx))
-  if (avoid.indexOf('save')<0)
-    router.post(`${url}/save`     , (ctx) => save(ctx))
-  if (avoid.indexOf('update')<0)
-    router.post(`${url}/update`   , (ctx) => update(ctx))
-  if (avoid.indexOf('remove')<0)
-    router.post(`${url}/remove`   , (ctx) => remove(ctx))
-  if (avoid.indexOf('key_list')<0)
-    router.get (`${url}/key_list` , (ctx) => key_list(ctx)) 
+  if (allowRead) {
+    router.get (`${url}/find`     , (ctx) => route_find(ctx))
+    router.get (`${url}/read`     , (ctx) => route_read(ctx))
+    router.get (`${url}/distinct` , (ctx) => route_distinct(ctx))
+    router.get (`${url}/key_list` , (ctx) => route_key_list(ctx)) 
+  }
+
+  if (allowUpsave) {
+    router.post(`${url}/save`     , (ctx) => route_save(ctx))
+    router.post(`${url}/update`   , (ctx) => route_update(ctx))
+  }
+  if (allowDelete) {
+    router.post(`${url}/delete`   , (ctx) => route_delete(ctx))
+  }
 
   return model
 }
