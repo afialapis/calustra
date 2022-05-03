@@ -1,6 +1,6 @@
 {
   "name": "calustra",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "description": "A DB connector",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -47,7 +47,7 @@
   ],
   "dependencies": {
     "calustra-query": "workspace:../query",
-    "farrapa-colors": "^1.0.4",
+    "farrapa-colors": "^1.0.7",
     "pg-promise": "^10.11.1",
     "sqlite3": "^5.0.2"
   },
