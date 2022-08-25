@@ -58,6 +58,8 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
     const getUserId = route?.options?.getUserId || router_options.getUserId
     const uid= getUserId(ctx)
 
+    let allowed= true
+
     const authUser = {
       require: false,
       ...router_options?.authUser || {},
@@ -82,6 +84,8 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
           logger.error(`Unauthorized access. Redirecting to ${authUser.redirect_url}`)
           ctx.redirect(authUser.redirect_url)
         }
+
+        allowed= false
       }
     }
 
@@ -95,10 +99,14 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
 
     const uinfo= {
       uid: uid,
-      fieldnames
+      fieldnames,
     }
-
-    await callback(uinfo)
+    
+    let res= {}
+    if (allowed) {
+      res= await callback(uinfo)
+    }
+    ctx.body = res
   }
 
   const route_read = async (ctx) => {
@@ -107,7 +115,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
       // TODO : handle transactions
       const model_options= {transaction: undefined}
       const data = await model.read(params, model_options)
-      ctx.body = _packBodyData(data)
+      return _packBodyData(data)
     })
   }
   
@@ -117,7 +125,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
       const params = queryStringToJson(ctx.request.url)
       const model_options= {transaction: undefined}
       const data = await model.keyList(params, model_options)    
-      ctx.body = _packBodyData(data)
+      return _packBodyData(data)
     })
   }
   
@@ -127,7 +135,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
       // TODO : handle transactions
       const model_options= {transaction: undefined}    
       const data = await model.find(params.id, model_options)
-      ctx.body = _packBodyData(data)
+      return _packBodyData(data)
     })
   }
 
@@ -137,7 +145,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
       // TODO : handle transactions
       const model_options= {transaction: undefined}
       const data = await model.distinct(params.distinct_field, params, model_options)
-      ctx.body = _packBodyData(data)
+      return _packBodyData(data)
     })
   }
   
@@ -150,7 +158,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
       // TODO : handle transactions
       const model_options= {transaction: undefined}
       const data = await model.insert(params, model_options)
-      ctx.body= _packBodyData(data)
+      return _packBodyData(data)
     })
   }
   
@@ -163,7 +171,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
       // TODO : handle transactions
       const model_options= {transaction: undefined}    
       const data = await model.update(params, {id: params.id}, model_options)
-      ctx.body= _packBodyData(data)
+      return _packBodyData(data)
     })
   }
   
@@ -173,7 +181,7 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
       // TODO : handle transactions
       const model_options= {transaction: undefined}    
       const data = await model.delete({id: params.id}, model_options)
-      ctx.body = _packBodyData(data)
+      return _packBodyData(data)
     })
   }
 
