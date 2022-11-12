@@ -6,8 +6,11 @@ const initModelCache = async (connOrConfigOrSelector, options, tableList= []) =>
   const connection= getConnection(connOrConfigOrSelector, options)
 
   const logger= connection.log
-  const logger_prev_prefix= logger.prefix
-  logger.set_prefix('calustra-orm')
+  let logger_prev_prefix
+  try {
+    logger_prev_prefix= logger.prefix
+    logger.set_prefix('calustra-orm')
+  } catch(_) {}
 
   logger.debug('Initing models cache...')
 
@@ -23,7 +26,9 @@ const initModelCache = async (connOrConfigOrSelector, options, tableList= []) =>
 
   logger.debug('Inited models cache')
 
-  logger.set_prefix(logger_prev_prefix)
+  try {
+    logger.set_prefix(logger_prev_prefix)
+  } catch(_) {}
 
 }
 

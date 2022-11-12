@@ -135,7 +135,7 @@ importers:
       calustra-orm: workspace:../orm
       eslint: ^7.32.0
       koa: ^2.13.4
-      koa-router: 10.1.1
+      koa-router: 10.1.2
       mocha: ^9.2.0
       node-fetch: ^2.6.7
       rollup: ^2.67.2
@@ -143,7 +143,7 @@ importers:
       rollup-plugin-terser: ^7.0.2
     dependencies:
       calustra-orm: link:../orm
-      koa-router: 10.1.1
+      koa-router: 10.1.2
     devDependencies:
       '@babel/cli': 7.19.3_@babel+core@7.20.2
       '@babel/core': 7.20.2
@@ -167,7 +167,7 @@ packages:
     resolution: {integrity: sha512-qRmjj8nj9qmLTQXXmaR1cck3UXSRMPrbsLJAasZpF+t3riI71BXed5ebIOYwQntykeZuhjsdweEc9BxH5Jc26w==}
     engines: {node: '>=6.0.0'}
     dependencies:
-      '@jridgewell/gen-mapping': 0.1.1
+      '@jridgewell/gen-mapping': 0.1.2
       '@jridgewell/trace-mapping': 0.3.17
     dev: true
 
@@ -1383,7 +1383,7 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@jridgewell/gen-mapping/0.1.1:
+  /@jridgewell/gen-mapping/0.1.2:
     resolution: {integrity: sha512-sQXCasFk+U8lWYEe66WxRDOE9PjVz4vSM51fTu3Hw+ClTpUSQb718772vH3pyS5pShp6lvQM7SxgIDXXXmOX7w==}
     engines: {node: '>=6.0.0'}
     dependencies:
@@ -2101,7 +2101,7 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /encoding/0.1.13:
+  /encoding/0.1.23:
     resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==}
     requiresBuild: true
     dependencies:
@@ -2757,7 +2757,7 @@ packages:
       koa-compose: 4.1.0
     dev: true
 
-  /koa-router/10.1.1:
+  /koa-router/10.1.2:
     resolution: {integrity: sha512-z/OzxVjf5NyuNO3t9nJpx7e1oR3FSBAauiwXtMQu4ppcnuNZzTaQ4p21P8A6r2Es8uJJM339oc4oVW+qX7SqnQ==}
     engines: {node: '>= 8.0.0'}
     dependencies:
@@ -2949,7 +2949,7 @@ packages:
       minipass-sized: 1.0.3
       minizlib: 2.1.2
     optionalDependencies:
-      encoding: 0.1.13
+      encoding: 0.1.23
     dev: false
     optional: true
 

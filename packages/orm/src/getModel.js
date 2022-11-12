@@ -40,8 +40,12 @@ const getModel = (connOrConfigOrSelector, tableName, options) => {
   const connection= getConnection(connOrConfigOrSelector, options)
 
   const logger= connection.log
-  const logger_prev_prefix= logger.prefix
-  logger.set_prefix('calustra-orm')
+
+  let logger_prev_prefix
+  try {
+    logger_prev_prefix= logger.prefix
+    logger.set_prefix('calustra-orm')
+  } catch(_) {}
 
   if (_isSelector(connOrConfigOrSelector)) {
     const model= getModelFromCache(connOrConfigOrSelector, logger)
@@ -52,7 +56,9 @@ const getModel = (connOrConfigOrSelector, tableName, options) => {
     return _initModel(connection.config, tableName, options)
   }) 
 
-  logger.set_prefix(logger_prev_prefix)
+  try {
+    logger.set_prefix(logger_prev_prefix)
+  } catch(_) {}
 
   return model
 }
