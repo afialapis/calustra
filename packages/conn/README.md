@@ -179,10 +179,10 @@ It will be matched against the `config` object you had initialized the connectio
 Given this, the most easy thing to do is to just specify the `database` as the selector if using PostgreSQL, or the `filename` if using SQLite. But that's up to you!
 
 ### `options`
-  · `log`: can be a string with the log level (`silly`, `debug`, `info`, `warn`, `error`) or a class exposing methods named as those log levels.
-  · `nocache`: if `true`, connections are not cached. Default is `false`.
-  · `cache_fallback`: if `true`, when calling `getConnection(selector)` and no cached connection matches the `selector`, but there are some cached connection, `calustra-conn` will return the first available one. Default is `false`.
-  · `cache_error_log`: Whenever you try to `getConnection(selector)` from cache, but no cached connection is available or none of them matches the `selector`, `calustra-conn` will log an error message. But sometimes it may not be an error, but an expected scenario: in that case, disable those logs by specifying `cache_error_log: false`. Default is `true`.
+- `log`: can be a string with the log level (`silly`, `debug`, `info`, `warn`, `error`) or a class exposing methods named as those log levels.
+- `nocache`: if `true`, connections are not cached. Default is `false`.
+- `cache_fallback`: if `true`, when calling `getConnection(selector)` and no cached connection matches the `selector`, but there are some cached connection, `calustra-conn` will return the first available one. Default is `false`.
+- `cache_error_log`: Whenever you try to `getConnection(selector)` from cache, but no cached connection is available or none of them matches the `selector`, `calustra-conn` will log an error message. But sometimes it may not be an error, but an expected scenario: in that case, disable those logs by specifying `cache_error_log: false`. Default is `true`.
 
 Some examples:
 
