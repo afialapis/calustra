@@ -1,12 +1,15 @@
 import defaults from "./defaults"
 import { merge } from "../util"
+import getConnectionWrap from "../getConnectionWrap"
 
-class ModelConfig {
 
-  constructor(conn, tablename, definition, options) {
-    this.conn       = conn
+class CalustraModelConfig {
+
+  constructor(connOrConfig, tablename, options) {
+    this.connOrConfig= connOrConfig
+    this.connOptions= options
     this.tablename  = tablename
-    this.definition = definition
+    this.definition = undefined // will be inited right before needed
     this.config     = {}
 
     this.config.triggers= options?.triggers || {}
@@ -23,6 +26,18 @@ class ModelConfig {
     }
     this.config.useDateFields= useDateFields
     
+  }
+
+  get conn() {
+    const connection= getConnectionWrap(this.connOrConfig, this.connOptions)
+    return connection
+  }
+
+  async loadDefinition() {
+    if (this.definition == undefined) {
+      this.definition= await this.conn.getTableDetails(this.tablename)
+    }
+
   }
 
   get fields() {
@@ -70,4 +85,4 @@ class ModelConfig {
 }
 
 
-export {ModelConfig}
+export {CalustraModelConfig}

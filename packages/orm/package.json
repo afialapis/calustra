@@ -1,6 +1,6 @@
 {
   "name": "calustra-orm",
-  "version": "0.0.37",
+  "version": "0.1.0",
   "description": "A small ORM for those out there who still feel good typing some raw SQL",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -55,6 +55,7 @@
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.1.3",
     "@rollup/plugin-replace": "^3.1.0",
+    "cacheiro": "^0.0.5",
     "eslint": "^7.32.0",
     "mocha": "^9.2.0",
     "rollup": "^2.67.2",

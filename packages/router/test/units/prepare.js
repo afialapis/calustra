@@ -1,24 +1,18 @@
-import {getConnection} from 'calustra'
+import {getConnection} from '../../src'
 import data from './data'
 
-let conn
 
-function router_test_prepare (config) {  
-
-  it('[PREPARE] create connection', function() {
-
-    conn= getConnection(config)
-
-  })
+function router_test_prepare (config, options) {  
 
   it('[PREPARE] should drop test_01 table if exists', async function() {
-
+    const conn= getConnection(config, options)
     const query = `DROP TABLE IF EXISTS test_01`
     await conn.execute(query)
 
   })
 
   it('[PREPARE] should create test_01 table', async function() {
+    const conn= getConnection(config, options)
 
     const query = `
       CREATE TABLE test_01 (
@@ -32,6 +26,7 @@ function router_test_prepare (config) {
   })
 
   it('[PREPARE] should create test records', async function() {
+    const conn= getConnection(config, options)
 
     for (const rec of data) {
       const query= `

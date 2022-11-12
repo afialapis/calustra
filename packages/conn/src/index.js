@@ -1,3 +1,3 @@
-import getConnection from './dbs/getConnection'
+import getConnection from './getConnection'
 
 export { getConnection }

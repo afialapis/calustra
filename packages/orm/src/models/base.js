@@ -5,11 +5,11 @@ import { prepare_query_select,
          prepare_query_update,
          prepare_query_delete,
          prepare_queries_before_delete } from '../query'
-import {ModelConfig} from '../config'
+import {CalustraModelConfig} from '../config'
 
-class ModelBase extends ModelConfig {
-  constructor(conn, tablename, definition, options) {
-    super(conn, tablename, definition, options)
+class CalustraModelBase extends CalustraModelConfig {
+  constructor(conn, tablename, options) {
+    super(conn, tablename, options)
   }
 
   async beforeRead(filter, options) {
@@ -25,6 +25,8 @@ class ModelBase extends ModelConfig {
   }    
 
   async read(pfilter, poptions) {
+    await this.loadDefinition()
+
     const [filter, options, goon] = await this.beforeRead(pfilter, poptions)
 
     if (! goon)
@@ -134,6 +136,8 @@ class ModelBase extends ModelConfig {
       throw Error(`[calustra] ${this.tablenanme}.insert() received data=undefined`)
     }
 
+    await this.loadDefinition()
+
     data= filterObj(data, this.fields)
 
     let [params, options, goon] = await this.beforeInsert(data, poptions)
@@ -191,6 +195,8 @@ class ModelBase extends ModelConfig {
     if (data == undefined) {
       throw Error(`[calustra] ${this.tablenanme}.insert() received data=undefined`)
     }
+
+    await this.loadDefinition()
     
     data= filterObj(data, this.fields)
     delete data.id
@@ -259,6 +265,8 @@ class ModelBase extends ModelConfig {
 
 
   async delete(filt, poptions) {
+    await this.loadDefinition()
+
     let [filter, options, goon] = await this.beforeDelete(filt, poptions)
 
     if (! goon) {
@@ -283,4 +291,4 @@ class ModelBase extends ModelConfig {
   }  
 }
 
-export default ModelBase
+export default CalustraModelBase

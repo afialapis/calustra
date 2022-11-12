@@ -1,5 +1,5 @@
 import queryStringToJson from '../util/queryStringToJson'
-import createModel from './createModel'
+import {getModel} from 'calustra-orm'
 
 
 async function createRoutesForCrud(connection, route, router, prefix, router_options, logger) {
@@ -41,7 +41,14 @@ async function createRoutesForCrud(connection, route, router, prefix, router_opt
       },   
 
   */
-  const model= await createModel(connection, route.name, route?.options || {})
+
+
+  const model_options= {
+    ...router_options, 
+    ...route?.options || {}
+  }
+
+  const model= await getModel(connection, route.name, model_options)
       
   const _packBodyData = (data) => {
     const body_field= router_options?.body_field

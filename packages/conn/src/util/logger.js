@@ -11,13 +11,24 @@ const LEVELS= {
 }
 
 class Logger {
+  prefix = 'calustra-conn'
+
   constructor (level) {
+    this.set_level(level)
+  }
+
+  set_level(level) {
     this.level= LEVELS[level != undefined ? level : 'none']
+  }
+  
+  
+  set_prefix(prefix) {
+    this.prefix= prefix
   }
 
   _log(color, lvl, msg) {
     if (this.level>=lvl) {
-      console.log(color(`[calustra] ${msg}`))
+      console.log(color(`[${this.prefix}] ${msg}`))
     }
   }
 

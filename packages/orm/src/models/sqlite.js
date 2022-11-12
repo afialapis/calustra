@@ -1,8 +1,8 @@
-import ModelBase from './base'
+import CalustraModelBase from './base'
 import {filterObj} from '../util'
 import { prepare_query_insert} from '../query'
 
-class ModelLT extends ModelBase {
+class CalustraModelSQLite extends CalustraModelBase {
   constructor(conn, tablename, definition, options) {
     super(conn, tablename, definition, options)
   }
@@ -14,6 +14,7 @@ class ModelLT extends ModelBase {
   */
 
   async insert(data, poptions) {
+    await this.loadDefinition()
 
     data= filterObj(data, this.fields)
 
@@ -43,4 +44,4 @@ class ModelLT extends ModelBase {
   }  
 }
 
-export default ModelLT
+export default CalustraModelSQLite

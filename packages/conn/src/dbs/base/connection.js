@@ -1,28 +1,34 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "query|value|options|schema|tableName|^_" }]*/
 
 import {formatQuery, queryDescription} from 'calustra-query'
-import Logger       from '../../util/logger'
-
+import {getOrSetQueryResultsFromCache} from '../../cache'
 
 class CalustraConnBase {
  
-  constructor (config) {
+  constructor (config, logger) {
     this.config= config
-    if (config?.log==undefined || typeof config?.log == 'string') {
-      this.log= new Logger(config?.log || 'info')
-    } else {
-      this.log = config.log
-    }
-    this.log.info(`Initing connection: ${JSON.stringify(this.config.db)}`)
+    this.log= logger
+    
+    this.log.debug(`Opening database: ${JSON.stringify(this.config)}`)
+    this.db = this.openDb(this.config)
+    
+    this.log.info(`Using database ${config?.database}`)
   }
 
   get dialect() {
-    return this.config?.db?.dialect || 'unknown'
+    return this.config?.dialect || 'unknown'
   }
+
+  openDb() {
+    throw 'CalustraConnBase: openDb() not implemented"'
+  }  
 
   openTransaction() {
     throw 'CalustraConnBase: openTransaction() not implemented"'
   }  
+
+  // method assigned on the fly
+  // uncache() {}
 
   close () {
     throw 'CalustraConnBase: close() not implemented"'
@@ -41,7 +47,7 @@ class CalustraConnBase {
 
       if (options?.log!==false) {
         const elapsed = parseFloat( (Date.now() - started) / 1000.0 ).toFixed(2)
-        this.log.debug(this.formatQuery(query, values))
+        this.log.silly(this.formatQuery(query, values))
         const msg= msg_callback(data, elapsed)
         this.log.info(msg)
       }
@@ -132,13 +138,43 @@ class CalustraConnBase {
     throw 'CalustraConnBase: select() not implemented"'
   }
 
+  async getOrSetCachedTableNames(callback, schema= 'public') {
+    if (this._table_names == undefined) {
+      this._table_names= await callback(schema)
+    }
+    return this._table_names
+  }
+
+  async getTableNamesFromDb(schema= 'public') {
+    throw 'CalustraConnBase: getTableNamesFromDb() not implemented"'
+  }  
+  
   async getTableNames(schema= 'public') {
-    throw 'CalustraConnBase: getTableNames() not implemented"'
+    const queryName = `${schema}.tablenames`
+
+    const data= await getOrSetQueryResultsFromCache(this.config, queryName, this.log, async () => {
+      const results= await this.getTableNamesFromDb(schema)
+      return results
+    })
+
+    return data
   }  
 
-  async getTableDetails(tableName, schema= 'public') {
-    throw 'CalustraConnBase: getTableDetails() not implemented"'
+
+  async getTableDetailsFromDb(tableName, schema= 'public') {
+    throw 'CalustraConnBase: getTableDetailsFromDb() not implemented"'
   }    
+
+  async getTableDetails(tableName, schema= 'public') {
+    const queryName = `${schema}.${tableName}.details`
+
+    const data= await getOrSetQueryResultsFromCache(this.config, queryName, this.log, async () => {
+      const results= await this.getTableDetailsFromDb(tableName, schema)
+      return results
+    })
+
+    return data
+  }  
 
 }
 

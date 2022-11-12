@@ -1,17 +1,38 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "schema|tableName|^_" }]*/
 
 import CalustraConnBase from '../base/connection'
-import {getDb} from './db'
+import sqlite3 from 'sqlite3'
+import defaults from './defaults'
+import merge from '../../util/merge'
 
 class CalustraConnLT extends CalustraConnBase {
-
-  constructor (config) {
-    super(config)
-    const [db, uncache] = getDb(config, this.log)
-    this.db= db
-    this.uncache= uncache
-    this.log.info(`Using database ${config?.db?.filename}`)
+  
+  constructor (config, logger) {
+    super(config, logger)
   }
+
+  openDb() {
+    const config = merge(defaults, this.config || {})
+
+    if (config.verbose) {
+      sqlite3.verbose()
+    }
+  
+    const driver= config.cached
+      ? sqlite3.cached.Database
+      : sqlite3.Database
+    
+    let db = new driver(config.filename)
+  
+    const extra= ['trace', 'profile', 'buyTimeout']
+    extra.map((opt) => {
+      if (config[opt]!=undefined) {
+        db.configure(opt, config[opt])
+      }
+    })
+    return db
+
+  } 
 
   openTransaction() {
     throw 'CalustraConnLT: SQLite connections does not support transactions"'
@@ -103,7 +124,7 @@ class CalustraConnLT extends CalustraConnBase {
     return this._select (query, values, options, callback) 
   }  
 
-  async getTableNames(schema= 'master') {
+  async getTableNamesFromDb(schema= 'master') {
     const query= 
         `SELECT name 
            FROM sqlite_schema 
@@ -119,7 +140,8 @@ class CalustraConnLT extends CalustraConnBase {
       
   }  
 
-  async getTableDetails(tableName, schema= 'master') {
+
+  async getTableDetailsFromDb(tableName, schema= 'master') {
     const query= 
       `   SELECT m.name as tableName, 
                  p.cid as number,
@@ -153,7 +175,6 @@ class CalustraConnLT extends CalustraConnBase {
     return tableDef
     
   }  
-
 
 }
 

@@ -1,16 +1,21 @@
 import CalustraConnBase from '../base/connection'
-import {getDb} from './db'
+import pgPromise  from  'pg-promise'
+import merge from '../../util/merge'
+import defaults from './defaults'
+
 
 class CalustraConnPG extends CalustraConnBase {
 
-  constructor (config) {
-    super(config)
-    const [db, uncache] = getDb(config, this.log)
-    this.db= db
-    this.uncache= uncache
-
-    this.log.info(`Using database ${config?.db?.database}`)
+  constructor (config, logger) {
+    super(config, logger)
   }
+
+  openDb() {
+    const config = merge(defaults, this.config || {})
+    const pgp = pgPromise()
+    const db  = pgp(config)
+    return db
+  } 
 
   openTransaction() {
     return this.db.tx  
@@ -88,7 +93,7 @@ class CalustraConnPG extends CalustraConnBase {
     return this._select (query, values, options, callback) 
   }
 
-  async getTableNames(schema= 'public') {
+  async getTableNamesFromDb(schema= 'public') {
     const query= 
         `SELECT DISTINCT c.relname AS name
           FROM pg_class c
@@ -105,7 +110,8 @@ class CalustraConnPG extends CalustraConnBase {
       
   }  
 
-  async getTableDetails(tableName, schema= 'public') {
+
+  async getTableDetailsFromDb(tableName, schema= 'public') {
     const query= 
       `SELECT f.attnum AS number, f.attname AS name, f.attnum,  
               f.attnotnull AS notnull, 
@@ -166,7 +172,7 @@ class CalustraConnPG extends CalustraConnBase {
     return tableDef
     
   }  
-
+ 
 }
 
 export default CalustraConnPG

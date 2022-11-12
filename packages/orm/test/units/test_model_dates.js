@@ -1,6 +1,5 @@
 import assert from 'assert'
-import {getConnection} from 'calustra'
-import {getModel} from '../../src/index'
+import {getConnection, getModel} from '../../src/index'
 
 /*
 DO SOMETHING HERE USING DATES OPTIONS
@@ -9,17 +8,17 @@ THEN ON ANOTHER TEST TRY CUSTOM HOOKS
 --- MAYBE INSTEAD OF HOOKS CALL THEM TRIGERS
 */
 
-function test_model_dates(config, data) {
+function test_model_dates(config, options, data) {
   const model_options= {
     useDateFields: true
   }
   
-  let conn= undefined, TestModel= undefined
+  let TestModel= undefined
 
-  describe(`CalustraOrm for ${config.db.dialect}. Testing the model automatic dates`, function() {
+  describe(`CalustraOrm for ${config.dialect}. Testing the model automatic dates`, function() {
 
     it('should prepare the database for testing', async function() {
-      conn = getConnection(config)
+      const conn = getConnection(config, options)
       let query = `DROP TABLE IF EXISTS test_01`
       await conn.execute(query)
       
@@ -37,8 +36,9 @@ function test_model_dates(config, data) {
       await conn.execute(query)
     })
 
-    it('should create a CalustraOrm model for test table', async function() {
-      TestModel = await getModel(conn, 'test_01', model_options)
+    it('should create a CalustraOrm model for test table', function() {
+      const conn = getConnection(config, options)
+      TestModel = getModel(conn, 'test_01', model_options)
     })
 
     it('should insert several records', async function() {
@@ -88,6 +88,7 @@ function test_model_dates(config, data) {
     })
     
     it('should clean and close test database', async function() {
+      const conn = getConnection(config, options)
       const query = `DROP TABLE test_01`
       await conn.execute(query)
       conn.close()

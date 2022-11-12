@@ -1,7 +1,4 @@
 import calustraRouter from './router'
-import {routerCache} from './cache'
+import {getConnection, getModel} from 'calustra-orm'
 
-const getConnectionFromCache= (selector) => routerCache.getConnection(selector)
-const getModelFromCache= (selector, tablename) => routerCache.getModel(selector, tablename)
-
-export {calustraRouter as default, getConnectionFromCache, getModelFromCache}
+export {calustraRouter as default, getConnection, getModel}

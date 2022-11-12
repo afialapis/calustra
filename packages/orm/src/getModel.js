@@ -1,29 +1,62 @@
-import {getConnection} from 'calustra'
-import ModelPG from './models/postgres'
-import ModelLT from './models/sqlite'
+import {getOrSetModelFromCache, getModelFromCache} from './cache'
+import getConnection from './getConnectionWrap'
+import CalustraModelPostgres from './models/postgres'
+import CalustraModelSQLite from './models/sqlite'
 
-const getModel = async (connOrConfig, tableName, options) => {
+function _isCalustraModel(obj) {
+  try {
+    return obj.constructor.name.indexOf('CalustraModel')>=0
+  } catch(e) {}
+  return false
+}
 
-  const connection= getConnection(connOrConfig)
-  
-  const definition= await connection.getTableDetails(tableName /*, 'public'*/ )
+function _isSelector(configOrSelector) {
+  return typeof configOrSelector == 'string'
+}
 
-  let model
-  
-  if (connection.dialect == 'postgres') {
-    model = new ModelPG(connection, tableName, definition, options)
+
+function _initModel(connConfig, tableName, options) {
+    let model
+    
+    if (connConfig.dialect == 'postgres') {
+      model = new CalustraModelPostgres(connConfig, tableName, options)
+    }
+    else if (connConfig.dialect == 'sqlite') {
+      model = new CalustraModelSQLite(connConfig, tableName, options)
+    } else {
+      throw `getModel: ${connConfig.dialect} is not a supported dialect`
+    }
+
+    return model
+}
+
+
+const getModel = (connOrConfigOrSelector, tableName, options) => {
+
+  if (_isCalustraModel(connOrConfigOrSelector)) {
+    return connOrConfigOrSelector
   }
 
-  if (connection.dialect == 'sqlite') {
-    model = new ModelLT(connection, tableName, definition, options)
-  }
+  const connection= getConnection(connOrConfigOrSelector, options)
 
-  if (model) {
+  const logger= connection.log
+  const logger_prev_prefix= logger.prefix
+  logger.set_prefix('calustra-orm')
+
+  if (_isSelector(connOrConfigOrSelector)) {
+    const model= getModelFromCache(connOrConfigOrSelector, logger)
     return model
   }
 
-  throw `getModel: ${connection.dialect} is not a supported dialect`
+  const model= getOrSetModelFromCache(connection, tableName, options, () => {
+    return _initModel(connection.config, tableName, options)
+  }) 
 
+  logger.set_prefix(logger_prev_prefix)
+
+  return model
 }
+
+
 
 export default getModel

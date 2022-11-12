@@ -1,24 +1,21 @@
+const _log_level= 'warn'
+
+
 export default {
   connections: {
     postgres: {
-      db: {
-        dialect:  'postgres',
-        host:     'localhost',
-        port:     5432,
-        database: 'calustra',
-        user:     'postgres',
-        password: 'postgres'
-      },
-      log: 'warn'
+      dialect:  'postgres',
+      host:     'localhost',
+      port:     5432,
+      database: 'calustra',
+      user:     'postgres',
+      password: 'postgres'
     },
     sqlite: {
-      db: {
-        dialect:  'sqlite',
-        filename: '/tmp/calustra.router.sqlite',
-        verbose: true,
-        cached: false
-      },
-      log: 'warn'
+      dialect:  'sqlite',
+      filename: '/tmp/calustra.router.sqlite',
+      verbose: true,
+      cached: false
     }
   },
   server: {
@@ -31,6 +28,7 @@ export default {
   // calustra configs to be tested
   calustra: {
     simple: {
+      log: _log_level,
       schema: 'public',
       body_field: undefined,
       crud: {
@@ -39,6 +37,7 @@ export default {
       }      
     },
     all: {
+      log: _log_level,
       schema: 'public',
       body_field: 'rebody',
       crud: {
@@ -47,6 +46,7 @@ export default {
       }
     },
     options: {
+      log: _log_level,
       schema: 'public',
       body_field: undefined,
       crud: {
@@ -58,6 +58,7 @@ export default {
       }
     },
     with_noauth_queries: {
+      log: _log_level,
       schema: 'public',
       body_field: undefined,
       crud: {      
@@ -82,6 +83,7 @@ export default {
     },
     
     with_auth_queries: {
+      log: _log_level,
       schema: 'public',
       body_field: undefined,
       crud: {      

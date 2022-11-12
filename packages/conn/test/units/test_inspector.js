@@ -2,13 +2,13 @@ import assert from 'assert'
 import {getConnection} from '../../src'
 
 
-function test_inspector(config) {
+function test_inspector(config, options) {
   let conn= undefined
 
-  describe(`${config.db.dialect}: Test inspectors`, function() {
+  describe(`${config.dialect}: Test inspectors`, function() {
 
     it('should create the database connection', function() {
-      conn = getConnection(config)
+      conn = getConnection(config, options)
     })
     
     it('should create test_01 table', async function() {

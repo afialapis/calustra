@@ -2,20 +2,20 @@ import assert from 'assert'
 import {getConnection} from '../../src'
 
 function test_crud(config, options, data) {
-  let conn= undefined
 
-  describe(`${config.dialect}: Test crud`, function() {
+  const db_name = config.database || config.filename
 
-    it('should create the database connection', function() {
-      conn = getConnection(config, options)
-    })
+  describe(`${config.dialect}: Test crud using cached conections (selector: ${db_name})`, function() {
+
 
     it('should drop test_01 table if exists', async function() {
+      const conn = getConnection(config, options)
       const query = `DROP TABLE IF EXISTS test_01`
       await conn.execute(query)
     })
 
     it('should create test_01 table', async function() {
+      const conn = getConnection(db_name)
       const query = `
         CREATE TABLE test_01 (
           id           serial,
@@ -27,6 +27,8 @@ function test_crud(config, options, data) {
     })
 
     it('should create test records', async function() {
+      const conn = getConnection(db_name)
+
       for (const rec of data) {
         const query= `
           INSERT INTO test_01
@@ -39,6 +41,7 @@ function test_crud(config, options, data) {
     })
 
     it('should update one record', async function() {
+      const conn = getConnection(db_name)
 
       const query = `
           UPDATE test_01
@@ -50,6 +53,7 @@ function test_crud(config, options, data) {
     })
 
     it('should update several records', async function() {
+      const conn = getConnection(db_name)
       const query = `
           UPDATE test_01
               SET name = $1
@@ -60,6 +64,7 @@ function test_crud(config, options, data) {
     })
 
     it('should delete one record', async function() {
+      const conn = getConnection(db_name)
       const query = `
           DELETE
             FROM test_01
@@ -70,6 +75,7 @@ function test_crud(config, options, data) {
     })
 
     it('should count 3 records', async function() {
+      const conn = getConnection(db_name)
       const query = `
         SELECT CAST(COUNT(1) AS int) as cnt
           FROM test_01`
@@ -79,6 +85,7 @@ function test_crud(config, options, data) {
     })
 
     it('should count 2 records with name Frederic', async function() {
+      const conn = getConnection(db_name)
       const query = `
       SELECT CAST(COUNT(1) AS int) as cnt
           FROM test_01
@@ -90,6 +97,7 @@ function test_crud(config, options, data) {
     
 
     it('should count 2 distinct names, Frederic and Peter', async function() {
+      const conn = getConnection(db_name)
       const query = `
         SELECT CAST(COUNT(DISTINCT name) AS int) as cnt
           FROM test_01`
@@ -99,6 +107,7 @@ function test_crud(config, options, data) {
     })
 
     it('should return distinct names, Frederic and Peter', async function() {
+      const conn = getConnection(db_name)
       const query = `
         SELECT DISTINCT name as cnt
           FROM test_01`
@@ -108,6 +117,7 @@ function test_crud(config, options, data) {
     })
 
     it('should delete other records', async function() {
+      const conn = getConnection(db_name)
       const query = `
           DELETE
             FROM test_01`
@@ -117,11 +127,13 @@ function test_crud(config, options, data) {
     })
 
     it('should drop test_01', async function() {
+      const conn = getConnection(db_name)
       const query = `DROP TABLE test_01`
       await conn.execute(query)
     })  
 
     it('should close connection', async function() {
+      const conn = getConnection(db_name)
       conn.close()
     })      
   })

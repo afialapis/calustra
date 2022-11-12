@@ -4,13 +4,13 @@ import router_test_run from './units/run'
 import router_test_clean from './units/clean'
 
 function _router_test_unit(config, server, name, calustra) {  
-  describe(`DiBiRouter: Prepare things for testing ${name} under ${config.db.dialect}`, function() {
+  describe(`DiBiRouter: Prepare things for testing ${name} under ${config.dialect}`, function() {
     
-    router_test_prepare (config)
+    router_test_prepare (config, calustra)
 
     router_test_run (config, server, name, calustra)
 
-    router_test_clean (config)
+    router_test_clean (config, calustra)
   })
 }
 

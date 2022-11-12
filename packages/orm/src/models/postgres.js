@@ -1,9 +1,9 @@
-import ModelBase from './base'
+import CalustraModelBase from './base'
 
-class ModelPG extends ModelBase {
+class CalustraModelPostgres extends CalustraModelBase {
   constructor(conn, tablename, definition, options) {
     super(conn, tablename, definition, options)
   }
 }
 
-export default ModelPG
+export default CalustraModelPostgres
