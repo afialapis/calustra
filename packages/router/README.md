@@ -26,7 +26,8 @@ This API will consist on two kind of endpoint / methods:
 Currently, supported databases are:
 - PostgreSQL
 - SQLite
-(check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn) for more info).
+
+Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn) for more info.
 
 
 
@@ -92,25 +93,25 @@ let screw_data= await response.json()
 - `getModel` (from [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm))
 - [`calustraRouter`](#calustrarouterconnorconfig-options).
 
-## getConnection(configOrSelector, options)
+## `getConnection(configOrSelector, options)`
 
 Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#getconnectionconfigorselector-options) for more info about connections.
 
-## getModel(connOrConfigOrSelector, tableName, options)
+## `getModel(connOrConfigOrSelector, tableName, options)`
 
 Check [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getmodelconnorconfigorselector-tablename-options) for more info about models.
 
-## calustraRouter(connOrConfig, options)
+## `calustraRouter(connOrConfig, options)`
 
 `connOrConfig` is used to initialize the database connection (or read a cached one). Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#getconnectionconfigorselector-options) for more info about connections.
 
 `options` is passed also to `calustra-conn`'s `getConnection(config, options)` method.
 
-### options.schema
+### `options.schema`
 
 By default is is `public`. Specifies which database's schema to work with.
 
-### options.crud
+### `options.crud`
 
 ```js
 
@@ -118,7 +119,7 @@ By default is is `public`. Specifies which database's schema to work with.
     prefix: '/crud,
     routes: 
       // Can be:
-      '*' // => autodetect and create routes for every table on the daabase
+      '*' // => autodetect and create routes for every table on the database
       // or
       // an array of tables config, where each config can be:
       // - a simple string with the table name
@@ -188,7 +189,7 @@ By default is is `public`. Specifies which database's schema to work with.
   
 ```
 
-### options.queries
+### `options.queries`
 
 ```js
   {
@@ -210,12 +211,12 @@ By default is is `public`. Specifies which database's schema to work with.
 
 ```
 
-### options.body_field
+### `options.body_field`
 
 
   body_field: 'result',
 
-### options.getUserId
+### `options.getUserId`
 
 ```js
   {
@@ -229,7 +230,7 @@ By default is is `public`. Specifies which database's schema to work with.
   }
 ```
 
-### options.authUser
+### `options.authUser`
 
 ```js
   {

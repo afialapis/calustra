@@ -38,7 +38,8 @@ What it does not do:
 Currently, supported databases are:
 - PostgreSQL
 - SQLite
-(check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn) for more info).
+
+Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn) for more info.
 
 
 
@@ -69,7 +70,7 @@ const options= {
 }
 
 //
-// todos is a table like:
+// screw_stock is a table like:
 //  --------------------------------
 //   id           serial,
 //   screw_type   TEXT NOT NULL,
@@ -120,12 +121,12 @@ const del_rows = await TestModel.delete(del_filter)
 - [`getModel`](#getmodelconnorconfigorselector-tablename-options).
 - [`initModelCache`](#initmodelcacheconnorconfigorselector-options-tablelist).
 
-## getConnection(configOrSelector, options)
+## `getConnection(configOrSelector, options)`
 
 Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#getconnectionconfigorselector-options) for more info about connections.
 
 
-## getModel(connOrConfigOrSelector, tableName, options)
+## `getModel(connOrConfigOrSelector, tableName, options)`
 
 To instantiate a Model, we will just do: `getModel(connOrConfigOrSelector, options)`.
 
@@ -134,24 +135,25 @@ In `calustra-orm`, a Model instance always refers to the database table; it neve
 In other words: unlike other ORMs, you will not do `const model= Model.create(); model.fieldA= 'value'; model.save()`.
 In `calustra-orm` you will do `Model.insert({data})` or `Model.update({data}, {filter})`.
 
-### connOrConfigOrSelector
+### `connOrConfigOrSelector`
 
 `connOrConfigOrSelector` can be:
 - a connection object returned by `getConnection`
 - a configuration object (which internally will be used to call `getConnection` and init the connection)
 - a selector string to retrieved some cached, already initialized, connection
+
 Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#getconnectionconfigorselector-options) for more info about connections.
 
-### tableName
+### `tableName`
 
 Just the database table name to be referenced by the Model object.
 
-### options
+### `options`
 
 This same `options` will be passed to `getConnection(... options)`. So it may contain also `options` for the connection.
 Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#options).
 
-#### options.checkBeforeDelete
+#### `options.checkBeforeDelete`
 
 An array of db fields like `['table.field', 'table.field']`.
 
@@ -176,7 +178,7 @@ If some record exists in `screw_stats` table with `screw_stock_id= 1`, then
 the `TestModel.delete` will fail.
 
 
-#### options.useDateFields
+#### `options.useDateFields`
 
 `calustra-orm` knows that a very extended approach is to have fields like
 `created_at` or `last_update_at` in your tables. This option will help with that.
@@ -202,7 +204,7 @@ As you can imagine, `calustra-orm` will automatically update this fields after e
 (`created_at` field) or update (`last_update_at` field).
 
 
-#### options.triggers
+#### `options.triggers`
 
 Triggers are used to customize every query phase. A Trigger is a function containing specific parameters
 and returning specific array of values. Available ones are:
@@ -264,7 +266,7 @@ const ScrewStock_3 = getModel(config, 'screw_stock', options_3)
 
 ```
 
-## initModelCache(connOrConfigOrSelector, options, tableList= [])
+## `initModelCache(connOrConfigOrSelector, options, tableList= [])`
 
 You will probably like to init a set of models when your app starts. Also as a safety check: if something fails, it may mean some problem on the database. This method is for that.
 
@@ -295,7 +297,7 @@ await initModelCache(config, options)
 
 ## Model object
 
-### model.insert(data, options)
+### `model.insert(data, options)`
 
 - `data`: an object with "what to insert". Fields that do not exist on Model definition will be discarded.
 - `options`: 
@@ -303,7 +305,7 @@ await initModelCache(config, options)
 
 It returns an `int` with the `.id` of the newly created record.
 
-### model.update(data, filter, options)
+### `model.update(data, filter, options)`
 
 - `data`: an object with "what to update". Fields that do not exist on Model definition will be discarded.
 - `filter`: an object with "which records to update". Fields that do not exist on Model definition will be discarded.
@@ -312,7 +314,7 @@ It returns an `int` with the `.id` of the newly created record.
 
 It returns an `int` with the number of affected records by the update.
 
-### model.delete(filter, options)
+### `model.delete(filter, options)`
 
 - `filter`: an object with "which recors to delete". Fields that do not exist on Model definition will be discarded.
 - `options`: 
@@ -321,7 +323,7 @@ It returns an `int` with the number of affected records by the update.
 It returns an `int` with the number of deleted records.
 
 
-### model.read(filter, options)
+### `model.read(filter, options)`
 
 - `filter`: an object with "which recors to read". Fields that do not exist on Model definition will be discarded.
 - `options`: 
@@ -335,7 +337,7 @@ It returns an Array of objects, empty if no record was found with the specified 
 
 
 
-### model.find(id, options)
+### `model.find(id, options)`
 
 - `id`: an `int` with the `.id` to look for
 - `options`: 
