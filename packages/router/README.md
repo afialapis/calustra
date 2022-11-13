@@ -89,17 +89,11 @@ let screw_data= await response.json()
 # API
 
 `calustra-router` exposes these methods: 
-- `getConnection` (from [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn))
-- `getModel` (from [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm))
 - [`calustraRouter`](#calustrarouterconnorconfig-options).
+- [`calustraRouterAll`](#async-calustrarouterallconnorconfig-options).
+- [`getConnection`](#getconnectionconfigorselector-options) (from [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn))
+- [`getModel`](#getmodelconnorconfigorselector-tablename-options) (from [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm))
 
-## `getConnection(configOrSelector, options)`
-
-Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#getconnectionconfigorselector-options) for more info about connections.
-
-## `getModel(connOrConfigOrSelector, tableName, options)`
-
-Check [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getmodelconnorconfigorselector-tablename-options) for more info about models.
 
 ## `calustraRouter(connOrConfig, options)`
 
@@ -243,3 +237,18 @@ By default is is `public`. Specifies which database's schema to work with.
   }
 
 ```
+
+## `async calustraRouterAll(connOrConfig, options)`
+
+Same as [`calustraRouter`](#calustrarouterconnorconfig-options), but:
+- `options.crud.queries` must be `*` (every table)
+- due to this necessary database access (to read tables info), function is `async`
+
+## `getConnection(configOrSelector, options)`
+
+Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#getconnectionconfigorselector-options) for more info about connections.
+
+## `getModel(connOrConfigOrSelector, tableName, options)`
+
+Check [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getmodelconnorconfigorselector-tablename-options) for more info about models.
+

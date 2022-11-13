@@ -1,15 +1,11 @@
-async function createCrudList(connection, routes, schema= 'public') {
+function createCrudList(routes) {
+  if (routes=='*') {
+    throw `[calustra-router] Error on createCrudList: routes=*, so you need to call createCrudListAsync`
+  }
+
   // Build crudList depending on crud param
   let crudList = []
-  if (routes==='*') {
-    const readFromDatabase= await connection.getTableNames(schema)
-    crudList= readFromDatabase.map((t) => {
-      return {
-        name: t,
-        options: {}
-      }
-    })
-  } else if (typeof routes == 'string') {
+  if (typeof routes == 'string') {
     crudList.push({name: routes, options: {}})
   } else {
     for (let tab of routes) {
@@ -24,4 +20,18 @@ async function createCrudList(connection, routes, schema= 'public') {
   return crudList
 }
 
-export default createCrudList
+async function createCrudListAsync(connection, schema= 'public') {
+  // Build crudList for every table
+  const readFromDatabase= await connection.getTableNames(schema)
+  const crudList= readFromDatabase.map((t) => {
+    return {
+      name: t,
+      options: {}
+    }
+  })
+  
+  return crudList
+}
+
+
+export {createCrudList, createCrudListAsync}

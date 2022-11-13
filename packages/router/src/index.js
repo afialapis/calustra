@@ -1,4 +1,4 @@
-import calustraRouter from './router'
+import {calustraRouter, calustraRouterAll} from './router'
 import {getConnection, getModel} from 'calustra-orm'
 
-export {calustraRouter as default, getConnection, getModel}
+export {calustraRouter, calustraRouterAll, getConnection, getModel}

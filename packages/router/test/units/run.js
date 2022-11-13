@@ -1,6 +1,6 @@
 import assert from 'assert'
 import fetch from 'node-fetch'
-import CalustraRouter from '../../src'
+import {calustraRouter, calustraRouterAll} from '../../src'
 import {start, stop} from './server'
 import data from './data'
 
@@ -8,7 +8,12 @@ function router_test_run (config, server, name, calustra) {
 
   it(`[RUN][${name}][START] should init crud/queries and server them on ${calustra.prefix}`, async function() {
 
-    const router = await CalustraRouter(config, calustra)
+    let router 
+    if (calustra.crud.routes=='*') {
+      router = await calustraRouterAll(config, calustra)
+    } else {
+      router = calustraRouter(config, calustra)
+    }
     start(server, router.routes())
 
   })

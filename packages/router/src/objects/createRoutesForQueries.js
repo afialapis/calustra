@@ -1,4 +1,4 @@
-async function createRoutesForQueries(connection, router, router_options, logger) {
+function createRoutesForQueries(connection, router, router_options, logger) {
   /*
     router_options.queries
     {
@@ -20,7 +20,10 @@ async function createRoutesForQueries(connection, router, router_options, logger
 
   const _route_callback = async (ctx, route) => {
     const getUserId = route?.getUserId || router_options.getUserId
-    const uid= getUserId(ctx)
+    let uid= undefined
+    if (getUserId) {
+      uid= getUserId(ctx)
+    }
 
     const authUser = {
       require: false,
