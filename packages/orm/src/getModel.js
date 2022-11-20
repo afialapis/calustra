@@ -1,7 +1,6 @@
-import {getOrSetModelFromCache, getModelFromCache} from './cache'
+import {getModelFromCache} from './cache'
 import getConnection from './getConnectionWrap'
-import CalustraModelPostgres from './models/postgres'
-import CalustraModelSQLite from './models/sqlite'
+import getModelFromConnection from './getModelFromConnection'
 
 function _isCalustraModel(obj) {
   try {
@@ -12,22 +11,6 @@ function _isCalustraModel(obj) {
 
 function _isSelector(configOrSelector) {
   return typeof configOrSelector == 'string'
-}
-
-
-function _initModel(connConfig, tableName, options) {
-    let model
-    
-    if (connConfig.dialect == 'postgres') {
-      model = new CalustraModelPostgres(connConfig, tableName, options)
-    }
-    else if (connConfig.dialect == 'sqlite') {
-      model = new CalustraModelSQLite(connConfig, tableName, options)
-    } else {
-      throw `getModel: ${connConfig.dialect} is not a supported dialect`
-    }
-
-    return model
 }
 
 
@@ -52,9 +35,7 @@ const getModel = (connOrConfigOrSelector, tableName, options) => {
     return model
   }
 
-  const model= getOrSetModelFromCache(connection, tableName, options, () => {
-    return _initModel(connection.config, tableName, options)
-  }) 
+  const model= getModelFromConnection(connection, tableName, options) 
 
   try {
     logger.set_prefix(logger_prev_prefix)

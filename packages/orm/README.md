@@ -125,6 +125,14 @@ const del_rows = await TestModel.delete(del_filter)
 
 Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#getconnectionconfigorselector-options) for more info about connections.
 
+The returned `connection` object, though, will have an addendum:
+
+```js
+  connection.getModel(tableName, options)
+```
+
+This is just a shortcut for the [`getModel`](#getmodelconnorconfigorselector-tablename-options) method using current `connection` object.
+
 
 ## `getModel(connOrConfigOrSelector, tableName, options)`
 
