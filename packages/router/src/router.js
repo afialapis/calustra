@@ -47,7 +47,7 @@ function calustraRouter(connOrConfig, options) {
 
   // create routes for queries
   if (crudRoutesOk) {
-    createRoutesForQueries(conn, router, router_options, conn.log)
+    createRoutesForQueries(router, router_options, conn.log)
   }
 
   // Return the router
@@ -95,7 +95,7 @@ async function calustraRouterAll(connOrConfig, options) {
 
   // create routes for queries
   if (crudRoutesOk) {
-    createRoutesForQueries(conn, router, router_options, conn.log)
+    createRoutesForQueries(router, router_options, conn.log)
   }
 
   // Return the router

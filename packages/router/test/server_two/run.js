@@ -1,28 +1,42 @@
+import Koa from 'koa'
 import assert from 'assert'
 import fetch from 'node-fetch'
-import {calustraRouter, calustraRouterAll} from '../../src'
-import {start, stop} from './server'
+import {useCalustraDbContext, useCalustraRouter, useCalustraRouterAsync} from '../../src'
 import data from './data'
 
-function router_test_run (config, server, name, calustra) {
 
-  it(`[RUN][${name}][START] should init crud/queries and server them on ${calustra.prefix}`, async function() {
 
-    let router 
+function router_test_run (config, server_options, name, calustra) {
+
+  let server
+
+  it(`[RUN][${name}][START] should init crud/queries and server them`, async function() {
+
+    const app = new Koa()
+
+    useCalustraDbContext(app, config, calustra)
+
     if (calustra.crud.routes=='*') {
-      router = await calustraRouterAll(config, calustra)
+      await useCalustraRouterAsync(app, config, calustra)
     } else {
-      router = calustraRouter(config, calustra)
+      useCalustraRouter(app, config, calustra)
     }
-    start(server, router.routes())
+
+    server= app.listen(server_options.port, function () {
+      //console.info('Listening on port ' + server_options.port)
+      
+    })
+
 
   })
 
   it(`[RUN][${name}][FETCH] should fetch test_01 from crud (READ)`, async function() {
 
-    const url= `http://localhost:${server.port}${calustra.crud.prefix}/test_01/read`
+    const url= `http://localhost:${server_options.port}${calustra.crud.prefix}/test_01/read`
     const response= await fetch(url)
+
     let result= await response.json()
+
     if (calustra.body_field != undefined) {
       result= result[calustra.body_field]
     }
@@ -36,7 +50,7 @@ function router_test_run (config, server, name, calustra) {
 
     it(`[RUN][${name}][FETCH] should fetch query on ${query.url}`, async function() {
       
-      const url= `http://localhost:${server.port}${calustra.queries.prefix}${query.url}`
+      const url= `http://localhost:${server_options.port}${calustra.queries.prefix}${query.url}`
       const response= await fetch(url)
       await query._test_check(response, assert)
     })
@@ -45,7 +59,7 @@ function router_test_run (config, server, name, calustra) {
 
   it(`[RUN][${name}][STOP] should stop test server`, function() {
 
-    stop()
+    server.close()
 
   })
 

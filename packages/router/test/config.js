@@ -70,11 +70,12 @@ export default {
         routes: [{
           url: '/query/one',
           method: 'GET',
-          callback: async (ctx, connection) => {
-            const res= await connection.selectOne('select * from test_01 where name = $1', ['Peter'], {})
+          callback: async (ctx) => {
+            const conn= ctx.db.getConnection()
+            const res= await conn.selectOne('select * from test_01 where name = $1', ['Peter'], {})            
             ctx.body= res
           },
-          _test_check: async (response, assert) => {
+          _test_check: async (response, assert) => {        
             const result = await response.json()
             assert.strictEqual(result.name, 'Peter')
           }
@@ -94,9 +95,9 @@ export default {
         prefix: '',
         routes: [
           {
-            url: '/query/one',
+            url: '/query/two',
             method: 'GET',
-            callback: (_ctx, _connection) => {},
+            callback: (_ctx) => {},
             authUser: {
               require: true,
               action: 'redirect',

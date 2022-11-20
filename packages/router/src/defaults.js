@@ -91,7 +91,7 @@ module.exports= {
         {
           url: '/crud/todos/fake',
           method: 'POST',
-          callback: (ctx, conn) => {},
+          callback: (ctx) => {},
           authUser: {
             require: true,
             action: 'redirect',

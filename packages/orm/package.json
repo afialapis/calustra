@@ -1,6 +1,6 @@
 {
   "name": "calustra-orm",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A small ORM for those out there who still feel good typing some raw SQL",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [

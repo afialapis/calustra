@@ -13,7 +13,7 @@
 
 # Intro
 
-[`calustra-router`](http://calustra.afialapis.com/) creates a [`koa-router`](https://github.com/koajs/router) Router exposing a [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) API with endpoints for your database tables.
+[`calustra-router`](http://calustra.afialapis.com/) adds a [`koa-router`](https://github.com/koajs/router) Router to your [`Koa`](https://github.com/koajs/koa) app exposing a [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) API with endpoints for your database tables.
 
 This API will consist on two kind of endpoint / methods:
 
@@ -28,7 +28,6 @@ Currently, supported databases are:
 - SQLite
 
 Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn) for more info.
-
 
 
 # Install
@@ -88,18 +87,56 @@ let screw_data= await response.json()
 
 # API
 
-`calustra-router` exposes these methods: 
+`calustra-router` has these use-approach (somehow `Koa` style) methods: 
+
+- [`useCalustraDbContext`]()
+- [`useCalustraRouter`]()
+- [`useCalustraRouterAsync`]()
+
+But each piece is also exposed:
 - [`calustraRouter`](#calustrarouterconnorconfig-options).
 - [`calustraRouterAll`](#async-calustrarouterallconnorconfig-options).
 - [`getConnection`](#getconnectionconfigorselector-options) (from [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn))
 - [`getModel`](#getmodelconnorconfigorselector-tablename-options) (from [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm))
 
 
+## `useCalustraDbContext(app, config, options)`
+
+- `app` is your `Koa` app.
+- `config`  and `options` are used to initialize the database connection (or read a cached one). Check [`getConnection`](#getconnectionconfigorselector-options) below.
+
+This methods extends the [`app.context`](https://github.com/koajs/koa/blob/master/docs/api/index.md#appcontext) with this:
+
+```js
+  app.context.db= {
+    getConnection,
+    getModel
+  }
+```
+
+More on [`getConnection`](#getconnectionconfigorselector-options) and [`getModel`](#getmodelconnorconfigorselector-tablename-options) below.
+
+
+## `useCalustraRouter(app, connOrConfig, config)`
+
+- `app` is your `Koa` app.
+- `connOrConfig` is used to initialize the database connection (or read a cached one). Check [`getConnection`](#getconnectionconfigorselector-options) below.
+- `options` is passed also to `calustra-conn`'s `getConnection(config, options)` method.
+
+This methods creates a [`calustraRouter`](#calustrarouterconnorconfig-options) and attaches it to your `app`.
+
+## `useCalustraRouterAsync(app, connOrConfig, config)`
+
+- `app` is your `Koa` app.
+- `connOrConfig` is used to initialize the database connection (or read a cached one). Check [`getConnection`](#getconnectionconfigorselector-options) below.
+- `options` is passed also to `calustra-conn`'s `getConnection(config, options)` method.
+
+This methods creates a [`calustraRouterAll`](#async-calustrarouterallconnorconfig-options) and attaches it to your `app`.
+
 ## `calustraRouter(connOrConfig, options)`
 
-`connOrConfig` is used to initialize the database connection (or read a cached one). Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#getconnectionconfigorselector-options) for more info about connections.
-
-`options` is passed also to `calustra-conn`'s `getConnection(config, options)` method.
+- `connOrConfig` is used to initialize the database connection (or read a cached one). Check [`getConnection`](#getconnectionconfigorselector-options) below.
+- `options` is passed also to `calustra-conn`'s `getConnection(config, options)` method.
 
 ### `options.schema`
 
@@ -193,7 +230,7 @@ By default is is `public`. Specifies which database's schema to work with.
       {
         url: '/screw_stock/fake',
         method: 'POST',
-        callback: (ctx, conn) => {},
+        callback: (ctx) => {},
         authUser: {
           require: true,
           action: 'redirect',
@@ -250,5 +287,5 @@ Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/c
 
 ## `getModel(connOrConfigOrSelector, tableName, options)`
 
-Check [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getmodelconnorconfigorselector-tablename-options) for more info about models.
+Check [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getmodelconnorconfigorselector-tablename-options) for more info about model s.
 
