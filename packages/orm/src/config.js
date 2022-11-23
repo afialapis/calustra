@@ -99,19 +99,19 @@ const getModelConfig = (tableName, config) => {
   }
 
   let useDateFields= merge(TABLE_DEF.useDateFields)
-  if (model_config?.useDateFields != undefined) {
-    if (typeof model_config.useDateFields == 'object') {
-      useDateFields= merge(TABLE_DEF.useDateFields, model_config.useDateFields)
-    } else if (typeof model_config.useDateFields == 'boolean') {
-      useDateFields.use = model_config.useDateFields
+  if (config?.useDateFields != undefined) {
+    if (typeof config.useDateFields == 'object') {
+      useDateFields= merge(TABLE_DEF.useDateFields, config.useDateFields)
+    } else if (typeof config.useDateFields == 'boolean') {
+      useDateFields.use = config.useDateFields
     }
   }
 
   let merged = {
     name: model_config.name,
-    schema: model_config?.schema || TABLE_DEF?.schema,
-    triggers: model_config?.triggers || {},
-    checkBeforeDelete: model_config?.checkBeforeDelete || false,
+    schema: config?.schema || TABLE_DEF?.schema,
+    triggers: config?.triggers || {},
+    checkBeforeDelete: config?.checkBeforeDelete || false,
     useDateFields
   }
 
