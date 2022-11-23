@@ -69,7 +69,7 @@ const getConnectionConfig = (config) => {
 
   const options= {
     ... CONN_OPTIONS_DEF,
-    ... config?.options || {}
+    ... config?.connection?.options || config?.conn?.options || {}
   }
   
   return {
