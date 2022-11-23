@@ -1,6 +1,6 @@
 import assert from 'assert'
 import {getConnection} from '../../src'
-import { isCalustraConnection } from 'calustra'
+import { isCalustraConnection } from 'calustra-conn'
 
 
 async function test_model(config, data, close= false) { 

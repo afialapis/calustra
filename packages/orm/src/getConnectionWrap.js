@@ -1,4 +1,4 @@
-import {getConnection, isCalustraConnection, isCalustraSelector} from 'calustra'
+import {getConnection, isCalustraConnection, isCalustraSelector} from 'calustra-conn'
 import {getConnectionConfig, getModelConfig} from './config'
 import {getOrSetModelFromCache} from './cache'
 import initModel from './instances'

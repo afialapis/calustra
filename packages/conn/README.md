@@ -35,7 +35,7 @@ npm install calustra [--save-dev]
 `calustra-conn` exposes just the method `getConnection` which returns a [Connection object](#connection-object).
 
 ```js
-import {getConnection} from 'calustra'
+import {getConnection} from 'calustra-conn'
 
 // Init connection
 const config= {
@@ -101,7 +101,7 @@ const del_records = await conn.executeAndCount(q_del, [1000])
 Notice that `calustra-conn` keeps a simple cache of connections once they are initialized. You can get them using `getConnection(selector)`:
 
 ```js
-import {getConnection} from 'calustra'
+import {getConnection} from 'calustra-conn'
 const conn = getConnection(`calustra`)
 ```
 
