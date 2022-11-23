@@ -1,22 +1,36 @@
-import {getConnection} from 'calustra'
-import getModelFromConnection from './getModelFromConnection'
+import {getConnection, isCalustraConnection, isCalustraSelector} from 'calustra'
+import {getConnectionConfig, getModelConfig} from './config'
+import {getOrSetModelFromCache} from './cache'
+import initModel from './instances'
 
-const getConnectionWrap = (connOrConfigOrSelector, options) => {
-
-  const conn_options= {
-    ...options,
-    cache_fallback: false,
-    cache_error_log: true
-  }
-
-  const connection= getConnection(connOrConfigOrSelector, conn_options)
+const getConnectionWrap = (options) => {
   
-  const getModel = (tableName, moptions) => {
-    const all_options= {
-      ...options || {},
-      ...moptions || {}
+  let connection, connConfig
+
+  if (isCalustraConnection(options)) {
+    connection= options
+    connConfig= {
+      database: connection.config,
+      options: {log: connection.log}
     }
-    const model= getModelFromConnection(connection, tableName, all_options)
+  } else if (isCalustraSelector(options)) {
+    connection= getConnection(options)
+    connConfig= {
+      database: connection.config,
+      options: {log: connection.log}
+    }
+  } else {
+    connConfig= getConnectionConfig(options)
+    connection= getConnection(connConfig.database, connConfig.options)
+  }
+  
+  const getModel = (tableName) => {
+    const modelConfig = getModelConfig(tableName, options)
+
+    const model= getOrSetModelFromCache(connection, modelConfig, () => {
+      return initModel(connection, modelConfig)
+    }) 
+    
     return model
   }
 

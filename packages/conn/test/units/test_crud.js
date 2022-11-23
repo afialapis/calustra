@@ -1,7 +1,7 @@
 import assert from 'assert'
 import {getConnection} from '../../src'
 
-function test_crud(config, options, data) {
+function test_crud(config, options, data, close= false) {
   let conn= undefined
 
   describe(`${config.dialect}: Test crud`, function() {
@@ -121,8 +121,12 @@ function test_crud(config, options, data) {
       await conn.execute(query)
     })  
 
-    it('should close connection', async function() {
-      conn.close()
+    it(`should ${close ? 'close' : 'uncache'} connection`, async function() {
+      if (close) {
+        conn.close()
+      } else {
+        conn.uncache()
+      }
     })      
   })
 

@@ -2,10 +2,7 @@ import {initCache} from 'cacheiro'
 
 const cache = initCache('raw')
 
-
-
-
-function getModelCacheKey(connection, tableName, options) {
+function _getModelCacheKey(connection, modelConfig) {
   const config= connection.config
   const conn_key= config.dialect=='postgres'
     ? `calustra-${config.dialect}-${config?.database || 'nodatabase'}-${config?.host || 'nohost'}-${config?.port || 'noport'}-${config?.user || 'nouser'}`
@@ -13,40 +10,18 @@ function getModelCacheKey(connection, tableName, options) {
     ? `calustra-${config.dialect}-${config?.filename || 'nofilename'}`
     : `calustra-${config.dialect}-nodata`
  
-  const _cbd_key= `checkBeforeDelete:${options?.checkBeforeDelete===true ? 'yes' : 'no'}`
-  const _udf_key= `useDateFields:${options?.useDateFields===true ? 'default' : options?.useDateFields==undefined ? 'no' : `${options?.useDateFields?.fieldnames}`}`
-  const _tri_key= `triggers:${options?.triggers==undefined ? 'no' : Object.values(options.triggers).join(',')}`
+  const _cbd_key= `checkBeforeDelete:${modelConfig?.checkBeforeDelete===true ? 'yes' : 'no'}`
+  const _udf_key= `useDateFields:${modelConfig?.useDateFields===true ? 'default' : modelConfig?.useDateFields==undefined ? 'no' : `${modelConfig?.useDateFields?.fieldnames}`}`
+  const _tri_key= `triggers:${modelConfig?.triggers==undefined ? 'no' : Object.values(modelConfig.triggers).join(',')}`
   const opt_key= `${_cbd_key};${_udf_key};${_tri_key}`
 
-  return `${tableName}-${conn_key}-${opt_key}`
+  return `${modelConfig.name}-${conn_key}-${opt_key}`
 }
 
 
-
-function getModelFromCache(selector, logger) {
-
-  const current_keys = cache.getKeys()
-
-  if ( (!current_keys) || (current_keys.length==0)) {
-    logger.error(`No cached models are available.`)
-    return undefined
-  }
-
-  const key_for_selector= current_keys.find((key) => key.indexOf(selector)>=0)
-
-  if (key_for_selector!=undefined) {
-    logger.debug(`Model retrieved from cache with selector ${selector}`)
-    return cache.getItem(key_for_selector)
-  }
-
-  logger.error(`Could not find models for selector ${selector}. Available ones are: ${current_keys.join(', ')}.`)
-  return undefined
-}
-
-
-function getOrSetModelFromCache(connection, tableName, options, initModelCallback) {
+function getOrSetModelFromCache(connection, modelConfig, initModelCallback) {
   const logger= connection.log
-  const cache_key = getModelCacheKey(connection, tableName, options)
+  const cache_key = _getModelCacheKey(connection, modelConfig)
 
   const model = cache.getOrSetItem(cache_key, 
     () => {
@@ -56,15 +31,15 @@ function getOrSetModelFromCache(connection, tableName, options, initModelCallbac
       const model= initModelCallback()
 
       if (model==undefined) {
-        logger.error(`${tableName} model could not be inited`)
-        throw `[calustra-orm] ${tableName} model could not be inited`
+        logger.error(`[calustra-orm] ${model.name} model could not be inited`)
+        throw `[calustra-orm] ${model.name} model could not be inited`
       }
 
       model.uncache = () => {
         cache.unsetItem(cache_key)
       }
       
-      logger.debug(`${tableName} model inited and cached as ${cache_key}`)
+      logger.debug(`[calustra-orm] ${model.name} model inited and cached as ${cache_key}`)
       return model
     })
   
@@ -73,4 +48,4 @@ function getOrSetModelFromCache(connection, tableName, options, initModelCallbac
 }
 
 
-export {getModelCacheKey, getModelFromCache, getOrSetModelFromCache}
+export {getOrSetModelFromCache}

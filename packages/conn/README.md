@@ -148,7 +148,8 @@ For `PostgreSQL`:
     // The maximum time, in milliseconds, that a connection can be idle before being released. 
     // Use with combination of evict for proper working, for more details read 
     // https://github.com/coopernurse/node-pool/issues/178#issuecomment-327110870
-    idleTimeoutMillis: 10000
+    idleTimeoutMillis: 10000,
+    allowExitOnIdle: true
   }
 ```
 For `SQLite`:

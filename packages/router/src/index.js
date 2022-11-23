@@ -1,12 +1,11 @@
-import {calustraRouter, calustraRouterAll} from './router'
-import {getConnection, getModel} from 'calustra-orm'
-import {useCalustraDbContext, useCalustraRouter, useCalustraRouterAsync} from './init'
+import {calustraRouter, calustraRouterForAllTables} from './router'
+import {getConnection} from 'calustra-orm'
+import {useCalustraDbContext, useCalustraRouter, useCalustraRouterForAllTables} from './use'
 
 export {
   useCalustraDbContext, 
   useCalustraRouter, 
-  useCalustraRouterAsync,
+  useCalustraRouterForAllTables,
   calustraRouter, 
-  calustraRouterAll,
-  getConnection, 
-  getModel}
+  calustraRouterForAllTables,
+  getConnection}

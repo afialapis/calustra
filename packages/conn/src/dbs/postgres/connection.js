@@ -21,10 +21,9 @@ class CalustraConnPG extends CalustraConnBase {
     return this.db.tx  
   }  
 
-  close () {
+  closeDb () {
     // Gotta do nothing if we use .query() ?
     this.db.$pool.end()
-    this.uncache()
   }
 
   async execute (query, values, options) {

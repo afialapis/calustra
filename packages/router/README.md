@@ -242,10 +242,10 @@ By default is is `public`. Specifies which database's schema to work with.
 
 ```
 
-### `options.body_field`
+### `options.bodyField`
 
 
-  body_field: 'result',
+  bodyField: 'result',
 
 ### `options.getUserId`
 

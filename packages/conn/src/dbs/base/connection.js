@@ -1,7 +1,7 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "query|value|options|schema|tableName|^_" }]*/
 
 import {formatQuery, queryDescription} from 'calustra-query'
-import {getOrSetQueryResultsFromCache} from '../../cache'
+import {getOrSetQueryResultsFromCache} from '../../cache/results'
 
 class CalustraConnBase {
  
@@ -13,6 +13,8 @@ class CalustraConnBase {
     this.db = this.openDb(this.config)
     
     this.log.info(`Using database ${config?.database}`)
+
+    this.is_open= true
   }
 
   get dialect() {
@@ -21,7 +23,15 @@ class CalustraConnBase {
 
   openDb() {
     throw 'CalustraConnBase: openDb() not implemented"'
+  }
+
+  closeDb () {
+    throw 'CalustraConnBase: closeDb() not implemented"'
   }  
+
+  get isOpen () {
+    return this.is_open
+  }
 
   openTransaction() {
     throw 'CalustraConnBase: openTransaction() not implemented"'
@@ -30,9 +40,14 @@ class CalustraConnBase {
   // method assigned on the fly
   // uncache() {}
 
+
   close () {
-    throw 'CalustraConnBase: close() not implemented"'
+    this.is_open= false
+    this.closeDb()
+    this.uncache()
   }
+
+
 
   formatQuery (query, values) {
     return formatQuery(query, values)

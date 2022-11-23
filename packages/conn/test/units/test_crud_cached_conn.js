@@ -1,7 +1,7 @@
 import assert from 'assert'
 import {getConnection} from '../../src'
 
-function test_crud(config, options, data) {
+function test_crud(config, options, data, close= false) {
 
   const db_name = config.database || config.filename
 
@@ -132,9 +132,13 @@ function test_crud(config, options, data) {
       await conn.execute(query)
     })  
 
-    it('should close connection', async function() {
+    it(`should ${close ? 'close' : 'uncache'} connection`, async function() {
       const conn = getConnection(db_name)
-      conn.close()
+      if (close) {
+        conn.close()
+      } else {
+        conn.uncache()
+      }
     })      
   })
 

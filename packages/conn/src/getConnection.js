@@ -1,18 +1,13 @@
-import {getConnectionFromCache, getOrSetConnectionFromCache} from './cache'
+import {
+  getConnectionFromCache, 
+  saveConnectionToCache, 
+  removeConnectionFromCache
+} from './cache/conns'
 import Logger from './util/logger'
 import CalustraConnPG from './dbs/postgres/connection'
 import CalustraConnLT from './dbs/sqlite/connection'
+import { isCalustraConnection, isCalustraSelector } from './checks'
 
-function _isCalustraConn(obj) {
-  try {
-    return obj.constructor.name.indexOf('CalustraConn')>=0
-  } catch(e) {}
-  return false
-}
-
-function _isSelector(configOrSelector) {
-  return typeof configOrSelector == 'string'
-}
 
 function _initLogger(options) {
   let logger
@@ -26,8 +21,9 @@ function _initLogger(options) {
 }
 
 
-function _initConnection(config, logger) {
+function _initConnection(config, options) {
   const dialect = config?.dialect 
+  const logger = _initLogger(options)
 
   if (dialect == 'postgres') {
     const conn= new CalustraConnPG(config, logger)
@@ -45,24 +41,41 @@ function _initConnection(config, logger) {
 
 
 function getConnection (configOrSelector, options) {
+  
+  // is it already a connection?
+  if (isCalustraConnection(configOrSelector)) {
+    const alreadyConn= configOrSelector
 
-  if (_isCalustraConn(configOrSelector)) {
-    return configOrSelector
+    // If already a connection and still open, return it as it is
+    if (alreadyConn.isOpen) {
+      removeConnectionFromCache(alreadyConn.config)
+      saveConnectionToCache(alreadyConn)
+
+      return alreadyConn
+    }
+    
+    // If already a connection but closed, rebuild it with its properties
+    return getConnection(alreadyConn.config, {
+      log: alreadyConn.log,
+      ...options
+    })
+    
   }
 
-  const logger= _initLogger(options)
-
-  if (_isSelector(configOrSelector)) {
-    const conn= getConnectionFromCache(configOrSelector, logger, options?.cache_fallback===true, options?.cache_error_log!==false)
-    return conn
+  const cachedConn= getConnectionFromCache(configOrSelector)
+  if (cachedConn) {
+    //console.log('++ getConnection - from cache ')
+    return cachedConn
   }
   
-  const config= configOrSelector
+  if (isCalustraSelector(configOrSelector)) {
+    throw `[calustra-conn] Could not get connection for selector ${configOrSelector}`
+  }
 
-  const conn= getOrSetConnectionFromCache(config, logger, () => {
-    return _initConnection(config, logger)
-  })
+  //console.log('++ getConnection - from config (saved to cache) ')
 
+  const conn= _initConnection(configOrSelector, options)
+  saveConnectionToCache(conn)
   return conn
 }
 

@@ -1,4 +1,4 @@
-export default (obj, onlyFields) => {
+const filterObj = (obj, onlyFields) => {
   if (obj == undefined || onlyFields == undefined) {
     return obj
   }
@@ -13,3 +13,5 @@ export default (obj, onlyFields) => {
 
   return out
 }
+
+export default filterObj

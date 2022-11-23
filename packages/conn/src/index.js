@@ -1,3 +1,5 @@
 import getConnection from './getConnection'
 
-export { getConnection }
+import {isCalustraConnection, isCalustraSelector} from './checks'
+
+export { getConnection, isCalustraConnection, isCalustraSelector }

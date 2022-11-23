@@ -38,9 +38,8 @@ class CalustraConnLT extends CalustraConnBase {
     throw 'CalustraConnLT: SQLite connections does not support transactions"'
   }  
 
-  close () {
+  closeDb () {
     this.db.close()
-    this.uncache()
   }
   
   
