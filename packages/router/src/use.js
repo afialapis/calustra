@@ -1,12 +1,12 @@
 import {getConnection as getConnectionCal} from 'calustra-orm'
 import {calustraRouter, calustraRouterForAllTables} from './router'
 
-function useCalustraDbContext(app, config) {
+function useCalustraDbContext(app, connOrConfig) {
 
-  const getConnection = () => getConnectionCal(config)
+  const getConnection = () => getConnectionCal(connOrConfig)
 
   const getModel = (name) => {
-    const conn= getConnectionCal(config)
+    const conn= getConnectionCal(connOrConfig)
     return conn.getModel(name)
   }
 

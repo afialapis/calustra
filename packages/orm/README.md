@@ -251,7 +251,7 @@ To instantiate a Model, we will just do: `const TableModel= connection.getModel(
 
 This Model object will apply the table-related config we have passed at [`getConnection`](#getconnectionoptions).
 
-### Model object
+## Model object
 
 In `calustra-orm`, a Model object always refers to the database table; it never refers to a single record.
 

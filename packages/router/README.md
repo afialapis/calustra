@@ -38,25 +38,29 @@ npm install calustra-router [--save-dev]
 
 # Get started
 
-`calustra-router` main method is `calustraRouter`.
-
 Here a simple server serving `calsutra-router` API on `/api` path:
 
 ```js
 import Koa from 'koa'
-import {calustraRouter} from 'calustra-router'
+import {useCalustraRouter} from 'calustra-router'
 
-const config= {
-  host:     'localhost',
-  port:      5432,
-  database: 'calustra-orm',
-  user:     'postgres',
-  password: 'postgres'
+const connConfig= {
+  connection: {
+    database: {
+      host:     'localhost',
+      port:      5432,
+      database: 'calustra-orm',
+      user:     'postgres',
+      password: 'postgres'
+    },
+    options: {
+      log: 'info',
+    },
+  },
+  tables: ['screw_stock']
 }
 
-const options= {
-  // calustra-conn options
-  log: 'info',
+const routesConfig= {
   // router options
   crud: {
     prefix: '/api',
@@ -64,17 +68,16 @@ const options= {
   }   
 }
 
-
-const router = await calustraRouter(config, options)
-
 const app = new Koa()
-app.use(router.routes())
 
-const server= app.listen(3001, function () {
+useCalustraRouter(app, connConfig, routesConfig)
+
+const server= app.listen(3000, function () {
   console.log('Server is listening...')
 })
 ```
-API could be consumed like this:
+
+Given previous server, API could be consumed like this:
 
 ```js
 import fetch from 'node-fetch'
@@ -89,21 +92,20 @@ let screw_data= await response.json()
 
 `calustra-router` has these use-approach (somehow `Koa` style) methods: 
 
-- [`useCalustraDbContext`]()
-- [`useCalustraRouter`]()
-- [`useCalustraRouterAsync`]()
+- [`useCalustraDbContext`](#usecalustradbcontextapp-connorconfig)
+- [`useCalustraRouter`](#usecalustrarouterapp-connorconfig-routes)
+- [`useCalustraRouterForAllTables`](#async-usecalustrarouterforalltablesapp-connorconfig-schema-public)
 
 But each piece is also exposed:
-- [`calustraRouter`](#calustrarouterconnorconfig-options).
-- [`calustraRouterAll`](#async-calustrarouterallconnorconfig-options).
-- [`getConnection`](#getconnectionconfigorselector-options) (from [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn))
-- [`getModel`](#getmodelconnorconfigorselector-tablename-options) (from [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm))
+- [`calustraRouter`](#calustrarouterconnorconfig-routes).
+- [`useCalustraRouterForAllTables`](#async-calustrarouterforalltablesconnorconfig-prefix--schema-public).
+- `getConnection` from [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getconnectionoptions)
 
 
-## `useCalustraDbContext(app, config, options)`
+## `useCalustraDbContext(app, connOrConfig)`
 
 - `app` is your `Koa` app.
-- `config`  and `options` are used to initialize the database connection (or read a cached one). Check [`getConnection`](#getconnectionconfigorselector-options) below.
+- `connOrConfig` is used to initialize the database connection (or read a cached one). Check [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getconnectionoptions)
 
 This methods extends the [`app.context`](https://github.com/koajs/koa/blob/master/docs/api/index.md#appcontext) with this:
 
@@ -114,35 +116,56 @@ This methods extends the [`app.context`](https://github.com/koajs/koa/blob/maste
   }
 ```
 
-More on [`getConnection`](#getconnectionconfigorselector-options) and [`getModel`](#getmodelconnorconfigorselector-tablename-options) below.
-
-
-## `useCalustraRouter(app, connOrConfig, config)`
+## `useCalustraRouter(app, connOrConfig, routes)`
 
 - `app` is your `Koa` app.
-- `connOrConfig` is used to initialize the database connection (or read a cached one). Check [`getConnection`](#getconnectionconfigorselector-options) below.
-- `options` is passed also to `calustra-conn`'s `getConnection(config, options)` method.
+- `connOrConfig` is used to initialize the database connection (or read a cached one). Check [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getconnectionoptions)
+- [`routes`](#routes-config)
 
-This methods creates a [`calustraRouter`](#calustrarouterconnorconfig-options) and attaches it to your `app`.
+This methods creates a [`calustraRouter`](#calustrarouterconnorconfig-routes) and attaches it to your `app`.
 
-## `useCalustraRouterAsync(app, connOrConfig, config)`
 
-- `app` is your `Koa` app.
-- `connOrConfig` is used to initialize the database connection (or read a cached one). Check [`getConnection`](#getconnectionconfigorselector-options) below.
-- `options` is passed also to `calustra-conn`'s `getConnection(config, options)` method.
+## `calustraRouter(connOrConfig, routes)`
 
-This methods creates a [`calustraRouterAll`](#async-calustrarouterallconnorconfig-options) and attaches it to your `app`.
+- `connOrConfig` is used to initialize the database connection (or read a cached one). Check [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getconnectionoptions)
+- [`routes`](#routes-config)
 
-## `calustraRouter(connOrConfig, options)`
+Creates a [`koa-router`](https://github.com/koajs/router) Router, and attached to it a series of endpoints depending on your [`routes`](#routes-config).
 
-- `connOrConfig` is used to initialize the database connection (or read a cached one). Check [`getConnection`](#getconnectionconfigorselector-options) below.
-- `options` is passed also to `calustra-conn`'s `getConnection(config, options)` method.
 
-### `options.schema`
+## `routes` config
 
-By default is is `public`. Specifies which database's schema to work with.
+Is an object like this:
 
-### `options.crud`
+```js
+{
+  crud: {... crud config ...},
+  queries: {...queries config...},
+  {...custom options...}
+}
+```
+
+Custom options `schema`, `bodyField`, `getUserId` and `authUser` can be specified at any scope. For example:
+
+```js
+{
+  getUserId: (ctx) => { return -1 }
+  crud: {
+    prefix: '/api',
+    getUserId: (ctx) => { return 0 }
+    routes: [
+      {
+        name: 'screw_stock',
+        getUserId: (ctx) => { return 1 }
+      }
+    ]
+  }
+}
+
+```
+
+
+### `routes.crud`
 
 ```js
 
@@ -185,34 +208,6 @@ By default is is `public`. Specifies which database's schema to work with.
               action: 'redirect', // 'error'
               redirect_url: '/',
               error_code: 401
-            },   
-
-            // calustra-orm options
-
-            useDateFields: {
-              use: false,
-              fieldnames: {
-                created_at: 'created_at', 
-                last_update_at: 'last_update_at'
-              },
-              now: () => 0 // epoch_now()
-            },
-
-            checkBeforeDelete: [
-              "another_table.field_id"
-            ],
-            
-            triggers: {
-              beforeRead   : undefined,
-              afterRead    : undefined,
-              beforeInsert : undefined,
-              afterInsert  : undefined,
-
-              beforeUpdate : undefined,
-              afterUpdate  : undefined,
-
-              beforeDelete : undefined,
-              afterDelete  : undefined
             }
           }
         }      
@@ -220,7 +215,7 @@ By default is is `public`. Specifies which database's schema to work with.
   
 ```
 
-### `options.queries`
+### `routes.queries`
 
 ```js
   {
@@ -242,12 +237,26 @@ By default is is `public`. Specifies which database's schema to work with.
 
 ```
 
-### `options.bodyField`
+### `routes.schema`
+
+By default is is `public`. Specifies which database's schema to work with.
+
+### `routes.bodyField`
+
+By default  it is `undefined`, which means that [`queries`](#routesqueries) callbacks will return data on the `ctx.body` directly.
+If you pass son value, for example `result`, then data will be:
+
+```js
+// ctx.body
+{
+  result: {...thedata}
+}
+``` 
 
 
-  bodyField: 'result',
+### `routes.getUserId`
 
-### `options.getUserId`
+A callback receiving one param `ctx` and returning the logged in user id -if any-.
 
 ```js
   {
@@ -275,17 +284,18 @@ By default is is `public`. Specifies which database's schema to work with.
 
 ```
 
-## `async calustraRouterAll(connOrConfig, options)`
 
-Same as [`calustraRouter`](#calustrarouterconnorconfig-options), but:
-- `options.crud.queries` must be `*` (every table)
-- due to this necessary database access (to read tables info), function is `async`
+## `async useCalustraRouterForAllTables(app, connOrConfig, schema= 'public')`
 
-## `getConnection(configOrSelector, options)`
+- `app` is your `Koa` app.
+- `connOrConfig` is used to initialize the database connection (or read a cached one). Check [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getconnectionoptions)
 
-Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#getconnectionconfigorselector-options) for more info about connections.
+This methods creates a [`calustraRouterForAllTables`](#async-calustrarouterforalltablesconnorconfig-prefix--schema-public) and attaches it to your `app`.
 
-## `getModel(connOrConfigOrSelector, tableName, options)`
 
-Check [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getmodelconnorconfigorselector-tablename-options) for more info about model s.
+## `async calustraRouterForAllTables(connOrConfig, prefix= '', schema= 'public')`
 
+- `connOrConfig` is used to initialize the database connection (or read a cached one). Check [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getconnectionoptions)
+
+
+Creates a [`koa-router`](https://github.com/koajs/router) Router, and attached to it [crud routes](#routescrud) for every table in the database.
