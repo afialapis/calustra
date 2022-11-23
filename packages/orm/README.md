@@ -24,7 +24,7 @@ What it does:
 - Async/await operations
 - Transactions support
 - Automatically maintain date fields or make some extra check
-- Supports [Triggers](#optionstriggers)
+- Supports [Triggers](#tabletriggers)
 
 What it does not do:
 
@@ -52,11 +52,7 @@ npm install calustra-orm [--save-dev]
 
 # Get started
 
-`calustra-orm` exposes just the method [`getConnection`](#getconnectionconfigorselector-options). It is built on top of [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn), providing a couple of addendums:
-
-- `config` parameter 
-
-. The returned [Connection object](https://github.com/afialapis/calustra/tree/main/packages/conn#connection-object) comes with an extra `getMethod(tableName)` method.
+`calustra-orm` exposes just the method [`getConnection`](#getconnectionoptions). It is built on top of [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#connection-object), providing a speacial addendum: `connection.getModel(tableName)`.
 
 
 ```js
@@ -130,7 +126,7 @@ const del_rows = await ScrewStock.delete(del_filter)
 
 ## `getConnection(options)`
 
-Prepares and returns a [Connection object](#).
+Prepares and returns a [Connection object](#connection-object).
 
 
 ### `options.connection`
@@ -243,7 +239,7 @@ the query is executed, to customize the returning results, etc.
 
 Returns the same [Connection object](https://github.com/afialapis/calustra/tree/main/packages/conn#connection-object) as in  [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn).
 
-But this object is extended with the `getModel(tableName)` method, which returns a [Model object](#).
+But this object is extended with the `getModel(tableName)` method, which returns a [Model object](#model-object).
 
 
 ### `connection.getModel(tableName)`

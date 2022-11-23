@@ -215,7 +215,7 @@ const options= {
 
 ## Connection object
 
-### `connection.select(query, values, options)`
+### `async connection.select(query, values, options)`
 
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
@@ -225,7 +225,7 @@ const options= {
 
 Returns an array of objects with the result of the query.
 
-### `connection.selectOne(query, values, options)`
+### `async connection.selectOne(query, values, options)`
 
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
@@ -236,7 +236,7 @@ Returns an array of objects with the result of the query.
 
 Returns an object with the result of the query.
 
-### `connection.execute(query, values, options)`
+### `async connection.execute(query, values, options)`
 
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
@@ -247,7 +247,7 @@ Returns an object with the result of the query.
 Returns an array of objects with the result of the query.
 
 
-### `connection.executeAndCount(query, values, options)`
+### `async connection.executeAndCount(query, values, options)`
 
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
@@ -258,14 +258,14 @@ Returns an array of objects with the result of the query.
 Returns an integer with the number of rows affected by the query.
 
 
-### `connection.getTableNames(schema= 'public')`
+### `async connection.getTableNames(schema= 'public')`
 
 Returns an array with the table names present in the specified database `schema`:
 
 Notice the results of this method will be in-memory cached: so query runs just once per connection.
 
 
-### `connection.getTableDetails(tableName, schema= 'public')`
+### `async connection.getTableDetails(tableName, schema= 'public')`
 
 Returns an object with the details of a database table definition, like:
 
@@ -290,6 +290,6 @@ If you close a connection:
 connection.close()
 ```
 
-notice that the database's pool will be removed, being longer available. Even if recreating the [Connection object](#connection-object) you will get errors. 
+notice that the database's pool will be removed, being no longer available. Even if recreating the [Connection object](#connection-object) you will get errors. 
 
 So, use it with care!
