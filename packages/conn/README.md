@@ -92,7 +92,7 @@ const del_records = await conn.executeAndCount(q_del, [1000])
 
 ```
 
-## Cached connections
+# Cached connections
 
 Notice that `calustra-conn` keeps a simple cache of connections once they are initialized. You can get them using `getConnection(selector)`:
 
@@ -104,14 +104,14 @@ const conn = getConnection(`calustra`)
 where selector is just a string matching some part of the `config` you passed the first time to init the connection. 
 
 
-There are a couple of ways to uncache a connection:
-
+You can uncache a connection:
 ```js
 conn.uncache()
 ```
 
+Closing it also uncaches it, but [closing connections ](#closing-connections) must be done carefully:
 ```js
-conn.close() // closing a connection means also to uncache it
+conn.close()
 ```
 
 You can disable caching of a connection by specifying the option `nocache: true`:
@@ -282,4 +282,14 @@ Returns an object with the details of a database table definition, like:
 
 Notice the results of this method will be in-memory cached: so query runs just once per connection and table.
 
+# Closing connections
 
+If you close a connection:
+
+```js
+connection.close()
+```
+
+notice that the database's pool will be removed, being longer available. Even if recreating the [Connection object](#connection-object) you will get errors. 
+
+So, use it with care!
