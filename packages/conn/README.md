@@ -7,7 +7,11 @@
 1. [Intro](#intro)
 2. [Install](#install)
 3. [Getting Started](#getting-started)
-4. [API](#api)
+4. [Cached connections](#cached-connections)
+5. [API](#api)
+  - [`getConnection`](#getconnectionconfigorselector-options)
+  - [Connection object](#connection-object)
+6. [Notes](#notes)
 
 # Intro
 
@@ -282,7 +286,9 @@ Returns an object with the details of a database table definition, like:
 
 Notice the results of this method will be in-memory cached: so query runs just once per connection and table.
 
-# Closing connections
+# Notes
+
+## Closing connections
 
 If you close a connection:
 

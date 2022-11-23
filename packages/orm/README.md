@@ -10,6 +10,9 @@
 2. [Install](#install)
 3. [Get started](#get-started)
 4. [API](#api)
+  - [`getConnection`](#getconnectionoptions)
+  - [Connection object](#connection-object)
+  - [Model object](#model-object)
 5. [ToDo](#todo)
 
 
