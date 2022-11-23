@@ -62,7 +62,9 @@ const getConnectionConfig = (config) => {
   const db= config?.connection?.database || config?.connection?.db || config?.conn?.database || config?.conn?.db
 
   if (! db?.dialect) {
-    throw `[calustra-orm] Cannot get connection config from ${JSON.stringify(config)}`
+    console.error('[calustra-orm] Cannot get connection config from:')
+    console.error(config)
+    throw `[calustra-orm] Cannot get connection config`
   }
 
   const options= {

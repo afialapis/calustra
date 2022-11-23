@@ -45,11 +45,13 @@ function calustraRouter(connOrConfig, routes) {
       attachQueriesRoutes(router, queriesConfig, connection.log)
     }
   } catch(e) {
-    const msg= `[calustra-router] Error initing the router. Probably config objects are not ok.
-    connOrConfig: ${JSON.stringify(connOrConfig)}
-    routes: ${JSON.stringify(routes)}`
-    console.error(msg)
     console.error(e)
+    console.error('[calustra-router] Error initing the router. Probably config objects are not ok')
+    console.error('[calustra-router] connOrConfig:')
+    console.error(connOrConfig)
+    console.error('[calustra-router] routes:')
+    console.error(routes)
+    
   }
 
   // Return the router
