@@ -8,7 +8,6 @@ import CalustraConnPG from './dbs/postgres/connection'
 import CalustraConnLT from './dbs/sqlite/connection'
 import { isCalustraConnection, isCalustraSelector } from './checks'
 
-
 function _initLogger(options) {
   let logger
   if (options?.log==undefined || typeof options?.log == 'string') {
@@ -39,7 +38,6 @@ function _initConnection(config, options) {
 }
 
 
-
 function getConnection (configOrSelector, options) {
   
   // is it already a connection?
@@ -59,12 +57,10 @@ function getConnection (configOrSelector, options) {
       log: alreadyConn.log,
       ...options
     })
-    
   }
 
   const cachedConn= getConnectionFromCache(configOrSelector)
   if (cachedConn) {
-    //console.log('++ getConnection - from cache ')
     return cachedConn
   }
   
@@ -72,10 +68,11 @@ function getConnection (configOrSelector, options) {
     throw `[calustra-conn] Could not get connection for selector ${configOrSelector}`
   }
 
-  //console.log('++ getConnection - from config (saved to cache) ')
-
   const conn= _initConnection(configOrSelector, options)
-  saveConnectionToCache(conn)
+
+  if (options?.nocache!==true) {
+    saveConnectionToCache(conn)
+  }
   return conn
 }
 

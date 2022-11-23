@@ -44,7 +44,7 @@
   ],
   "dependencies": {
     "cacheiro": "^0.0.5",
-    "calustra": "workspace:../conn",
+    "calustra-conn": "workspace:../conn",
     "intre": "^1.0.3"
   },
   "devDependencies": {

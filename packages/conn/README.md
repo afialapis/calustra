@@ -16,6 +16,7 @@
 Currently, supported databases are:
 - PostgreSQL (through [pg-promise](https://github.com/vitaly-t/pg-promise)). 
 - SQLite (through [sqlite3](https://github.com/TryGhost/node-sqlite3)). 
+
 We may add support for other databases (MySql, MsSql, ...) in the future... or may not.
 
 
@@ -27,7 +28,7 @@ npm install calustra [--save-dev]
 
 # Getting Started
 
-`calustra-conn` exposes just the method `getConnection`.
+`calustra-conn` exposes just the method `getConnection` which returns a [Connection object](#connection-object).
 
 ```js
 import {getConnection} from 'calustra'
@@ -126,7 +127,7 @@ const conn = getConnection(config, {nocache: true})
 
 Initializes and returns a [connection object](#connection-object). 
 
-The first time you init the connection, you have to pass a [`config`](#config) object. For further usages of the connection, you can take the cached connection by passing a [`selector`](#selector).
+Connections are cached. The first time you init the connection, you have to pass a [`config`](#config) object. But for further usages of the connection, you can take the cached connection just by passing a [`selector`](#selector).
 
 ### `config` 
 
@@ -182,8 +183,6 @@ Given this, the most easy thing to do is to just specify the `database` as the s
 ### `options`
 - `log`: can be a string with the log level (`silly`, `debug`, `info`, `warn`, `error`) or a class exposing methods named as those log levels.
 - `nocache`: if `true`, connections are not cached. Default is `false`.
-- `cache_fallback`: if `true`, when calling `getConnection(selector)` and no cached connection matches the `selector`, but there are some cached connection, `calustra-conn` will return the first available one. Default is `false`.
-- `cache_error_log`: Whenever you try to `getConnection(selector)` from cache, but no cached connection is available or none of them matches the `selector`, `calustra-conn` will log an error message. But sometimes it may not be an error, but an expected scenario: in that case, disable those logs by specifying `cache_error_log: false`. Default is `true`.
 
 Some examples:
 
@@ -208,8 +207,7 @@ class CustomLogger {
 }
 
 const options= {    
-    log: CustomLogger,
-    cache_fallback: true
+    log: CustomLogger
 }
 ```
 
@@ -222,8 +220,8 @@ const options= {
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
 - `options`:
-  · `transaction`
-  · `log`: if `false`, logging is disabled for this particular call
+  - `transaction`
+  - `log`: if `false`, logging is disabled for this particular call
 
 Returns an array of objects with the result of the query.
 
@@ -232,9 +230,9 @@ Returns an array of objects with the result of the query.
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
 - `options`:
-  · `transaction`
-  · `log`: if `false`, logging is disabled for this particular call
-  · `omitWarning`: by default, if query returns more than one record, a logging warning is shown. If `omitWarning` is `true`, this warning is ignored.
+  - `transaction`
+  - `log`: if `false`, logging is disabled for this particular call
+  - `omitWarning`: by default, if query returns more than one record, a logging warning is shown. If `omitWarning` is `true`, this warning is ignored.
 
 Returns an object with the result of the query.
 
@@ -243,8 +241,8 @@ Returns an object with the result of the query.
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
 - `options`:
-  · `transaction`
-  · `log`: if `false`, logging is disabled for this particular call
+  - `transaction`
+  - `log`: if `false`, logging is disabled for this particular call
 
 Returns an array of objects with the result of the query.
 
@@ -254,15 +252,11 @@ Returns an array of objects with the result of the query.
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
 - `options`:
-  · `transaction`
-  · `log`: if `false`, logging is disabled for this particular call
+  - `transaction`
+  - `log`: if `false`, logging is disabled for this particular call
 
 Returns an integer with the number of rows affected by the query.
 
-
-### `connection.executeAndCount(schema= 'public')`
-
-Returns an array of table names.
 
 ### `connection.getTableNames(schema= 'public')`
 

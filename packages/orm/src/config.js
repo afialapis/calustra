@@ -21,9 +21,7 @@ const CONN_DB_SQLITE_DEF = {
 
 
 const CONN_OPTIONS_DEF= {
-  log: 'warn',
-  cache_fallback: false,
-  cache_error_log: true  
+  log: 'warn'
 }
 
 const TABLE_DEF= {
