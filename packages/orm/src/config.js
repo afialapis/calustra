@@ -81,7 +81,7 @@ const getConnectionConfig = (config) => {
 
 const getModelConfig = (tableName, config) => {
 
-  let model_config= {}
+  let model_config= undefined
 
   for (const t of config?.tables || []) {
     if (t===tableName) {
@@ -90,12 +90,14 @@ const getModelConfig = (tableName, config) => {
       }
     } else if (t?.name===tableName) {
       model_config= {...t}
-    } else {
-      // throw `[calustra-orm] Cannot get model config for table ${tableName}`
-      model_config= {
-        name: tableName
-      }      
-    }
+    } 
+  }
+
+  if (model_config == undefined) {
+    // throw `[calustra-orm] Cannot get model config for table ${tableName}`
+    model_config= {
+      name: tableName
+    }      
   }
 
   let useDateFields= merge(TABLE_DEF.useDateFields)
