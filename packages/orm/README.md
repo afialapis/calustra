@@ -1,24 +1,11 @@
-![CalustraOrm logo](https://calustra.afialapis.com/assets/images/logo/calustra-orm_name.png)
+![Calustra logo](https://calustra-orm.afialapis.com/logo.png)
 
 [![NPM Version](https://badge.fury.io/js/calustra-orm.svg)](https://www.npmjs.com/package/calustra-orm)
-[![Dependency Status](https://david-dm.org/afialapis/calustra-orm.svg)](https://david-dm.org/afialapis/calustra-orm)
 [![NPM Downloads](https://img.shields.io/npm/dm/calustra-orm.svg?style=flat)](https://www.npmjs.com/package/calustra-orm)
-
-# Table of Contents
-
-1. [Intro](#intro)
-2. [Install](#install)
-3. [Get started](#get-started)
-4. [API](#api)
-  - [`getConnection`](#getconnectionoptions)
-  - [Connection object](#connection-object)
-  - [Model object](#model-object)
-5. [ToDo](#todo)
-
 
 # Intro
 
-[`calustra-orm`](http://calustra.afialapis.com/) is a small, minimalist ORM, for those out there who still feel good typing some raw SQL.
+[`calustra-orm`](http://calustra-orm.afialapis.com/) is a small, minimalist ORM, for those out there who still feel good typing some raw SQL.
 
 What it does:
 
@@ -55,7 +42,7 @@ npm install calustra-orm [--save-dev]
 
 # Get started
 
-`calustra-orm` exposes just the method [`getConnection`](#getconnectionoptions). It is built on top of [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#connection-object), providing a speacial addendum: `connection.getModel(tableName)`.
+`calustra-orm` exposes just the method [`getConnection`](#getconnectionoptions). It is built on top of [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn#connection-object). It returns an extended [connection object](#connection-object), providing a special addendum: [`connection.getModel(tableName)`](#connectiongetmodeltablename).
 
 
 ```js
@@ -138,7 +125,7 @@ Contains the `database` config and its `options`. These both parameters are pass
 
 ### `options.tables`
 
-List of tables in the database which will be accessible trough [`getModel`](). Each item in the list may be an `string` (the table name) or an object like this:
+List of tables in the database which will be accessible trough [`getModel()`](#connectiongetmodeltablename). Each item in the list may be an `string` (the table name) or an object like this:
 
 ```js
 {

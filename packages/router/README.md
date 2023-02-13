@@ -1,19 +1,11 @@
-![calustra-router logo](https://calustra.afialapis.com/assets/images/logo/calustra-router_name.png)
+![Calustra logo](https://calustra-router.afialapis.com/logo.png)
 
 [![NPM Version](https://badge.fury.io/js/calustra-router.svg)](https://www.npmjs.com/package/calustra-router)
-[![Dependency Status](https://david-dm.org/afialapis/calustra-router.svg)](https://david-dm.org/afialapis/calustra-router)
 [![NPM Downloads](https://img.shields.io/npm/dm/calustra-router.svg?style=flat)](https://www.npmjs.com/package/calustra-router)
-
-# Table of Contents
-
-1. [Intro](#intro)
-2. [Install](#install)
-3. [Get started](#get-started)
-4. [API](#api)
 
 # Intro
 
-[`calustra-router`](http://calustra.afialapis.com/) adds a [`koa-router`](https://github.com/koajs/router) Router to your [`Koa`](https://github.com/koajs/koa) app exposing a [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) API with endpoints for your database tables.
+[`calustra-router`](http://calustra-router.afialapis.com/) adds a [`koa-router`](https://github.com/koajs/router) Router to your [`Koa`](https://github.com/koajs/koa) app exposing a [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) API with endpoints for your database tables.
 
 This API will consist on two kind of endpoint / methods:
 

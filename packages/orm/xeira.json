@@ -1,0 +1,16 @@
+{
+  "product": "package",
+  "target": "node",
+  "source_index": "./src/index.mjs",
+  "react": false,
+  "monorepo": false,
+  "linter": "eslint",
+  "transpile_folder": "./lib",
+  "transpiler": "babel",
+  "minifier": "uglify",
+  "bundle_folder": "./dist",
+  "bundler": "rollup",
+  "test_folder": "./test",
+  "demo_mode": 0,
+  "demo_demoer": "rollup"
+}

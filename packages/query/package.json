@@ -1,6 +1,6 @@
 {
   "name": "calustra-query",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Small yet powerful set of utils over SQL queries",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -20,26 +20,27 @@
     "lib",
     "dist"
   ],
-  "main": "lib/index.js",
-  "publishConfig": {
-    "main": "lib/index.js"
-  },
-  "cjs": "dist/calustra-query.cjs.js",
-  "module": "dist/calustra-query.es.js",
-  "browser": "dist/calustra-query.umd.js",
+  "type": "module",
+  "main": "./lib/index.cjs",
+  "cjs": "./dist/calustra-query.cjs",
+  "module": "./dist/calustra-query.mjs",
+  "exports": {
+    "import": "./dist/calustra-query.mjs",
+    "default": "./lib/index.cjs",
+    "require": "./dist/calustra-query.cjs"
+  },  
   "scripts": {
-    "lint": "eslint src",
-    "test-clean": "rm -f test/bundle.js",
-    "test-build": "rollup -c rollup.test.js",
-    "test": "npm run test-clean && npm run test-build && ./node_modules/mocha/bin/mocha test/bundle.js",
-    "lib-clean": "rm -rf lib && mkdir lib",
-    "lib-build": "babel src -d lib",
-    "lib": "npm run lib-clean && npm run lib-build",
-    "dist-clean": "rm -rf dist && mkdir dist",
-    "dist-build": "rollup -c",
-    "dist": "npm run dist-clean && npm run dist-build",
-    "clean": "npm run test-clean && npm run lib-clean && npm run dist-clean",
-    "prepare": "npm run lint && npm run test && npm run lib && npm run dist"
+    "clean-lib": "rm -rf lib && mkdir lib",
+    "clean-dist": "rm -rf dist && mkdir dist",
+    "clean-site": "rm -rf arredemo",
+    "clean-all": "npm run --silent clean-lib && npm run --silent clean-dist && npm run --silent clean-site",
+    "lint": "npx xeira lint",
+    "test": "npx xeira test ./test/index.mjs",
+    "lib": "npm run --silent clean-lib && npx xeira transpile",
+    "dist": "npm run --silent clean-dist && npx xeira bundle",
+    "site": "npm run --silent clean-site && npx xeira site",
+    "prepare": "npm run --silent lint && npm run --silent test && npm run --silent lib && npm run --silent dist && npm run --silent site",
+    "reset": "npm run --silent clean-all && rm -fr node_modules package-lock.json && npm i"    
   },
   "keywords": [
     "js",
@@ -50,18 +51,14 @@
     "farrapa-colors": "^1.0.7"
   },
   "devDependencies": {
-    "@babel/cli": "^7.17.0",
-    "@babel/core": "^7.17.2",
-    "@babel/eslint-parser": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
-    "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^21.0.1",
-    "@rollup/plugin-node-resolve": "^13.1.3",
-    "@rollup/plugin-replace": "^3.1.0",
-    "eslint": "^7.32.0",
-    "mocha": "^9.2.0",
-    "rollup": "^2.67.2",
-    "rollup-plugin-node-externals": "^2.2.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "xeira": "^0.0.39"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/xeira/configs/eslint.cjs"
+    ]
+  },
+  "babel": {
+    "extends": "./node_modules/xeira/configs/babel.cjs"
   }
 }

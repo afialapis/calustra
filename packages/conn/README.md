@@ -1,21 +1,11 @@
+![Calustra logo](https://calustra-conn.afialapis.com/logo.png)
+
 [![NPM Version](https://badge.fury.io/js/calustra.svg)](https://www.npmjs.com/package/calustra)
-[![Dependency Status](https://david-dm.org/afialapis/calustra.svg)](https://david-dm.org/afialapis/calustra)
 [![NPM Downloads](https://img.shields.io/npm/dm/calustra.svg?style=flat)](https://www.npmjs.com/package/calustra)
-
-# Table of Contents
-
-1. [Intro](#intro)
-2. [Install](#install)
-3. [Getting Started](#getting-started)
-4. [Cached connections](#cached-connections)
-5. [API](#api)
-  - [`getConnection`](#getconnectionconfigorselector-options)
-  - [Connection object](#connection-object)
-6. [Notes](#notes)
 
 # Intro
 
-`calustra` is a database connector.
+[`calustra-conn`](https://calustra-conn.afialapis.com) is a database connector.
 
 Currently, supported databases are:
 - PostgreSQL (through [pg-promise](https://github.com/vitaly-t/pg-promise)). 
@@ -113,7 +103,7 @@ You can uncache a connection:
 conn.uncache()
 ```
 
-Closing it also uncaches it, but [closing connections ](#closing-connections) must be done carefully:
+Closing it also uncaches it, but [closing connections](#closing-connections) must be done carefully:
 ```js
 conn.close()
 ```
