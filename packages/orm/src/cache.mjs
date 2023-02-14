@@ -11,7 +11,7 @@ function _getModelCacheKey(connection, modelConfig) {
     : `calustra-${config.dialect}-nodata`
  
   const _cbd_key= `checkBeforeDelete:${modelConfig?.checkBeforeDelete===true ? 'yes' : 'no'}`
-  const _udf_key= `useDateFields:${modelConfig?.useDateFields===true ? 'default' : modelConfig?.useDateFields==undefined ? 'no' : `${modelConfig?.useDateFields?.fieldnames}`}`
+  const _udf_key= `useDateFields:${modelConfig?.useDateFields===true ? 'default' : modelConfig?.useDateFields==undefined ? 'no' : `${modelConfig?.useDateFields?.fieldNames}`}`
   const _tri_key= `triggers:${modelConfig?.triggers==undefined ? 'no' : Object.values(modelConfig.triggers).join(',')}`
   const opt_key= `${_cbd_key};${_udf_key};${_tri_key}`
 

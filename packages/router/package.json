@@ -1,6 +1,6 @@
 {
   "name": "calustra-router",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Expose database as API through koa-router",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -33,13 +33,14 @@
     "clean-dist": "rm -rf dist && mkdir dist",
     "clean-site": "rm -rf arredemo",
     "clean-all": "npm run --silent clean-lib && npm run --silent clean-dist && npm run --silent clean-site",
-    "lint": "npx xeira lint",
+    "purge": "npm run --silent clean-all && rm -fr node_modules package-lock.json",
+    "lint": "npx xeira lint ./src",
     "test": "npx xeira test ./test/index.mjs",
     "lib": "npm run --silent clean-lib && npx xeira transpile",
     "dist": "npm run --silent clean-dist && npx xeira bundle",
     "site": "npm run --silent clean-site && npx xeira site",
     "prepare": "npm run --silent lint && npm run --silent test && npm run --silent lib && npm run --silent dist && npm run --silent site",
-    "reset": "npm run --silent clean-all && rm -fr node_modules package-lock.json && npm i"
+    "reset": "npm run --silent purge && npm i"
   },
   "keywords": [
     "js",
@@ -53,7 +54,7 @@
   "devDependencies": {
     "koa": "^2.13.4",
     "node-fetch": "^2.6.7",
-    "xeira": "^0.0.39"
+    "xeira": "^0.0.40"
   },
   "eslintConfig": {
     "extends": [

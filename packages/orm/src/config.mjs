@@ -29,7 +29,7 @@ const TABLE_DEF= {
   schema: 'public',
   useDateFields: {
     use: false,
-    fieldnames: {
+    fieldNames: {
       created_at: 'created_at', 
       last_update_at: 'last_update_at'
     },

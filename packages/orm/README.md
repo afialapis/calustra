@@ -22,7 +22,7 @@ What it does not do:
     - apart from the aforementioned CRUD stuff, you'll use raw SQL for any other query
   - Table relations: 
     - it does not care about relations between tables. 
-    - it does not provide methods like `FatherModel.getChildrens()`
+    - it does not provide methods like `FatherModel.getChildren()`
 
 [comment]: # (You can read about our motivations **HERE**)
 
@@ -133,7 +133,7 @@ List of tables in the database which will be accessible trough [`getModel()`](#c
   schema: 'public',
   useDateFields: {
     use: false,
-    fieldnames: {
+    fieldNames: {
       created_at: 'created_at', 
       last_update_at: 'last_update_at'
     },
@@ -195,7 +195,7 @@ Here you can specify an object like this:
 
   const useDateFields= {
     use: true,
-    fieldnames: {
+    fieldNames: {
       created_at: 'created_at', 
       last_update_at: 'last_update_at'
     },
@@ -264,7 +264,7 @@ It returns an `int` with the number of affected records by the update.
 
 #### `model.delete(filter, options)`
 
-- `filter`: an object with "which recors to delete". Fields that do not exist on Model definition will be discarded.
+- `filter`: an object with "which records to delete". Fields that do not exist on Model definition will be discarded.
 - `options`: 
   - `transaction`: an `calustra-orm` transaction object
 
@@ -273,7 +273,7 @@ It returns an `int` with the number of deleted records.
 
 #### `model.read(filter, options)`
 
-- `filter`: an object with "which recors to read". Fields that do not exist on Model definition will be discarded.
+- `filter`: an object with "which records to read". Fields that do not exist on Model definition will be discarded.
 - `options`: 
   - `fields`: a subset of table's field names to include on the result output
   - `sortby`: indicates wat field to sort by the read. It may be an `string` with the field's name 

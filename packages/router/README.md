@@ -30,7 +30,7 @@ npm install calustra-router [--save-dev]
 
 # Get started
 
-Here a simple server serving `calsutra-router` API on `/api` path:
+Here a simple server serving `calustra-router` API on `/api` path:
 
 ```js
 import Koa from 'koa'
@@ -181,7 +181,7 @@ Custom options `schema`, `bodyField`, `getUserId` and `authUser` can be specifie
 
             useUserFields: {
               use: false,
-              fieldnames: {
+              fieldNames: {
                 created_by: 'created_by', 
                 last_update_by: 'last_update_by'
               },

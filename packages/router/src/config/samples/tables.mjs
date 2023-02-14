@@ -13,7 +13,7 @@
 
       useUserFields: {
         use: false,
-        fieldnames: {
+        fieldNames: {
           created_by: 'created_by', 
           last_update_by: 'last_update_by'
         },
@@ -38,7 +38,7 @@
 
       useDateFields: {
         use: false,
-        fieldnames: {
+        fieldNames: {
           created_at: 'created_at', 
           last_update_at: 'last_update_at'
         },

@@ -57,14 +57,14 @@ function attachCrudRoutes(connection, router, crudConfig, logger) {
         }
       }
 
-      let fieldnames= {}
+      let fieldNames= {}
       if (route.useUserFields.use===true) {
-        fieldnames= route.useUserFields.fieldnames
+        fieldNames= route.useUserFields.fieldNames
       }
 
       const uinfo= {
         uid: uid,
-        fieldnames,
+        fieldNames,
       }
       
       let res= {}
@@ -117,8 +117,8 @@ function attachCrudRoutes(connection, router, crudConfig, logger) {
     const route_save = async (ctx) => {
       await _checkUserInfo(ctx, 'w', async (uinfo) => {
         const params = ctx.request.fields
-        if (uinfo?.fieldnames?.created_by) {
-          params[uinfo.fieldnames.created_by] = uinfo.uid
+        if (uinfo?.fieldNames?.created_by) {
+          params[uinfo.fieldNames.created_by] = uinfo.uid
         }
         // TODO : handle transactions
         const options= {transaction: undefined}
@@ -130,8 +130,8 @@ function attachCrudRoutes(connection, router, crudConfig, logger) {
     const route_update = async (ctx) => {
       await _checkUserInfo(ctx, 'w', async (uinfo) => {
         const params = ctx.request.fields
-        if (uinfo?.fieldnames?.last_update_by) {
-          params[uinfo.fieldnames.last_update_by] = uinfo.uid
+        if (uinfo?.fieldNames?.last_update_by) {
+          params[uinfo.fieldNames.last_update_by] = uinfo.uid
         }
         // TODO : handle transactions
         const options= {transaction: undefined}    

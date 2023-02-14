@@ -6,41 +6,48 @@
   "contributors": [
     "Donato Lorenzo <donato@afialapis.com>"
   ],
+  "type": "module",
   "license": "MIT",
   "scripts": {
-    "query:clean": "pnpm run clean --filter calustra-query",
-    "query:lint": "pnpm run lint --filter calustra-query",
-    "query:test": "pnpm run test --filter calustra-query",
-    "query:lib": "pnpm run lib --filter calustra-query",
-    "query:dist": "pnpm run dist --filter calustra-query",
-    "query:prepare": "pnpm run prepare --filter calustra-query",
-    "conn:clean": "pnpm run clean --filter ./packages/conn",
-    "conn:lint": "pnpm run lint --filter ./packages/conn",
-    "conn:test": "pnpm run test --filter ./packages/conn",
-    "conn:lib": "pnpm run lib --filter ./packages/conn",
-    "conn:dist": "pnpm run dist --filter ./packages/conn",
-    "conn:prepare": "pnpm run prepare --filter ./packages/conn",
-    "orm:clean": "pnpm run clean --filter calustra-orm",
-    "orm:lint": "pnpm run lint --filter calustra-orm",
-    "orm:test": "pnpm run test --filter calustra-orm",
-    "orm:lib": "pnpm run lib --filter calustra-orm",
-    "orm:dist": "pnpm run dist --filter calustra-orm",
-    "orm:prepare": "pnpm run prepare --filter calustra-orm",
-    "router:clean": "pnpm run clean --filter calustra-router",
-    "router:lint": "pnpm run lint --filter calustra-router",
-    "router:test": "pnpm run test --filter calustra-router",
-    "router:lib": "pnpm run lib --filter calustra-router",
-    "router:dist": "pnpm run dist --filter calustra-router",
-    "router:prepare": "pnpm run prepare --filter calustra-router",
-    "clean": "pnpm run query:clean && pnpm run conn:clean && pnpm run orm:clean && pnpm run router:clean",
-    "lint": "pnpm run query:lint && pnpm run conn:lint && pnpm run orm:lint && pnpm run router:lint",
-    "test": "pnpm run query:test && pnpm run conn:test && pnpm run orm:test && pnpm run router:test",
-    "lib": "pnpm run query:lib && pnpm run conn:lib && pnpm run orm:lib && pnpm run router:lib",
-    "dist": "pnpm run query:dist && pnpm run conn:dist && pnpm run orm:dist && pnpm run router:dist",
-    "all:prepare": "pnpm run query:prepare && pnpm run conn:prepare && pnpm run orm:prepare && pnpm run router:prepare",
+    "main:purge": "rm -fr pnpm-lock.yaml node_modules",
+    "main:site": "npx xeira site",
+    "query:purge": "pnpm run --silent purge --filter calustra-query",
+    "query:reset": "pnpm run --silent reset --filter calustra-query",
+    "query:lint": "pnpm run --silent lint --filter calustra-query",
+    "query:test": "pnpm run --silent test --filter calustra-query",
+    "query:lib": "pnpm run --silent lib --filter calustra-query",
+    "query:dist": "pnpm run --silent dist --filter calustra-query",
+    "query:prepare": "pnpm run --silent prepare --filter calustra-query",
+    "conn:purge": "pnpm run --silent purge --filter ./packages/conn",
+    "conn:reset": "pnpm run --silent reset --filter ./packages/conn",
+    "conn:lint": "pnpm run --silent lint --filter ./packages/conn",
+    "conn:test": "pnpm run --silent test --filter ./packages/conn",
+    "conn:lib": "pnpm run --silent lib --filter ./packages/conn",
+    "conn:dist": "pnpm run --silent dist --filter ./packages/conn",
+    "conn:prepare": "pnpm run --silent prepare --filter ./packages/conn",
+    "orm:purge": "pnpm run --silent purge --filter calustra-orm",
+    "orm:reset": "pnpm run --silent reset --filter calustra-orm",
+    "orm:lint": "pnpm run --silent lint --filter calustra-orm",
+    "orm:test": "pnpm run --silent test --filter calustra-orm",
+    "orm:lib": "pnpm run --silent lib --filter calustra-orm",
+    "orm:dist": "pnpm run --silent dist --filter calustra-orm",
+    "orm:prepare": "pnpm run --silent prepare --filter calustra-orm",
+    "router:purge": "pnpm run --silent purge --filter calustra-router",
+    "router:reset": "pnpm run --silent reset --filter calustra-router",
+    "router:lint": "pnpm run --silent lint --filter calustra-router",
+    "router:test": "pnpm run --silent test --filter calustra-router",
+    "router:lib": "pnpm run --silent lib --filter calustra-router",
+    "router:dist": "pnpm run --silent dist --filter calustra-router",
+    "router:prepare": "pnpm run --silent prepare --filter calustra-router",
+    "all:purge": "pnpm run --silent query:purge && pnpm run --silent conn:purge && pnpm run --silent orm:purge && pnpm run --silent router:purge",
+    "all:lint": "pnpm run --silent query:lint && pnpm run --silent conn:lint && pnpm run --silent orm:lint && pnpm run --silent router:lint",
+    "all:test": "pnpm run --silent query:test && pnpm run --silent conn:test && pnpm run --silent orm:test && pnpm run --silent router:test",
+    "all:lib": "pnpm run --silent query:lib && pnpm run --silent conn:lib && pnpm run --silent orm:lib && pnpm run --silent router:lib",
+    "all:dist": "pnpm run --silent query:dist && pnpm run --silent conn:dist && pnpm run --silent orm:dist && pnpm run --silent router:dist",
+    "all:prepare": "pnpm run --silent query:prepare && pnpm run --silent conn:prepare && pnpm run --silent orm:prepare && pnpm run --silent router:prepare",
     "all:publish": "pnpm publish --filter calustra-query && pnpm publish --filter ./packages/conn && pnpm publish --filter calustra-orm && pnpm publish --filter calustra-router",
-    "purge": "pnpm run clean && rm -fr pnpm-lock.yaml node_modules packages/query/node_modules packages/conn/node_modules packages/orm/node_modules packages/router/node_modules",
-    "reset": "pnpm run purge && pnpm i"
+    "reset": "pnpm run --silent all:purge && pnpm run --silent main:purge && pnpm i",
+    "prepare": "pnpm run --silent all:prepare && pnpm run --silent main:site"
   },
   "pnpm": {
     "overrides": {
@@ -49,5 +56,16 @@
       "tar@<3.2.2": ">=3.2.2",
       "tar@<3.2.3": ">=3.2.3"
     }
+  },
+  "devDependencies": {
+    "xeira": "^0.0.40"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/xeira/configs/eslint.cjs"
+    ]
+  },
+  "babel": {
+    "extends": "./node_modules/xeira/configs/babel.cjs"
   }
 }

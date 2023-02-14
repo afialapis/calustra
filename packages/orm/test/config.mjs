@@ -7,7 +7,7 @@ const _tables= [
     schema: 'public',
     useDateFields: {
       use: true,
-      fieldnames: {
+      fieldNames: {
         created_at: 'created_at', 
         last_update_at: 'last_update_at'
       },

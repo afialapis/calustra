@@ -2,7 +2,7 @@
   {
     path: '/crud/todos/fake',
     method: 'POST',
-    callback: (ctx) => {},
+    callback: (_ctx) => {},
     authUser: {
       require: true,
       action: 'redirect',

@@ -40,7 +40,7 @@ const DEF_CRUD= {
 
               useUserFields: {
                 use: false,
-                fieldnames: {
+                fieldNames: {
                   created_by: 'created_by', 
                   last_update_by: 'last_update_by'
                 },
@@ -85,7 +85,7 @@ const DEF_QUERIES= {
 
 
 
-const ROUTES_DEF= {
+export default {
   bodyField: DEF_bodyField,
   getUserId: DEF_getUserId,
   authUser: DEF_authUser, 

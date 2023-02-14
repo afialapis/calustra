@@ -17,7 +17,7 @@ const DEFAULT_AUTH_USER = {
 
 const DEFAULT_USE_USER_FIELDS = {
   use: false,
-  fieldnames: {
+  fieldNames: {
     created_by: 'created_by', 
     last_update_by: 'last_update_by'
   }

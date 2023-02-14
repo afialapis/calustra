@@ -46,14 +46,14 @@ class CalustraModelConfig {
 
   get datesCreatedField() {
     if (this.useDateFieldsOn) {
-      return this.config.useDateFields.fieldnames.created_at
+      return this.config.useDateFields.fieldNames.created_at
     }
     return undefined
   }
 
   get datesUpdatedField() {
     if (this.useDateFieldsOn) {
-      return this.config.useDateFields.fieldnames.last_update_at
+      return this.config.useDateFields.fieldNames.last_update_at
     }
     return undefined
   }  

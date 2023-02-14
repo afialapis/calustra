@@ -27,7 +27,7 @@ import {
 
           useUserFields: {
             use: false,
-            fieldnames: {
+            fieldNames: {
               created_by: 'created_by', 
               last_update_by: 'last_update_by'
             },
