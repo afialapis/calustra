@@ -10,7 +10,7 @@ importers:
 
   .:
     specifiers:
-      xeira: ^0.0.40
+      xeira: ^0.1.0
     devDependencies:
       xeira: 0.0.40
 
@@ -21,7 +21,7 @@ importers:
       farrapa-colors: ^1.0.7
       pg-promise: ^11.2.0
       sqlite3: ^5.1.4
-      xeira: ^0.0.40
+      xeira: ^0.1.0
     dependencies:
       cacheiro: 0.0.6
       calustra-query: link:../query
@@ -36,7 +36,7 @@ importers:
       cacheiro: ^0.0.5
       calustra-conn: file:../conn
       intre: ^1.0.3
-      xeira: ^0.0.40
+      xeira: ^0.1.0
     dependencies:
       cacheiro: 0.0.5
       calustra-conn: link:../conn
@@ -47,7 +47,7 @@ importers:
   packages/query:
     specifiers:
       farrapa-colors: ^1.0.7
-      xeira: ^0.0.40
+      xeira: ^0.1.0
     dependencies:
       farrapa-colors: 1.0.7
     devDependencies:
@@ -59,7 +59,7 @@ importers:
       koa: ^2.13.4
       koa-router: 10.1.1
       node-fetch: ^2.6.7
-      xeira: ^0.0.40
+      xeira: ^0.1.0
     dependencies:
       calustra-orm: link:../orm
       koa-router: 10.1.1

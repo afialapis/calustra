@@ -28,15 +28,15 @@
     "import": "./dist/calustra-conn.mjs",
     "default": "./lib/index.cjs",
     "require": "./dist/calustra-conn.cjs"
-  },  
+  },
   "scripts": {
     "clean-lib": "rm -rf lib && mkdir lib",
     "clean-dist": "rm -rf dist && mkdir dist",
     "clean-site": "rm -rf arredemo",
     "clean-all": "npm run --silent clean-lib && npm run --silent clean-dist && npm run --silent clean-site",
     "purge": "npm run --silent clean-all && rm -fr node_modules package-lock.json",
-    "lint": "npx xeira lint ./src",
-    "test": "npx xeira test ./test/index.mjs",
+    "lint": "npx xeira lint --folder=./src",
+    "test": "npx xeira test --files=./test/index.mjs",
     "lib": "npm run --silent clean-lib && npx xeira transpile",
     "dist": "npm run --silent clean-dist && npx xeira bundle",
     "site": "npm run --silent clean-site && npx xeira site",
@@ -53,12 +53,11 @@
     "calustra-query": "file:../query",
     "farrapa-colors": "^1.0.7",
     "pg-promise": "^11.2.0",
-    "sqlite3": "^5.1.4"
+    "sqlite3": "^5.1.5"
   },
   "devDependencies": {
-    "xeira": "^0.0.40"
+    "xeira": "^0.1.0"
   },
-
   "eslintConfig": {
     "extends": [
       "./node_modules/xeira/configs/eslint.cjs"
