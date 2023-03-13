@@ -29,20 +29,6 @@
     "default": "./lib/index.cjs",
     "require": "./dist/calustra-orm.cjs"
   },  
-  "scripts": {
-    "clean-lib": "rm -rf lib && mkdir lib",
-    "clean-dist": "rm -rf dist && mkdir dist",
-    "clean-site": "rm -rf arredemo",
-    "clean-all": "npm run --silent clean-lib && npm run --silent clean-dist && npm run --silent clean-site",
-    "purge": "npm run --silent clean-all && rm -fr node_modules package-lock.json",
-    "lint": "npx xeira lint --folder=./src",
-    "test": "npx xeira test --files=./test/index.mjs",
-    "lib": "npm run --silent clean-lib && npx xeira transpile",
-    "dist": "npm run --silent clean-dist && npx xeira bundle",
-    "site": "npm run --silent clean-site && npx xeira site",
-    "prepare": "npm run --silent lint && npm run --silent test && npm run --silent lib && npm run --silent dist && npm run --silent site",
-    "reset": "npm run --silent purge && npm i"
-  },
   "keywords": [
     "js",
     "orm",
@@ -52,16 +38,5 @@
     "cacheiro": "^0.0.5",
     "calustra-conn": "file:../conn",
     "intre": "^1.0.3"
-  },
-  "devDependencies": {
-    "xeira": "^0.1.0"
-  },
-  "eslintConfig": {
-    "extends": [
-      "./node_modules/xeira/configs/eslint.cjs"
-    ]
-  },
-  "babel": {
-    "extends": "./node_modules/xeira/configs/babel.cjs"
   }
 }
