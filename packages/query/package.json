@@ -1,6 +1,6 @@
 {
   "name": "calustra-query",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Small yet powerful set of utils over SQL queries",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -28,7 +28,7 @@
     "import": "./dist/calustra-query.mjs",
     "default": "./lib/index.cjs",
     "require": "./dist/calustra-query.cjs"
-  },  
+  },
   "keywords": [
     "js",
     "orm",
