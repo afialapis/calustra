@@ -35,7 +35,7 @@
     "sql"
   ],
   "dependencies": {
-    "cacheiro": "^0.0.6",
+    "cacheiro": "^0.0.8",
     "calustra-query": "file:../query",
     "farrapa-colors": "^1.0.7",
     "pg-promise": "^11.2.0",

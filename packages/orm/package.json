@@ -35,7 +35,7 @@
     "sql"
   ],
   "dependencies": {
-    "cacheiro": "^0.0.5",
+    "cacheiro": "^0.0.8",
     "calustra-conn": "file:../conn",
     "intre": "^1.0.3"
   }
