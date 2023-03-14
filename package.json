@@ -68,8 +68,8 @@
     
     "purge": "npm run pkg:purge && npm run main:purge",
     "reset": "npm run pkg:purge && npm run main:reset && npm run pkg:reset",
-    "prepare": "npm run pkg:prepare",
-    "publish": "npm run pkg:publish"
+    "all:prepare": "npm run pkg:prepare",
+    "all:publish": "npm run pkg:publish"
   },
   "npm": {
     "overrides": {
