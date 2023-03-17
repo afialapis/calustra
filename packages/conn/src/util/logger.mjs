@@ -1,4 +1,4 @@
-import {red, blue, cyan, magenta, yellow, gray} from 'farrapa-colors'
+import {red, blue, cyan, magenta, yellow, gray} from 'tinguir'
 
 const LEVELS= {
   none   : 0,

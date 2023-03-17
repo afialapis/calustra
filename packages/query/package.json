@@ -35,6 +35,6 @@
     "sql"
   ],
   "dependencies": {
-    "farrapa-colors": "^1.0.7"
+    "tinguir": "^0.0.3"
   }
 }

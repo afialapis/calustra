@@ -1,4 +1,4 @@
-import { gray, cyan, yellow, red } from 'farrapa-colors'
+import { gray, cyan, yellow, red } from 'tinguir'
 
 const KEYWORDS = {
   'SELECT': gray,

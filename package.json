@@ -62,6 +62,7 @@
     "pkg:test": "npm run query:test && npm run conn:test && npm run orm:test && npm run router:test",
     "pkg:lib": "npm run query:lib && npm run conn:lib && npm run orm:lib && npm run router:lib",
     "pkg:dist": "npm run query:dist && npm run conn:dist && npm run orm:dist && npm run router:dist",
+    "pkg:site": "npm run query:site && npm run conn:site && npm run orm:site && npm run router:site",
     "pkg:prepare": "npm run query:prepare && npm run conn:prepare && npm run orm:prepare && npm run router:prepare",
     "pkg:version": "npx xeira version --filter=* --number $1",
     "pkg:publish": "npm run query:publish && npm run conn:publish && npm run orm:publish && npm run router:publish",
@@ -80,7 +81,7 @@
     }
   },
   "devDependencies": {
-    "xeira": "^0.1.0"
+    "xeira": "^0.2.0"
   },
   "eslintConfig": {
     "extends": [
