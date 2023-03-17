@@ -1,6 +1,6 @@
 {
   "name": "calustra-conn",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "A database connector",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -41,8 +41,8 @@
     "pg-promise": "^11.2.0",
     "sqlite3": "^5.1.5"
   },
-  "engines" : { 
-    "npm" : ">=8.0.0 <8.3.2",
-    "node" : ">=16.0.0 <=16.14.0"
-  }  
+  "engines": {
+    "npm": ">=8.0.0 <8.3.2",
+    "node": ">=16.0.0 <=16.14.0"
+  }
 }
