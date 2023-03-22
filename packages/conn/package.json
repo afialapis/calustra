@@ -1,6 +1,6 @@
 {
   "name": "calustra-conn",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "A database connector",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -35,8 +35,8 @@
     "sql"
   ],
   "dependencies": {
-    "cacheiro": "^0.0.10",
-    "calustra-query": "file:../query",
+    "cacheiro": "^0.0.11",
+    "calustra-query": "*",
     "tinguir": "^0.0.3",
     "pg-promise": "^11.2.0",
     "sqlite3": "^5.1.5"

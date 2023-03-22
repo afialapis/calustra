@@ -1,6 +1,6 @@
 {
   "name": "calustra-orm",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "A small ORM for those out there who still feel good typing some raw SQL",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -35,8 +35,8 @@
     "sql"
   ],
   "dependencies": {
-    "cacheiro": "^0.0.10",
-    "calustra-conn": "file:../conn",
+    "cacheiro": "^0.0.11",
+    "calustra-conn": "*",
     "intre": "^1.1.5"
   }
 }

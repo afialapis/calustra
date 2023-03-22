@@ -8,13 +8,19 @@
   ],
   "type": "module",
   "license": "MIT",
+
+  "workspaces": [
+    "packages/query",
+    "packages/conn",
+    "packages/orm",
+    "packages/router"
+  ],
   "scripts": {
     "main:purge": "rm -fr node_modules package-lock.json npm-lock.yaml",
     "main:reset": "rm -fr main:purge && npm i",
     
-    "query:clean": "cd packages/query && rm -fr $1",
-    "query:purge": "npm run query:clean lib dist arredemo node_modules package-lock.json",
-    "query:reset": "npm run query:purge && cd packages/query && npm i",
+    "query:clean": "cd packages/query && rm -fr $@",
+    "query:purge": "npm run query:clean lib dist",
     "query:lint": "npx xeira lint --filter=query --folder=src",
     "query:test": "npx xeira test --files=./test/index.mjs --filter=query",
     "query:lib": "npm run query:clean lib && npx xeira transpile --filter=query",
@@ -23,9 +29,8 @@
     "query:prepare": "npm run query:lint && npm run query:test && npm run query:lib && npm run query:dist && npm run query:site",
     "query:publish": "cd packages/query && npm publish",
 
-    "conn:clean": "cd packages/conn && rm -fr $1",
-    "conn:purge": "npm run conn:clean lib dist arredemo node_modules package-lock.json",
-    "conn:reset": "npm run conn:purge && cd packages/conn && npm i",
+    "conn:clean": "cd packages/conn && rm -fr $@",
+    "conn:purge": "npm run conn:clean lib dist",
     "conn:lint": "npx xeira lint --filter=conn --folder=src",
     "conn:test": "npx xeira test --files=./test/index.mjs --filter=conn",
     "conn:lib": "npm run conn:clean lib && npx xeira transpile --filter=conn",
@@ -34,9 +39,8 @@
     "conn:prepare": "npm run conn:lint && npm run conn:test && npm run conn:lib && npm run conn:dist && npm run conn:site",
     "conn:publish": "cd packages/conn && npm publish",
 
-    "orm:clean": "cd packages/orm && rm -fr $1",
-    "orm:purge": "npm run orm:clean lib dist arredemo node_modules package-lock.json",
-    "orm:reset": "npm run orm:purge && cd packages/orm && npm i",
+    "orm:clean": "cd packages/orm && rm -fr $@",
+    "orm:purge": "npm run orm:clean lib dist",
     "orm:lint": "npx xeira lint --filter=orm --folder=src",
     "orm:test": "npx xeira test --files=./test/index.mjs --filter=orm",
     "orm:lib": "npm run orm:clean lib && npx xeira transpile --filter=orm",
@@ -45,9 +49,8 @@
     "orm:prepare": "npm run orm:lint && npm run orm:test && npm run orm:lib && npm run orm:dist && npm run orm:site",
     "orm:publish": "cd packages/orm && npm publish",
 
-    "router:clean": "cd packages/router && rm -fr $1",
-    "router:purge": "npm run router:clean lib dist arredemo node_modules package-lock.json",
-    "router:reset": "npm run router:purge && cd packages/router && npm i",
+    "router:clean": "cd packages/router && rm -fr $@",
+    "router:purge": "npm run router:clean lib dist",
     "router:lint": "npx xeira lint --filter=router --folder=src",
     "router:test": "npx xeira test --files=./test/index.mjs --filter=router",
     "router:lib": "npm run router:clean lib && npx xeira transpile --filter=router",
@@ -57,31 +60,20 @@
     "router:publish": "cd packages/router && npm publish",
   
     "pkg:purge": "npm run query:purge && npm run conn:purge && npm run orm:purge && npm run router:purge",
-    "pkg:reset": "npm run query:reset && npm run conn:reset && npm run orm:reset && npm run router:reset",
     "pkg:lint": "npm run query:lint && npm run conn:lint && npm run orm:lint && npm run router:lint",
     "pkg:test": "npm run query:test && npm run conn:test && npm run orm:test && npm run router:test",
-    "pkg:lib": "npm run query:lib && npm run conn:lib && npm run orm:lib && npm run router:lib",
-    "pkg:dist": "npm run query:dist && npm run conn:dist && npm run orm:dist && npm run router:dist",
-    "pkg:site": "npm run query:site && npm run conn:site && npm run orm:site && npm run router:site",
+    
     "pkg:prepare": "npm run query:prepare && npm run conn:prepare && npm run orm:prepare && npm run router:prepare",
     "pkg:version": "npx xeira version --filter=* --number $1",
     "pkg:publish": "npm run query:publish && npm run conn:publish && npm run orm:publish && npm run router:publish",
     
     "purge": "npm run pkg:purge && npm run main:purge",
-    "reset": "npm run pkg:purge && npm run main:reset && npm run pkg:reset",
+    "reset": "npm run pkg:purge && npm run main:reset",
     "all:prepare": "npm run pkg:prepare",
     "all:publish": "npm run pkg:publish"
   },
-  "npm": {
-    "overrides": {
-      "tar@<4.4.18": ">=4.4.18",
-      "tar@<4.4.16": ">=4.4.16",
-      "tar@<3.2.2": ">=3.2.2",
-      "tar@<3.2.3": ">=3.2.3"
-    }
-  },
   "devDependencies": {
-    "xeira": "^0.2.0"
+    "xeira": "^0.2.4"
   },
   "eslintConfig": {
     "extends": [
