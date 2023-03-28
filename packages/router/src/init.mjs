@@ -23,7 +23,7 @@ function initCalustraRouter(app, connOrConfig, routes) {
   const router= calustraRouter(connOrConfig, routes)
   
   if (router) {
-    app.init(router.routes())
+    app.use(router.routes())
   }
 
   return app
@@ -34,7 +34,7 @@ async function initCalustraRouterForAllTables (app, connOrConfig, schema= 'publi
 
   const router= await calustraRouterForAllTables(connOrConfig, schema)
   if (router) {
-    app.init(router.routes())
+    app.use(router.routes())
   }
 
   return app
