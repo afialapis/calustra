@@ -1,11 +1,11 @@
 import {calustraRouter, calustraRouterForAllTables} from './router/index.mjs'
 import {getConnection} from 'calustra-orm'
-import {useCalustraDbContext, useCalustraRouter, useCalustraRouterForAllTables} from './use.mjs'
+import {initCalustraDbContext, initCalustraRouter, initCalustraRouterForAllTables} from './init.mjs'
 
 export {
-  useCalustraDbContext, 
-  useCalustraRouter, 
-  useCalustraRouterForAllTables,
+  initCalustraDbContext, 
+  initCalustraRouter, 
+  initCalustraRouterForAllTables,
   calustraRouter, 
   calustraRouterForAllTables,
   getConnection}

@@ -1,7 +1,7 @@
 import {getConnection as getConnectionCal} from 'calustra-orm'
 import {calustraRouter, calustraRouterForAllTables} from './router/index.mjs'
 
-function useCalustraDbContext(app, connOrConfig) {
+function initCalustraDbContext(app, connOrConfig) {
 
   const getConnection = () => getConnectionCal(connOrConfig)
 
@@ -18,27 +18,27 @@ function useCalustraDbContext(app, connOrConfig) {
   return app
 }
 
-function useCalustraRouter(app, connOrConfig, routes) {
+function initCalustraRouter(app, connOrConfig, routes) {
 
   const router= calustraRouter(connOrConfig, routes)
   
   if (router) {
-    app.use(router.routes())
+    app.init(router.routes())
   }
 
   return app
 }
 
 
-async function useCalustraRouterForAllTables (app, connOrConfig, schema= 'public') {
+async function initCalustraRouterForAllTables (app, connOrConfig, schema= 'public') {
 
   const router= await calustraRouterForAllTables(connOrConfig, schema)
   if (router) {
-    app.use(router.routes())
+    app.init(router.routes())
   }
 
   return app
 }
 
 
-export {useCalustraDbContext, useCalustraRouter, useCalustraRouterForAllTables}
+export {initCalustraDbContext, initCalustraRouter, initCalustraRouterForAllTables}

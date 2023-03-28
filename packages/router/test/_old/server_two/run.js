@@ -1,7 +1,7 @@
 import Koa from 'koa'
 import assert from 'assert'
 import fetch from 'node-fetch'
-import {useCalustraDbContext, useCalustraRouter, useCalustraRouterAsync} from '../../../src'
+import {initCalustraDbContext, initCalustraRouter, initCalustraRouterAsync} from '../../../src'
 import data from './data'
 
 
@@ -14,12 +14,12 @@ function router_test_run (config, server_options, name, calustra) {
 
     const app = new Koa()
 
-    useCalustraDbContext(app, config, calustra)
+    initCalustraDbContext(app, config, calustra)
 
     if (calustra.crud.routes=='*') {
-      await useCalustraRouterAsync(app, config, calustra)
+      await initCalustraRouterAsync(app, config, calustra)
     } else {
-      useCalustraRouter(app, config, calustra)
+      initCalustraRouter(app, config, calustra)
     }
 
     server= app.listen(server_options.port, function () {

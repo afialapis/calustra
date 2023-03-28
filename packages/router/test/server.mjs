@@ -1,13 +1,13 @@
 import Koa from 'koa'
-import {useCalustraDbContext, useCalustraRouter, useCalustraRouterForAllTables} from '../src/index.mjs'
+import {initCalustraDbContext, initCalustraRouter, initCalustraRouterForAllTables} from '../src/index.mjs'
 
 const serve = (config, connOrConfig, routesConfig) => {
 
   const app = new Koa()
 
-  useCalustraDbContext(app, connOrConfig)
+  initCalustraDbContext(app, connOrConfig)
 
-  useCalustraRouter(app, connOrConfig, routesConfig)
+  initCalustraRouter(app, connOrConfig, routesConfig)
 
   const server= app.listen(config.port, function () {
     //console.info('Listening on port ' + server_options.port)
@@ -20,9 +20,9 @@ const serveAllTables = async (config, connOrConfig, prefix= '') => {
 
   const app = new Koa()
 
-  useCalustraDbContext(app, connOrConfig)
+  initCalustraDbContext(app, connOrConfig)
 
-  await useCalustraRouterForAllTables(app, connOrConfig, prefix)
+  await initCalustraRouterForAllTables(app, connOrConfig, prefix)
 
   const server= app.listen(config.port, function () {
     //console.info('Listening on port ' + server_options.port)
