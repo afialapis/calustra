@@ -9,13 +9,13 @@
   "type": "module",
   "license": "MIT",
 
-  "workspaces": [
+  "XXXX_workspaces": [
     "packages/query",
     "packages/conn",
     "packages/orm",
     "packages/router"
   ],
-  "scripts": {
+  "XXXX_scripts": {
     "main:purge": "rm -fr node_modules package-lock.json npm-lock.yaml",
     "main:reset": "rm -fr main:purge && npm i",
     
@@ -72,6 +72,21 @@
     "all:prepare": "npm run pkg:prepare",
     "all:publish": "npm run pkg:publish"
   },
+  "scripts": {
+    "purge": "rm -fr node_modules package-lock.json npm-lock.yaml",
+    "reset": "rm -fr purge && npm i",
+
+    "query:test": "npx xeira test --files=./test/query/index.mjs",
+    "conn:test": "npx xeira test --files=./test/conn/index.mjs"
+  },
+  "dependencies": {
+    "cacheiro": "^0.0.11",
+    "calustra-query": "*",
+    "intre": "^1.1.5",
+    "tinguir": "^0.0.3",
+    "pg-promise": "^11.2.0",
+    "sqlite3": "^5.1.5"
+  },  
   "devDependencies": {
     "xeira": "^0.2.4"
   },
@@ -79,8 +94,5 @@
     "extends": [
       "./node_modules/xeira/configs/eslint.cjs"
     ]
-  },
-  "babel": {
-    "extends": "./node_modules/xeira/configs/babel.cjs"
   }
 }
