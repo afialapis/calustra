@@ -10,12 +10,13 @@
 This API will consist on two kind of endpoint / methods:
 
 - [crud](#optionscrud)
-  · `GET` methods: `read`, `key_list`, `distinct`, `find`
-  . `POST`methods: `save`, `update`, `delete`
+  - `GET` methods: `read`, `key_list`, `distinct`, `find`
+  - `POST`methods: `save`, `update`, `delete`
 
 - [queries](#optionsqueries): custom defined endpoints pointing to custom methods
 
 Currently, supported databases are:
+
 - PostgreSQL
 - SQLite
 
@@ -25,7 +26,7 @@ Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/c
 # Install
 
 ```
-npm install calustra-router [--save-dev]
+npm install calustra-router
 ```
 
 # Get started
@@ -82,15 +83,16 @@ let screw_data= await response.json()
 
 # API
 
-`calustra-router` has these use-approach (somehow `Koa` style) methods: 
+`calustra-router` has these init methods: 
 
-- [`initCalustraDbContext`](#usecalustradbcontextapp-connorconfig)
-- [`initCalustraRouter`](#usecalustrarouterapp-connorconfig-routes)
-- [`initCalustraRouterForAllTables`](#async-usecalustrarouterforalltablesapp-connorconfig-schema-public)
+- [`initCalustraDbContext`](#initcalustradbcontextapp-connorconfig)
+- [`initCalustraRouter`](#initcalustrarouterapp-connorconfig-routes)
+- [`initCalustraRouterForAllTables`](#async-initcalustrarouterforalltablesapp-connorconfig-schema-public)
 
 But each piece is also exposed:
+
 - [`calustraRouter`](#calustrarouterconnorconfig-routes).
-- [`initCalustraRouterForAllTables`](#async-calustrarouterforalltablesconnorconfig-prefix--schema-public).
+- [`calustraRouterForAllTables`](#async-calustrarouterforalltablesconnorconfig-prefix--schema-public).
 - `getConnection` from [calustra-orm](https://github.com/afialapis/calustra/tree/main/packages/orm#getconnectionoptions)
 
 

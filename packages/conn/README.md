@@ -17,7 +17,7 @@ We may add support for other databases (MySql, MsSql, ...) in the future... or m
 # Install
 
 ```
-npm install calustra [--save-dev]
+npm install calustra
 ```
 
 # Getting Started
@@ -99,16 +99,18 @@ where selector is just a string matching some part of the `config` you passed th
 
 
 You can uncache a connection:
+
 ```js
 conn.uncache()
 ```
 
 Closing it also uncaches it, but [closing connections](#closing-connections) must be done carefully:
+
 ```js
 conn.close()
 ```
 
-You can disable caching of a connection by specifying the option `nocache: true`:
+You can disable caching of a connection by specifying the option `nocache`:
 
 ```js
 const conn = getConnection(config, {nocache: true})

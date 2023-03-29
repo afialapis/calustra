@@ -26,18 +26,19 @@ What it does not do:
 
 [comment]: # (You can read about our motivations **HERE**)
 
+
 Currently, supported databases are:
+
 - PostgreSQL
 - SQLite
 
 Check [calustra-conn](https://github.com/afialapis/calustra/tree/main/packages/conn) for more info.
 
 
-
 # Install
 
 ```
-npm install calustra-orm [--save-dev]
+npm install calustra-orm
 ```
 
 # Get started

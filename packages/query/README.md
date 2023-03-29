@@ -10,7 +10,7 @@
 # Install
 
 ```
-npm install calustra-query [--save-dev]
+npm install calustra-query
 ```
 
 # API
