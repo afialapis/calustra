@@ -2,7 +2,7 @@ import {
   DEFAULT_BODY_FIELD,
   DEFAULT_GET_USER_ID,
   DEFAULT_AUTH_USER
-} from "../../config/index.mjs"
+} from "../config/index.mjs"
 
 /**
   {

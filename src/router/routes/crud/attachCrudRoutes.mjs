@@ -1,4 +1,4 @@
-import queryStringToJson from '../../util/queryStringToJson.mjs'
+import queryStringToJson from '../util/queryStringToJson.mjs'
 
 
 function attachCrudRoutes(connection, router, crudConfig, logger) {
@@ -159,7 +159,6 @@ function attachCrudRoutes(connection, router, crudConfig, logger) {
     }
 
     logger.info(`[calustra-router] Routing table ${route.name} to ${url}`)
-    console.log(`[calustra-router] Routing table ${route.name} to ${url}`)
 
     const allowRead = route.mode.indexOf('r')>=0
     const allowDelete = route.mode.indexOf('w')>=0

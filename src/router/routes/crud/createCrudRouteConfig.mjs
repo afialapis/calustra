@@ -3,7 +3,7 @@ import {
   DEFAULT_GET_USER_ID,
   DEFAULT_AUTH_USER,
   DEFAULT_USE_USER_FIELDS
-} from "../../config/index.mjs"
+} from "../config/index.mjs"
 
 const createCrudRouteConfig = (name) => {
 

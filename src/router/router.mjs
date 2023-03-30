@@ -1,15 +1,13 @@
 import Router    from 'koa-router'
-import {getConnection} from 'calustra-orm'
+import getCrudConfig from './routes/crud/getCrudConfig.mjs'
+import attachCrudRoutes from './routes/crud/attachCrudRoutes.mjs'
+import createCrudConfigForAllTables from './routes/crud/createCrudConfigForAllTables.mjs'
 
-import getCrudConfig from './crud/getCrudConfig.mjs'
-import attachCrudRoutes from './crud/attachCrudRoutes.mjs'
-import createCrudConfigForAllTables from './crud/createCrudConfigForAllTables.mjs'
-
-import getQueriesConfig from './queries/getQueriesConfig.mjs'
-import attachQueriesRoutes from './queries/attachQueriesRoutes.mjs'
+import getQueriesConfig from './routes/queries/getQueriesConfig.mjs'
+import attachQueriesRoutes from './routes/queries/attachQueriesRoutes.mjs'
 
 
-function calustraRouter(connOrConfig, routes) {
+function calustraRouter(connection, routes) {
 
   // Init the Koa Router
   const router = new Router()
@@ -27,14 +25,6 @@ function calustraRouter(connOrConfig, routes) {
       throw "[calustra-router] Could not get any route from the passed <routes> param"
     }  
 
-    // Init connection object
-    const connection= getConnection(connOrConfig)
-
-    // Check connection
-    if ( !connection ) {
-      throw "[calustra-router] Could not get any connection from the passed <connOrConfig> param"
-    }  
-
     // attach CRUD routes
     if (crudRoutesOk) {
       attachCrudRoutes(connection, router, crudConfig, connection.log)
@@ -48,7 +38,7 @@ function calustraRouter(connOrConfig, routes) {
     console.error(e)
     console.error('[calustra-router] Error initing the router. Probably config objects are not ok')
     console.error('[calustra-router] connOrConfig:')
-    console.error(connOrConfig)
+    console.error(connection?.config)
     console.error('[calustra-router] routes:')
     console.error(routes)
     
@@ -60,23 +50,14 @@ function calustraRouter(connOrConfig, routes) {
 
 
 
-async function calustraRouterForAllTables(connOrConfig, prefix= '', schema= 'public') {
-
-  // Init connection object
-  const connection= getConnection(connOrConfig)
-
-  // Check connection
-  if ( !connection ) {
-    throw "[calustra-router] Could not get any connection from the passed <connOrConfig> param"
-  }  
-  
+async function calustraRouterForAllTables(connection, prefix= '', schema= 'public') {
   const crudConfig = await createCrudConfigForAllTables(connection, prefix, schema)
 
   // check routes
   const crudRoutesOk= ((crudConfig?.routes!=undefined) && (crudConfig.routes.length>0))
 
   if ( !crudRoutesOk ) {
-    throw "[calustra-router] Could not get any route for the passed <connOrConfig> param"
+    throw "[calustra-router] Could not get any route for the connection"
   }  
 
   // Init the Koa Router
