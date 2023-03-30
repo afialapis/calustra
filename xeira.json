@@ -1,14 +1,9 @@
 {
   "product": "package",
-  "target": "node",
-  "source_index": "./src/index.mjs",
   "linter": "eslint",
-  "transpile_folder": "./lib",
   "transpiler": "babel",
-  "minifier": "uglify",
-  "bundle_folder": "./dist",
+  "minifier": "none",
   "bundler": "rollup",
-  "test_folder": "./test",
   "demo_mode": null,
   "demo_demoer": null
 }

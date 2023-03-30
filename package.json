@@ -6,72 +6,95 @@
   "contributors": [
     "Donato Lorenzo <donato@afialapis.com>"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afialapis/calustra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/afialapis/calustra/issues"
+  },
+  "homepage": "https://calustra.afialapis.com/",  
   "type": "module",
   "license": "MIT",
-  "XXXX_workspaces": [
-    "packages/query",
-    "packages/conn",
-    "packages/orm",
-    "packages/router"
-  ],
-  "XXXX_scripts": {
-    "main:purge": "rm -fr node_modules package-lock.json npm-lock.yaml",
-    "main:reset": "rm -fr main:purge && npm i",
-    "query:clean": "cd packages/query && rm -fr $@",
-    "query:purge": "npm run query:clean lib dist",
-    "query:lint": "npx xeira lint --filter=query --folder=src",
-    "query:test": "npx xeira test --files=./test/index.mjs --filter=query",
-    "query:lib": "npm run query:clean lib && npx xeira transpile --filter=query --minifier=none",
-    "query:dist": "npm run query:clean dist && npx xeira bundle --filter=query",
-    "query:site": "npm run query:clean arredemo && npx xeira site --filter=query",
-    "query:prepare": "npm run query:lint && npm run query:test && npm run query:lib && npm run query:dist && npm run query:site",
-    "query:publish": "cd packages/query && npm publish",
-    "conn:clean": "cd packages/conn && rm -fr $@",
-    "conn:purge": "npm run conn:clean lib dist",
-    "conn:lint": "npx xeira lint --filter=conn --folder=src",
-    "conn:test": "npx xeira test --files=./test/index.mjs --filter=conn",
-    "conn:lib": "npm run conn:clean lib && npx xeira transpile --filter=conn --minifier=none",
-    "conn:dist": "npm run conn:clean dist && npx xeira bundle --filter=conn",
-    "conn:site": "npm run conn:clean arredemo && npx xeira site --filter=conn",
-    "conn:prepare": "npm run conn:lint && npm run conn:test && npm run conn:lib && npm run conn:dist && npm run conn:site",
-    "conn:publish": "cd packages/conn && npm publish",
-    "orm:clean": "cd packages/orm && rm -fr $@",
-    "orm:purge": "npm run orm:clean lib dist",
-    "orm:lint": "npx xeira lint --filter=orm --folder=src",
-    "orm:test": "npx xeira test --files=./test/index.mjs --filter=orm",
-    "orm:lib": "npm run orm:clean lib && npx xeira transpile --filter=orm --minifier=none",
-    "orm:dist": "npm run orm:clean dist && npx xeira bundle --filter=orm",
-    "orm:site": "npm run orm:clean arredemo && npx xeira site --filter=orm",
-    "orm:prepare": "npm run orm:lint && npm run orm:test && npm run orm:lib && npm run orm:dist && npm run orm:site",
-    "orm:publish": "cd packages/orm && npm publish",
-    "router:clean": "cd packages/router && rm -fr $@",
-    "router:purge": "npm run router:clean lib dist",
-    "router:lint": "npx xeira lint --filter=router --folder=src",
-    "router:test": "npx xeira test --files=./test/index.mjs --filter=router",
-    "router:lib": "npm run router:clean lib && npx xeira transpile --filter=router --minifier=none",
-    "router:dist": "npm run router:clean dist && npx xeira bundle --filter=router",
-    "router:site": "npm run router:clean arredemo && npx xeira site --filter=router",
-    "router:prepare": "npm run router:lint && npm run router:test && npm run router:lib && npm run router:dist && npm run router:site",
-    "router:publish": "cd packages/router && npm publish",
-    "pkg:purge": "npm run query:purge && npm run conn:purge && npm run orm:purge && npm run router:purge",
-    "pkg:lint": "npm run query:lint && npm run conn:lint && npm run orm:lint && npm run router:lint",
-    "pkg:test": "npm run query:test && npm run conn:test && npm run orm:test && npm run router:test",
-    "pkg:prepare": "npm run query:prepare && npm run conn:prepare && npm run orm:prepare && npm run router:prepare",
-    "pkg:version": "npx xeira version --filter=* --number $1",
-    "pkg:publish": "npm run query:publish && npm run conn:publish && npm run orm:publish && npm run router:publish",
-    "purge": "npm run pkg:purge && npm run main:purge",
-    "reset": "npm run pkg:purge && npm run main:reset",
-    "all:prepare": "npm run pkg:prepare",
-    "all:publish": "npm run pkg:publish"
+ 
+  "main": "./lib/conn/index.cjs",
+  "cjs": "./lib/conn/index.cjs",
+  "module": "./dist/conn/calustra-conn.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/conn/calustra-conn.mjs",
+      "require": "./lib/conn/index.cjs",
+      "default": "./lib/conn/index.cjs"
+    },
+    "./conn": {
+      "import": "./dist/conn/calustra-conn.mjs",
+      "require": "./lib/conn/index.cjs",
+      "default": "./lib/conn/index.cjs"
+    },    
+    "./query": {
+      "import": "./dist/query/calustra-query.mjs",
+      "require": "./lib/query/index.cjs",
+      "default": "./lib/query/index.cjs"
+    },
+    "./router": {
+      "import": "./dist/router/calustra-router.mjs",
+      "require": "./lib/router/index.cjs",
+      "default": "./lib/router/index.cjs"      
+    },
+    "./fetcher": {
+      "import": "./dist/fetcher/calustra-fetcher.mjs",
+      "require": "./lib/fetcher/index.cjs",
+      "default": "./lib/fetcher/index.cjs"      
+    }
   },
+
+  "files": [
+    "lib",
+    "dist"
+  ],
   "scripts": {
     "purge": "rm -fr node_modules package-lock.json npm-lock.yaml",
     "reset": "rm -fr purge && npm i",
 
+    "query:clean-lib": "rm -fr lib/query && mkdir lib/query",
+    "query:clean-dist": "rm -fr dist/query && mkdir dist/query",
+    "query:clean": "npm run query:clean-lib && npm run query:clean-dist",
+    "query:lint": "npx xeira lint --folder=./src/query",
     "query:test": "npx xeira test --files=./test/query/index.mjs",
+    "query:lib": "npm run query:clean-lib && npx xeira transpile --source_index=./src/query/index.mjs --transpile_folder=./lib --minifier=none",
+    "query:dist": "npm run query:clean-dist && npx xeira bundle --source_index=./src/query/index.mjs --bundle_folder=./dist/query --bundle_name=calustra-query --target=node",
+    "query:prepare": "npm run query:lint && npm run query:test && npm run query:lib && npm run query:dist",    
+
+    "conn:clean-lib": "rm -fr lib/conn && mkdir lib/conn",
+    "conn:clean-dist": "rm -fr dist/conn && mkdir dist/conn",
+    "conn:clean": "npm run conn:clean-lib && npm run conn:clean-dist",
+    "conn:lint": "npx xeira lint --folder=./src/conn",
     "conn:test": "npx xeira test --files=./test/conn/index.mjs",
+    "conn:lib": "npm run conn:clean-lib && npx xeira transpile --source_index=./src/conn/index.mjs --transpile_folder=./lib --minifier=none",
+    "conn:dist": "npm run conn:clean-dist && npx xeira bundle --source_index=./src/conn/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-conn --target=node",
+    "conn:prepare": "npm run conn:lint && npm run conn:test && npm run conn:lib && npm run conn:dist",  
+
+    "router:clean-lib": "rm -fr lib/router && mkdir lib/router",
+    "router:clean-dist": "rm -fr dist/router && mkdir dist/router",
+    "router:clean": "npm run router:clean-lib && npm run router:clean-dist",
+    "router:lint": "npx xeira lint --folder=./src/router",
     "router:test": "npx xeira test --files=./test/router/index.mjs",
-    "test": "npm run query:test && npm run conn:test && npm run router:test"
+    "router:lib": "npm run router:clean-lib && npx xeira transpile --source_index=./src/router/index.mjs --transpile_folder=./lib --minifier=none",
+    "router:dist": "npm run router:clean-dist && npx xeira bundle --source_index=./src/router/index.mjs --bundle_folder=./dist/router --bundle_name=calustra-router --target=node",
+    "router:prepare": "npm run router:lint && npm run router:test && npm run router:lib && npm run router:dist",  
+    
+    "fetcher:clean-lib": "rm -fr lib/fetcher && mkdir lib/fetcher",
+    "fetcher:clean-dist": "rm -fr dist/fetcher && mkdir dist/fetcher",
+    "fetcher:clean": "npm run fetcher:clean-lib && npm run fetcher:clean-dist",
+    "fetcher:lint": "npx xeira lint --folder=./src/fetcher",
+    "fetcher:lib": "npm run fetcher:clean-lib && npx xeira transpile --source_index=./src/fetcher/index.mjs --transpile_folder=./lib --minifier=none",
+    "fetcher:dist": "npm run fetcher:clean-dist && npx xeira bundle --source_index=./src/fetcher/index.mjs --bundle_folder=./dist/fetcher --bundle_name=calustra-fetcher --target=both",
+    "fetcher:prepare": "npm run fetcher:lint && npm run fetcher:lib && npm run fetcher:dist",  
+
+    "lint": "npm run query:lint && npm run conn:lint && npm run router:lint && npm run fetcher:lint",
+    "test": "npm run query:test && npm run conn:test && npm run router:test",
+    "site": "rm -fr arredemo && npx xeira site",
+    "prepare": "npm run query:prepare && npm run conn:prepare && npm run router:prepare && npm run fetcher:prepare && npm run site"
   },
   "dependencies": {
     "cacheiro": "^0.0.11",
@@ -85,7 +108,7 @@
   "devDependencies": {
     "koa": "^2.14.1",
     "node-fetch": "^3.3.1",
-    "xeira": "^0.2.4"
+    "xeira": "^0.3.1"
   },
   "eslintConfig": {
     "extends": [

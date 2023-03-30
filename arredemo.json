@@ -1,0 +1,13 @@
+{
+  "theme": "default",
+  "favicon": "logo/favicon/calustra.png",
+  "logo": "logo/calustra_logo.png",
+  "company": "Afialapis",
+  "url": "calustra.afialapis.com",
+  "doc_versions": null,
+  "md": {
+    "strip_details_tag": true,
+    "keep_summary_content": false
+  },
+  "demo_entry": null
+}

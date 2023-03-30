@@ -8,8 +8,6 @@ import { Fetcher } from '../../../src/fetcher/index.mjs'
 
 function _run_test_base (name, config, options, close, callback) {  
 
-  
-
   describe(`calustra-router: Test ${name} under ${config.dialect}`, function() {
       
     it('[PREPARE] should prepare database', async function() {
