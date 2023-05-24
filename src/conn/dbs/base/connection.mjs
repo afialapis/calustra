@@ -170,12 +170,12 @@ class CalustraConnBase {
     throw 'CalustraConnBase: select() not implemented"'
   }
 
-  async getOrSetCachedTableNames(callback, schema= 'public') {
-    if (this._table_names == undefined) {
-      this._table_names= await callback(schema)
-    }
-    return this._table_names
-  }
+  // async getOrSetCachedTableNames(callback, schema= 'public') {
+  //   if (this._table_names == undefined) {
+  //     this._table_names= await callback(schema)
+  //   }
+  //   return this._table_names
+  // }
 
   async getTableNamesFromDb(schema= 'public') {
     throw 'CalustraConnBase: getTableNamesFromDb() not implemented"'

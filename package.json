@@ -35,16 +35,6 @@
       "import": "./dist/query/calustra-query.mjs",
       "require": "./lib/query/index.cjs",
       "default": "./lib/query/index.cjs"
-    },
-    "./router": {
-      "import": "./dist/router/calustra-router.mjs",
-      "require": "./lib/router/index.cjs",
-      "default": "./lib/router/index.cjs"      
-    },
-    "./fetcher": {
-      "import": "./dist/fetcher/calustra-fetcher.mjs",
-      "require": "./lib/fetcher/index.cjs",
-      "default": "./lib/fetcher/index.cjs"      
     }
   },
 
@@ -74,40 +64,19 @@
     "conn:dist": "npm run conn:clean-dist && npx xeira bundle --source_index=./src/conn/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-conn --target=node",
     "conn:prepare": "npm run conn:lint && npm run conn:test && npm run conn:lib && npm run conn:dist",  
 
-    "router:clean-lib": "rm -fr lib/router && mkdir lib/router",
-    "router:clean-dist": "rm -fr dist/router && mkdir dist/router",
-    "router:clean": "npm run router:clean-lib && npm run router:clean-dist",
-    "router:lint": "npx xeira lint --folder=./src/router",
-    "router:test": "npx xeira test --files=./test/router/index.mjs",
-    "router:lib": "npm run router:clean-lib && npx xeira transpile --source_index=./src/router/index.mjs --transpile_folder=./lib --minifier=none",
-    "router:dist": "npm run router:clean-dist && npx xeira bundle --source_index=./src/router/index.mjs --bundle_folder=./dist/router --bundle_name=calustra-router --target=node",
-    "router:prepare": "npm run router:lint && npm run router:test && npm run router:lib && npm run router:dist",  
-    
-    "fetcher:clean-lib": "rm -fr lib/fetcher && mkdir lib/fetcher",
-    "fetcher:clean-dist": "rm -fr dist/fetcher && mkdir dist/fetcher",
-    "fetcher:clean": "npm run fetcher:clean-lib && npm run fetcher:clean-dist",
-    "fetcher:lint": "npx xeira lint --folder=./src/fetcher",
-    "fetcher:lib": "npm run fetcher:clean-lib && npx xeira transpile --source_index=./src/fetcher/index.mjs --transpile_folder=./lib --minifier=none",
-    "fetcher:dist": "npm run fetcher:clean-dist && npx xeira bundle --source_index=./src/fetcher/index.mjs --bundle_folder=./dist/fetcher --bundle_name=calustra-fetcher --target=both",
-    "fetcher:prepare": "npm run fetcher:lint && npm run fetcher:lib && npm run fetcher:dist",  
-
-    "lint": "npm run query:lint && npm run conn:lint && npm run router:lint && npm run fetcher:lint",
-    "test": "npm run query:test && npm run conn:test && npm run router:test",
+    "lint": "npm run query:lint && npm run conn:lint",
+    "test": "npm run query:test && npm run conn:test",
     "site": "rm -fr arredemo && npx xeira site",
-    "prepare": "npm run query:prepare && npm run conn:prepare && npm run router:prepare && npm run fetcher:prepare && npm run site"
+    "prepare": "npm run query:prepare && npm run conn:prepare && npm run site"
   },
   "dependencies": {
     "cacheiro": "^0.0.11",
-    "calustra-query": "*",
     "intre": "^1.1.5",
-    "koa-router": "^12.0.0",
     "pg-promise": "^11.2.0",
     "sqlite3": "^5.1.5",
     "tinguir": "^0.0.3"
   },
   "devDependencies": {
-    "koa": "^2.14.1",
-    "node-fetch": "^3.3.1",
     "xeira": "^0.3.1"
   },
   "eslintConfig": {
