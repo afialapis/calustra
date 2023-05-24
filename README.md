@@ -485,7 +485,7 @@ Clean and colorize a query with logging in mind.
 # Notes
 
 
-# Cached connections
+## Cached connections
 
 Notice that `calustra` keeps a simple cache of connections once they are initialized. You can get them using `getConnection(selector)`:
 
