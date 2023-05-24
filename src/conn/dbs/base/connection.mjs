@@ -249,8 +249,10 @@ class CalustraConnBase {
         modelOptions= {
           name: tableName
         }
+        break
       } else if (t?.name===tableName) {
         modelOptions= {...t}
+        break
       } 
     }
   

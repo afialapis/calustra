@@ -52,15 +52,15 @@ function getOrSetModelFromCache(connection, modelOptions, initModelCallback) {
       const model= initModelCallback()
 
       if (model==undefined) {
-        logger.error(`[calustra-orm] ${model.name} model could not be inited`)
-        throw `[calustra-orm] ${model.name} model could not be inited`
+        logger.error(`[calustra-conn] ${model.name} model could not be inited`)
+        throw `[calustra-conn] ${model.name} model could not be inited`
       }
 
       model.uncache = () => {
         cache.unsetItem(cache_key)
       }
       
-      logger.debug(`[calustra-orm] ${model.name} model inited and cached as ${cache_key}`)
+      logger.debug(`[calustra-conn] ${model.name} model inited and cached as ${cache_key}`)
       return model
     })
   
