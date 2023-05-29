@@ -1,6 +1,6 @@
 {
   "name": "calustra",
-  "version": "0.10.0-beta.1",
+  "version": "0.10.0",
   "description": "Database to Web",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -77,7 +77,7 @@
     "tinguir": "^0.0.3"
   },
   "devDependencies": {
-    "xeira": "^0.3.1"
+    "xeira": "^0.3.9"
   },
   "eslintConfig": {
     "extends": [
