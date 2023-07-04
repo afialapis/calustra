@@ -222,7 +222,7 @@ List of tables in the database which will be accessible trough [`getModel()`](#c
       created_at: 'created_at', 
       last_update_at: 'last_update_at'
     },
-    now: () => epoch_now()
+    now: () => intre_now()
   },
   
   checkBeforeDelete: [
@@ -278,7 +278,7 @@ the `ScrewStock.delete` will fail.
 Here you can specify an object like this:
 
 ```js
-import {epoch_now} from 'intre'
+import {intre_now} from 'intre'
 
 const conn = getConnection(config, {
   tables: [{
@@ -289,7 +289,7 @@ const conn = getConnection(config, {
         created_at: 'created_at', 
         last_update_at: 'last_update_at'
       },
-      now: () => epoch_now()
+      now: () => intre_now()
     }
   }]
 })

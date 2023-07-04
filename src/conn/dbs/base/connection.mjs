@@ -4,7 +4,7 @@ import formatQuery from '../../../query/format.mjs'
 import getQueryDescription from '../../../query/getDescription.mjs'
 import {getOrSetQueryResultsFromCache} from '../../cache/results.mjs'
 import Logger from '../../util/logger.mjs'
-import {epoch_now} from 'intre'
+import {intre_now} from 'intre'
 import merge from "../../util/merge.mjs"
 import { getOrSetModelFromCache } from '../../cache/conns.mjs'
 
@@ -81,7 +81,13 @@ class CalustraConnBase {
         const elapsed = parseFloat( (Date.now() - started) / 1000.0 ).toFixed(2)
         this.log.silly(this.formatQuery(query, values))
         const msg= msg_callback(data, elapsed)
-        this.log.info(msg)
+        if (options?.log === 'silly') {
+          this.log.silly(msg)
+        } else if (options?.log === 'debug') {
+          this.log.debug(msg)
+        } else {
+          this.log.info(msg)
+        }
       }
 
       return data
@@ -218,7 +224,7 @@ class CalustraConnBase {
           created_at: 'created_at', 
           last_update_at: 'last_update_at'
         },
-        now: () => epoch_now()
+        now: () => intre_now()
       },
       /*
       checkBeforeDelete: [

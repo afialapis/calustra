@@ -46,7 +46,7 @@ function getOrSetModelFromCache(connection, modelOptions, initModelCallback) {
 
   const model = cache.getOrSetItem(cache_key, 
     () => {
-      logger.debug(`Model retrieved from cache with ${cache_key}`)
+      logger.silly(`Model retrieved from cache with ${cache_key}`)
     },
     () => {
       const model= initModelCallback()
@@ -60,7 +60,7 @@ function getOrSetModelFromCache(connection, modelOptions, initModelCallback) {
         cache.unsetItem(cache_key)
       }
       
-      logger.debug(`[calustra-conn] ${model.name} model inited and cached as ${cache_key}`)
+      logger.silly(`[calustra-conn] ${model.name} model inited and cached as ${cache_key}`)
       return model
     })
   

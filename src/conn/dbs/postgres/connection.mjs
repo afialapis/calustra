@@ -153,7 +153,7 @@ class CalustraConnPG extends CalustraConnBase {
           AND f.attnum > 0 
       ORDER BY number`    
 
-    const res = await this.select(query, [schema, tableName])
+    const res = await this.select(query, [schema, tableName], {log: 'silly'})
 
     let tableDef = {}
     

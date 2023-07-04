@@ -1,6 +1,6 @@
 {
   "name": "calustra",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Database to Web",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -71,13 +71,13 @@
   },
   "dependencies": {
     "cacheiro": "^0.0.11",
-    "intre": "^1.1.5",
-    "pg-promise": "^11.2.0",
-    "sqlite3": "^5.1.5",
+    "intre": "^2.0.2",
+    "pg-promise": "^11.5.0",
+    "sqlite3": "^5.1.6",
     "tinguir": "^0.0.3"
   },
   "devDependencies": {
-    "xeira": "^0.3.9"
+    "xeira": "^0.3.12"
   },
   "eslintConfig": {
     "extends": [
