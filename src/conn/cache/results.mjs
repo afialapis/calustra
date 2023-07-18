@@ -6,12 +6,12 @@ async function getOrSetQueryResultsFromCache(config, queryName, logger, queryRes
   const cache_key= getQueryResultsCacheKey(config, queryName)
   const data = await cache.getOrSetItemAsync(cache_key, 
     async () => {
-      logger.silly(`Query results retrieved from cache with ${cache_key}`)
+      logger.silly(`[calustra] Query results retrieved from cache with ${cache_key}`)
     },
     async () => {
       const data= await queryResultsCallback()
 
-      logger.silly(`Query results for ${queryName} retrieved and cached as ${cache_key}`)
+      logger.silly(`[calustra] Query results for ${queryName} retrieved and cached as ${cache_key}`)
       return data
     })  
   return data

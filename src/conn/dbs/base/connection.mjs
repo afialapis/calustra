@@ -29,10 +29,10 @@ class CalustraConnBase {
     this.options= options
     this.log = _initLogger(options)
     
-    this.log.debug(`Opening database: ${JSON.stringify(this.config)}`)
+    this.log.debug(`[calustra] Opening database: ${JSON.stringify(this.config)}`)
     this.db = this.openDb(this.config)
     
-    this.log.info(`Using database ${config?.database}`)
+    this.log.info(`[calustra] Using database ${config?.database}`)
     this.is_open= true
   }
 
@@ -79,21 +79,21 @@ class CalustraConnBase {
 
       if (options?.log!==false) {
         const elapsed = parseFloat( (Date.now() - started) / 1000.0 ).toFixed(2)
-        this.log.silly(this.formatQuery(query, values))
+        this.log.silly(`[calustra] ${this.formatQuery(query, values)}`)
         const msg= msg_callback(data, elapsed)
         if (options?.log === 'silly') {
-          this.log.silly(msg)
+          this.log.silly(`[calustra] ${msg}`)
         } else if (options?.log === 'debug') {
-          this.log.debug(msg)
+          this.log.debug(`[calustra] ${msg}`)
         } else {
-          this.log.info(msg)
+          this.log.info(`[calustra] ${msg}`)
         }
       }
 
       return data
     } catch (error) {
-      this.log.error(this.formatQuery(query, values))
-      this.log.error(error.constructor.name)
+      this.log.error(`[calustra] ${this.formatQuery(query, values)}`)
+      this.log.error(`[calustra] ${error.constructor.name}`)
       this.log.error(error.stack)
     }
 
@@ -155,7 +155,7 @@ class CalustraConnBase {
     }
 
     if (data.length>1 && !omitWarning) {
-      this.log.warn('Returned ' + data.length + ' rows, but expected just 1')
+      this.log.warn('[calustra] Returned ' + data.length + ' rows, but expected just 1')
     }
   
     if (data.length>0)

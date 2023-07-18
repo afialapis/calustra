@@ -1,6 +1,6 @@
 {
   "name": "calustra",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Database to Web",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -19,15 +19,15 @@
  
   "main": "./lib/conn/index.cjs",
   "cjs": "./lib/conn/index.cjs",
-  "module": "./dist/conn/calustra-conn.mjs",
+  "module": "./dist/conn/calustra.mjs",
   "exports": {
     ".": {
-      "import": "./dist/conn/calustra-conn.mjs",
+      "import": "./dist/conn/calustra.mjs",
       "require": "./lib/conn/index.cjs",
       "default": "./lib/conn/index.cjs"
     },
     "./conn": {
-      "import": "./dist/conn/calustra-conn.mjs",
+      "import": "./dist/conn/calustra.mjs",
       "require": "./lib/conn/index.cjs",
       "default": "./lib/conn/index.cjs"
     },    
@@ -61,7 +61,7 @@
     "conn:lint": "npx xeira lint --folder=./src/conn",
     "conn:test": "npx xeira test --files=./test/conn/index.mjs",
     "conn:lib": "npm run conn:clean-lib && npx xeira transpile --source_index=./src/conn/index.mjs --transpile_folder=./lib --minifier=none",
-    "conn:dist": "npm run conn:clean-dist && npx xeira bundle --source_index=./src/conn/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-conn --target=node",
+    "conn:dist": "npm run conn:clean-dist && npx xeira bundle --source_index=./src/conn/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra --target=node",
     "conn:prepare": "npm run conn:lint && npm run conn:test && npm run conn:lib && npm run conn:dist",  
 
     "lint": "npm run query:lint && npm run conn:lint",

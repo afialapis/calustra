@@ -84,8 +84,8 @@ class CalustraModelBase extends CalustraModelOptions {
     try {
       return data[0].cnt
     } catch(error) {
-      this.connection.log.error(`${this.name} ERROR:`)
-      this.connection.log.error(error.constructor.name)
+      this.connection.log.error(`[calustra] ${this.name} ERROR:`)
+      this.connection.log.error(`[calustra] ${error.constructor.name}`)
       this.connection.log.error(error.stack)      
     }
 
@@ -96,7 +96,7 @@ class CalustraModelBase extends CalustraModelOptions {
   async find(id, options) {
     if (isNaN(id) || id <= 0) {    
       const msg = this.name + ': cannot find, invalid Id <' + id + '>'
-      this.connection.log.error(msg)
+      this.connection.log.error(`[calustra] ${msg}`)
       throw new Error(msg)
     }
 
@@ -106,7 +106,7 @@ class CalustraModelBase extends CalustraModelOptions {
     if (Array.isArray(data)) {
       odata= data[0]
     } else {
-      this.connection.log.warn(`${this.name}: Id ${id} does not exist`)
+      this.connection.log.warn(`[calustra] ${this.name}: Id ${id} does not exist`)
     }
 
     return odata
@@ -140,7 +140,7 @@ class CalustraModelBase extends CalustraModelOptions {
 
   async insert(data, poptions) {
     if (data == undefined) {
-      throw Error(`[calustra] ${this.tablenanme}.insert() received data=undefined`)
+      throw Error(`[calustra] ${this.name}.insert() received data=undefined`)
     }
 
     await this.loadDefinition()
@@ -160,10 +160,10 @@ class CalustraModelBase extends CalustraModelOptions {
     
     if (id == null) {
       const msg = this.name + ': cannot save ' + JSON.stringify(data)
-      this.connection.log.error(msg)
+      this.connection.log.error(`[calustra] ${msg}`)
     } else {
       if (options?.log!==false) {
-        this.connection.log.debug(`Created with Id ${id}`)
+        this.connection.log.debug(`[calustra] ${this.name}: Created with Id ${id}`)
       }
     }
 
@@ -200,7 +200,7 @@ class CalustraModelBase extends CalustraModelOptions {
 
   async update(data, filt, poptions) {
     if (data == undefined) {
-      throw Error(`[calustra] ${this.tablenanme}.insert() received data=undefined`)
+      throw Error(`[calustra] ${this.name}.insert() received data=undefined`)
     }
 
     await this.loadDefinition()
@@ -216,7 +216,7 @@ class CalustraModelBase extends CalustraModelOptions {
     const [query, values]= prepare_query_update(this.name, this.fields, params, filter)
 
     if (query == undefined) {
-      this.connection.log.error(`${this.name} ERROR: Nothing to update`)
+      this.connection.log.error(`[calustra] ${this.name} ERROR: Nothing to update`)
       return 0
     }
 
@@ -226,10 +226,10 @@ class CalustraModelBase extends CalustraModelOptions {
 
     if (count == 0) {
       const msg = this.name + ': no record updated with filter ' + JSON.stringify(filt) + ' -- ' + JSON.stringify(data)
-      this.connection.log.warn(msg)
+      this.connection.log.warn(`[calustra] ${msg}`)
     } else {
       if (options?.log!==false) {
-        this.connection.log.debug(`Updated ${count} records`)
+        this.connection.log.debug(`[calustra] ${this.name}: Updated ${count} records`)
       }
     }
 
@@ -278,7 +278,7 @@ class CalustraModelBase extends CalustraModelOptions {
 
     if (! allow) {
       const msg = this.name + ': Cannot delete for filter ' + JSON.stringify(filt)
-      this.connection.log.warn(msg)
+      this.connection.log.warn(`[calustra] ${msg}`)
       return 0
     }  
 
@@ -291,7 +291,7 @@ class CalustraModelBase extends CalustraModelOptions {
     count= await this.afterDelete(count, filter, options)
 
     if (options?.log!==false) {
-      this.connection.log.debug(`Deleted ${count} records`)
+      this.connection.log.debug(`[calustra] ${this.name}: Deleted ${count} records`)
     }    
 
     return count

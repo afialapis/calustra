@@ -51,7 +51,7 @@ function getConnection (configOrSelector, options) {
   }
   
   if (isCalustraSelector(configOrSelector)) {
-    throw `[calustra-conn] Could not get connection for selector ${configOrSelector}`
+    throw `[calustra] Could not get connection for selector ${configOrSelector}`
   }
 
   const conn= _initConnection(configOrSelector, options)
