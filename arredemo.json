@@ -2,8 +2,9 @@
   "theme": "default",
   "favicon": "logo/favicon/calustra.png",
   "logo": "logo/calustra_logo.png",
+  "url": "https://www.afialapis.com/os/calustra",
   "company": "Afialapis",
-  "url": "calustra.afialapis.com",
+  "company_url": "https://www.afialapis.com",
   "doc_versions": null,
   "md": {
     "strip_details_tag": true,

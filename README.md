@@ -1,8 +1,8 @@
-![Calustra logo](https://calustra.afialapis.com/logo.png)
+![Calustra logo](https://www.afialapis.com/os/calustra/logo.png)
 
 # Intro
 
-[`calustra`](https://calustra.afialapis.com) is a database connector.
+[`calustra`](https://www.afialapis.com/os/calustra) is a database connector.
 
 Currently, supported databases are:
 - PostgreSQL (through [pg-promise](https://github.com/vitaly-t/pg-promise)). 
