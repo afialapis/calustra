@@ -1,8 +1,20 @@
 # conn
 
+## Add log prefix option
+
+To be used instead of `[calustra]`
+
 ## Logging queries
 
 If a query takes more than X time, log the complete SQL instead of the resume
+
+# Model
+
+## filtering by null values
+
+if pased a NULL value on the filter, query should do "...AND field IS NULL"
+
+
 
 ## Connect more databases
 

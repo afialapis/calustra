@@ -12,7 +12,7 @@ import { getOrSetModelFromCache } from '../../cache/conns.mjs'
 
 function _initLogger(options) {
   let logger
-  if (options?.log==undefined || typeof options?.log == 'string') {
+  if ( (options?.log==undefined) || (typeof options?.log == 'string')) {
     logger= new Logger(options?.log || 'info')
   } else {
     logger = options.log
