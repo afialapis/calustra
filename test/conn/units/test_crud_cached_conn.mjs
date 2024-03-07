@@ -1,15 +1,22 @@
 import {getConnection} from '../../../src/conn/index.mjs'
 const expect= global.expect
 
-function test_crud_cached_conn(config, options, data, close= false) {
+function test_crud_cached_conn(config, options, data) {
 
   const db_name = config.database || config.filename
 
   describe(`[crud][cache][${config.dialect}] Test crud using cached conections (selector: ${db_name})`, function() {
 
+    it(`[crud][cache][${config.dialect}] should init and cache the conn`, function(done) {
+      const _conn = getConnection(config, {
+        ...options,
+        reset: true
+      })
+      done()
+    })
 
     it(`[crud][cache][${config.dialect}] should drop test_01 table if exists`, async function() {
-      const conn = getConnection(config, options)
+      const conn = getConnection(db_name)
       const query = `DROP TABLE IF EXISTS test_01`
       await conn.execute(query)
     })
@@ -17,7 +24,7 @@ function test_crud_cached_conn(config, options, data, close= false) {
     it(`[crud][cache][${config.dialect}] should create test_01 table`, async function() {
       const conn = getConnection(db_name)
       const query = `
-        CREATE TABLE test_01 (
+        CREATE TABLE IF NOT EXISTS test_01 (
           id           serial,
           name         TEXT NOT NULL,
           description  TEXT NULL,
@@ -94,7 +101,6 @@ function test_crud_cached_conn(config, options, data, close= false) {
       
       expect(res.cnt).to.equal(2)
     })
-    
 
     it(`[crud][cache][${config.dialect}] should count 2 distinct names, Frederic and Peter`, async function() {
       const conn = getConnection(db_name)
@@ -130,17 +136,12 @@ function test_crud_cached_conn(config, options, data, close= false) {
       const conn = getConnection(db_name)
       const query = `DROP TABLE test_01`
       await conn.execute(query)
+    })
+
+    it(`[crud][cache][${config.dialect}]should close connection`, async function() {
+      const conn = getConnection(db_name)
+      conn.close()
     })  
-
-
-    if (close) {
-      it(`[crud][cache][${config.dialect}]should ${close ? 'close' : 'uncache'} connection`, async function() {
-        const conn = getConnection(db_name)
-        if (close) {
-          conn.close()
-        }
-      })  
-    }    
   })
 
 }

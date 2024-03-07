@@ -140,7 +140,7 @@ class CalustraModelBase extends CalustraModelOptions {
 
   async insert(data, poptions) {
     if (data == undefined) {
-      throw Error(`[calustra] ${this.name}.insert() received data=undefined`)
+      throw new Error(`[calustra] ${this.name}.insert() received data=undefined`)
     }
 
     await this.loadDefinition()
@@ -200,7 +200,7 @@ class CalustraModelBase extends CalustraModelOptions {
 
   async update(data, filt, poptions) {
     if (data == undefined) {
-      throw Error(`[calustra] ${this.name}.insert() received data=undefined`)
+      throw new Error(`[calustra] ${this.name}.insert() received data=undefined`)
     }
 
     await this.loadDefinition()

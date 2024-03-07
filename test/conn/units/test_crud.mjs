@@ -1,17 +1,29 @@
+import {getConnection} from '../../../src/conn/index.mjs'
 const expect= global.expect
 
-function test_crud(conn, data/*, close= false*/) {
+function test_crud(config, options, data) {
   
-  describe(`[crud][basic][${conn.config.dialect}] Test crud`, function() {
+  describe(`[crud][${config.dialect}] Test crud`, function() {
 
-    it(`[crud][basic][${conn.config.dialect}] should drop test_01 table if exists`, async function() {
+    let conn 
+
+    it(`[crud][cache][${config.dialect}] should init connection`, function(done) {
+      conn = getConnection(config, {
+        ...options,
+        reset: true,
+        nocache: true
+      })
+      done()
+    })
+
+    it(`[crud][${config.dialect}] should drop test_01 table if exists`, async function() {
       const query = `DROP TABLE IF EXISTS test_01`
       await conn.execute(query)
     })
 
-    it(`[crud][basic][${conn.config.dialect}] should create test_01 table`, async function() {
+    it(`[crud][${config.dialect}] should create test_01 table`, async function() {
       const query = `
-        CREATE TABLE test_01 (
+        CREATE TABLE IF NOT EXISTS test_01 (
           id           serial,
           name         TEXT NOT NULL,
           description  TEXT NULL,
@@ -20,7 +32,7 @@ function test_crud(conn, data/*, close= false*/) {
       await conn.execute(query)
     })
 
-    it(`[crud][basic][${conn.config.dialect}] should create test records`, async function() {
+    it(`[crud][${config.dialect}] should create test records`, async function() {
       for (const rec of data) {
         const query= `
           INSERT INTO test_01
@@ -32,8 +44,7 @@ function test_crud(conn, data/*, close= false*/) {
       }
     })
 
-    it(`[crud][basic][${conn.config.dialect}] should update one record`, async function() {
-
+    it(`[crud][${config.dialect}] should update one record`, async function() {
       const query = `
           UPDATE test_01
               SET description = $1
@@ -43,7 +54,7 @@ function test_crud(conn, data/*, close= false*/) {
       expect(cnt).to.equal(1)
     })
 
-    it(`[crud][basic][${conn.config.dialect}] should update several records`, async function() {
+    it(`[crud][${config.dialect}] should update several records`, async function() {
       const query = `
           UPDATE test_01
               SET name = $1
@@ -53,7 +64,7 @@ function test_crud(conn, data/*, close= false*/) {
       expect(cnt).to.equal(2)
     })
 
-    it(`[crud][basic][${conn.config.dialect}] should delete one record`, async function() {
+    it(`[crud][${config.dialect}] should delete one record`, async function() {
       const query = `
           DELETE
             FROM test_01
@@ -63,7 +74,7 @@ function test_crud(conn, data/*, close= false*/) {
       expect(cnt).to.equal(1)
     })
 
-    it(`[crud][basic][${conn.config.dialect}] should count 3 records`, async function() {
+    it(`[crud][${config.dialect}] should count 3 records`, async function() {
       const query = `
         SELECT CAST(COUNT(1) AS int) as cnt
           FROM test_01`
@@ -72,7 +83,7 @@ function test_crud(conn, data/*, close= false*/) {
       expect(res.cnt).to.equal(3)
     })
 
-    it(`[crud][basic][${conn.config.dialect}] should count 2 records with name Frederic`, async function() {
+    it(`[crud][${config.dialect}] should count 2 records with name Frederic`, async function() {
       const query = `
       SELECT CAST(COUNT(1) AS int) as cnt
           FROM test_01
@@ -83,7 +94,7 @@ function test_crud(conn, data/*, close= false*/) {
     })
     
 
-    it(`[crud][basic][${conn.config.dialect}] should count 2 distinct names, Frederic and Peter`, async function() {
+    it(`[crud][${config.dialect}] should count 2 distinct names, Frederic and Peter`, async function() {
       const query = `
         SELECT CAST(COUNT(DISTINCT name) AS int) as cnt
           FROM test_01`
@@ -92,7 +103,7 @@ function test_crud(conn, data/*, close= false*/) {
       expect(res.cnt).to.equal(2)
     })
 
-    it(`[crud][basic][${conn.config.dialect}] should return distinct names, Frederic and Peter`, async function() {
+    it(`[crud][${config.dialect}] should return distinct names, Frederic and Peter`, async function() {
       const query = `
         SELECT DISTINCT name as cnt
           FROM test_01`
@@ -101,7 +112,7 @@ function test_crud(conn, data/*, close= false*/) {
       expect(res.length).to.equal(2)
     })
 
-    it(`[crud][basic][${conn.config.dialect}] should delete other records`, async function() {
+    it(`[crud][${config.dialect}] should delete other records`, async function() {
       const query = `
           DELETE
             FROM test_01`
@@ -110,18 +121,14 @@ function test_crud(conn, data/*, close= false*/) {
       expect(cnt).to.equal(3)
     })
 
-    it(`[crud][basic][${conn.config.dialect}] should drop test_01`, async function() {
+    it(`[crud][${config.dialect}] should drop test_01`, async function() {
       const query = `DROP TABLE test_01`
       await conn.execute(query)
     })  
 
-    // it(`[crud][basic][${conn.config.dialect}] should ${close ? 'close' : 'uncache'} connection`, async function() {
-    //   if (close) {
-    //     conn.close()
-    //   } else {
-    //     conn.uncache()
-    //   }
-    // })      
+    it(`[crud][${config.dialect}] should close connection`, async function() {
+      conn.close()
+    })      
   })
 
 }

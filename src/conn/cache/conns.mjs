@@ -53,7 +53,7 @@ function getOrSetModelFromCache(connection, modelOptions, initModelCallback) {
 
       if (model==undefined) {
         logger.error(`[calustra] ${model.name} model could not be inited`)
-        throw `[calustra] ${model.name} model could not be inited`
+        throw new Error(`[calustra] ${model.name} model could not be inited`)
       }
 
       model.uncache = () => {

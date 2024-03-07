@@ -28,35 +28,47 @@ function _initConnection(config, options) {
 
 
 function getConnection (configOrSelector, options) {
+  const nocache = options?.nocache === true
+  const reset = options?.reset === true
   
   // is it already a connection?
   if (isCalustraConnection(configOrSelector)) {
     const alreadyConn= configOrSelector
 
-    // If already a connection and still open, return it as it is
-    if (alreadyConn.isOpen) {
+    // Lets ignore and rebuild the connection if:
+    //  -- it iss cached but closed
+    //   -- options.reset is true
+    if ((! alreadyConn.isOpen) || (reset)) {
       removeConnectionFromCache(alreadyConn.config)
-      saveConnectionToCache(alreadyConn)
-
-      return alreadyConn
+      return getConnection(alreadyConn.config, {
+        ...alreadyConn.options,
+        ...options || {}
+      })
     }
-    
-    // If already a connection but closed, rebuild it with its properties
-    return getConnection(alreadyConn.config, alreadyConn.options)
+
+    // lets clean cache in case
+    if (nocache) {
+      removeConnectionFromCache(alreadyConn.config)
+    }
+
+    return alreadyConn
   }
 
   const cachedConn= getConnectionFromCache(configOrSelector)
   if (cachedConn) {
-    return cachedConn
+    if (nocache || reset) {
+      removeConnectionFromCache(configOrSelector)
+    } else {
+      return cachedConn
+    }
   }
   
   if (isCalustraSelector(configOrSelector)) {
-    throw `[calustra] Could not get connection for selector ${configOrSelector}`
+    throw new Error(`[calustra] Could not get connection for selector ${configOrSelector}`)
   }
 
   const conn= _initConnection(configOrSelector, options)
-
-  if (options?.nocache!==true) {
+  if (nocache!==true) {
     saveConnectionToCache(conn)
   }
   return conn

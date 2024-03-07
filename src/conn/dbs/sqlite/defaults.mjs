@@ -5,7 +5,7 @@ export default {
   verbose:   true,
   
   // https://github.com/mapbox/node-sqlite3/wiki/Caching
-  cached:    true,
+  cached:    false, // calustra will handle the caching
   
   /*user:     'sqlite',
   password: 'sqlite'*/

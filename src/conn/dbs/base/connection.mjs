@@ -41,11 +41,11 @@ class CalustraConnBase {
   }
 
   openDb() {
-    throw 'CalustraConnBase: openDb() not implemented"'
+    throw new Error ('CalustraConnBase: openDb() not implemented"')
   }
 
   closeDb () {
-    throw 'CalustraConnBase: closeDb() not implemented"'
+    throw new Error ('CalustraConnBase: closeDb() not implemented"')
   }  
 
   get isOpen () {
@@ -53,11 +53,11 @@ class CalustraConnBase {
   }
 
   openTransaction() {
-    throw 'CalustraConnBase: openTransaction() not implemented"'
+    throw new Error ('CalustraConnBase: openTransaction() not implemented"')
   }  
 
   // method assigned on the fly
-  // uncache() {}
+  uncache() {}
 
   close () {
     this.is_open= false
@@ -70,10 +70,13 @@ class CalustraConnBase {
     return formatQuery(query, values)
   }
 
-  async _logQuery (query, values, options, run_callback, msg_callback) {
+  async _runAndLogQuery (query, values, options, run_callback, msg_callback) {
     const started = Date.now()
     
     try {
+      if (! this.isOpen) {
+        throw new Error('Connection is closed')
+      }
 
       const data= await run_callback()
 
@@ -92,70 +95,45 @@ class CalustraConnBase {
 
       return data
     } catch (error) {
-      this.log.error(`[calustra] ${this.formatQuery(query, values)}`)
-      this.log.error(`[calustra] ${error.constructor.name}`)
-      this.log.error(error.stack)
+      if (options?.silent_fail === false) {
+        throw error
+      }
+
+      if (options?.log!==false) {
+        this.log.error(`[calustra] ${this.formatQuery(query, values)}`)
+        this.log.error(`[calustra] ${error.constructor.name}`)
+        this.log.error(error.stack)
+      }
     }
 
     return undefined
   }
 
   async _execute (query, values, options, callback) {
-    if (! this.isOpen) {
-      this.log.error(`[calustra] Connection is closed (${this.isOpen})`)
-      return undefined
-    }
-
-    const run_callback = async () => {
-      const data = await callback()
-      return data
-    }
-    
     const msg_callback = (_data, time) => {
       const desc= getQueryDescription(query, undefined, time)
       return desc
     }
 
-    return this._logQuery (query, values, options, run_callback, msg_callback)
+    return this._runAndLogQuery (query, values, options, callback, msg_callback)
   }
 
   async _executeAndCount (query, values, options, callback) {
-    if (! this.isOpen) {
-      this.log.error(`[calustra] Connection is closed (${this.isOpen})`)
-      return undefined
-    }
-    
-    const run_callback = async () => {
-      const res = await callback()
-      return res
-
-    }
-    
     const msg_callback = (rows, time) => {
       const desc= getQueryDescription(query, rows, time)
       return desc
     }
 
-    return this._logQuery (query, values, options, run_callback, msg_callback)
+    return this._runAndLogQuery (query, values, options, callback, msg_callback)
   }  
 
   async _select (query, values, options, callback) {
-    if (! this.isOpen) {
-      this.log.error(`[calustra] Connection is closed (${this.isOpen})`)
-      return undefined
-    }
-    
-    const run_callback = async () => {
-      const data = await callback()
-      return data
-    }
-
     const msg_callback = (data, time) => {
       const desc= getQueryDescription(query, data.length, time) 
       return desc
     }
 
-    return this._logQuery (query, values, options, run_callback, msg_callback)
+    return this._runAndLogQuery (query, values, options, callback, msg_callback)
 
   }
 
@@ -181,15 +159,15 @@ class CalustraConnBase {
   }  
 
   async execute (query, values, options) {
-    throw 'CalustraConnBase: execute() not implemented"'
+    throw new Error ('CalustraConnBase: execute() not implemented"')
   }
 
   async executeAndCount (query, values, options) {
-    throw 'CalustraConnBase: executeAndCount() not implemented"'
+    throw new Error ('CalustraConnBase: executeAndCount() not implemented"')
   }  
 
   async select (query, values, options) {
-    throw 'CalustraConnBase: select() not implemented"'
+    throw new Error ('CalustraConnBase: select() not implemented"')
   }
 
   // async getOrSetCachedTableNames(callback, schema= 'public') {
@@ -200,7 +178,7 @@ class CalustraConnBase {
   // }
 
   async getTableNamesFromDb(schema= 'public') {
-    throw 'CalustraConnBase: getTableNamesFromDb() not implemented"'
+    throw new Error ('CalustraConnBase: getTableNamesFromDb() not implemented"')
   }  
   
   async getTableNames(schema= 'public') {
@@ -215,7 +193,7 @@ class CalustraConnBase {
   }  
 
   async getTableDetailsFromDb(tableName, schema= 'public') {
-    throw 'CalustraConnBase: getTableDetailsFromDb() not implemented"'
+    throw new Error ('CalustraConnBase: getTableDetailsFromDb() not implemented"')
   }    
 
   async getTableDetails(tableName, schema= 'public') {

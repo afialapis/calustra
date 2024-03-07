@@ -207,6 +207,9 @@ const options= {
 #### `nocache`
 If `true`, connections are not cached. Default is `false`.
 
+#### `reset`
+If `true`, cached connections will be ignored. Connection will be re-created. Default is `false`.
+
 
 #### `tables`
 
@@ -326,6 +329,7 @@ the query is executed, to customize the returning results, etc.
 - `options`:
   - `transaction`
   - `log`: if `false`, logging is disabled for this particular call
+  - `silent_fail`: can be `true` (default, will return `undefined` as query results) or `false` (exception will be propagated).
 
 Returns an array of objects with the result of the query.
 
@@ -337,6 +341,7 @@ Returns an array of objects with the result of the query.
   - `transaction`
   - `log`: if `false`, logging is disabled for this particular call
   - `omitWarning`: by default, if query returns more than one record, a logging warning is shown. If `omitWarning` is `true`, this warning is ignored.
+  - `silent_fail`: can be `true` (default, will return `undefined` as query results) or `false` (exception will be propagated).
 
 Returns an object with the result of the query.
 
@@ -347,6 +352,7 @@ Returns an object with the result of the query.
 - `options`:
   - `transaction`
   - `log`: if `false`, logging is disabled for this particular call
+  - `silent_fail`: can be `true` (default, will return `undefined` as query results) or `false` (exception will be propagated).
 
 Returns an array of objects with the result of the query.
 
@@ -496,13 +502,7 @@ const conn = getConnection(`calustra`)
 
 `selector` is just a string matching some part of the `config` you passed the first time to init the connection. 
 
-You can uncache a connection:
-
-```js
-conn.uncache()
-```
-
-Closing it also uncaches it, but [closing connections](#closing-connections) must be done carefully:
+Closing a connection destroys and uncaches it, but [closing connections](#closing-connections) must be done carefully:
 
 ```js
 conn.close()
@@ -513,6 +513,14 @@ You can disable caching of a connection by specifying the option `nocache`:
 ```js
 const conn = getConnection(config, {nocache: true})
 // connection will not be available later trough getConnection(selector)
+```
+
+When creating a connection, you may force to re-init it (and ignore previous cached connection, if any) 
+by specifying the option `reset`:
+
+```js
+const conn = getConnection(config, {reset: true})
+// previous cached connection will be ignored and overwritten
 ```
 
 ## Closing connections
