@@ -49,7 +49,7 @@ class CalustraConnBase {
   }  
 
   get isOpen () {
-    return this.is_open
+    return this.is_open==true
   }
 
   openTransaction() {
@@ -101,45 +101,61 @@ class CalustraConnBase {
   }
 
   async _execute (query, values, options, callback) {
-    return this._logQuery (query, values, options, 
+    if (! this.isOpen) {
+      this.log.error(`[calustra] Connection is closed (${this.isOpen})`)
+      return undefined
+    }
 
-      async () => {
-        const data = await callback()
-        return data
-      }, 
-      (_data, time) => {
-        const desc= getQueryDescription(query, undefined, time)
-        return desc
-      })
+    const run_callback = async () => {
+      const data = await callback()
+      return data
+    }
+    
+    const msg_callback = (_data, time) => {
+      const desc= getQueryDescription(query, undefined, time)
+      return desc
+    }
+
+    return this._logQuery (query, values, options, run_callback, msg_callback)
   }
 
   async _executeAndCount (query, values, options, callback) {
-    return this._logQuery (query, values, options, 
+    if (! this.isOpen) {
+      this.log.error(`[calustra] Connection is closed (${this.isOpen})`)
+      return undefined
+    }
+    
+    const run_callback = async () => {
+      const res = await callback()
+      return res
 
-      async () => {
-        const res = await callback()
-        return res
+    }
+    
+    const msg_callback = (rows, time) => {
+      const desc= getQueryDescription(query, rows, time)
+      return desc
+    }
 
-      }, 
-      (rows, time) => {
-        const desc= getQueryDescription(query, rows, time)
-        return desc
-      })      
+    return this._logQuery (query, values, options, run_callback, msg_callback)
   }  
 
   async _select (query, values, options, callback) {
+    if (! this.isOpen) {
+      this.log.error(`[calustra] Connection is closed (${this.isOpen})`)
+      return undefined
+    }
+    
+    const run_callback = async () => {
+      const data = await callback()
+      return data
+    }
 
-    return this._logQuery (query, values, options, 
-      
-      async () => {
-        const data = await callback()
-        return data
-      }, 
+    const msg_callback = (data, time) => {
+      const desc= getQueryDescription(query, data.length, time) 
+      return desc
+    }
 
-      (data, time) => {
-        const desc= getQueryDescription(query, data.length, time) 
-        return desc
-      }) 
+    return this._logQuery (query, values, options, run_callback, msg_callback)
 
   }
 

@@ -5,9 +5,9 @@ const expect = global.expect
 function test_table_names() {
 
 
-  describe(`Test getTableNames`, function() {
+  describe(`[query] Test getTableNames`, function() {
 
-    it('should parse and test several queries', function() {
+    it('[query] should parse and test several queries', function() {
 
       test_queries.map(q => {
         const expected = q.tables

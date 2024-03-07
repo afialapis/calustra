@@ -5,16 +5,16 @@ function test_crud_cached_conn(config, options, data, close= false) {
 
   const db_name = config.database || config.filename
 
-  describe(`${config.dialect}: Test crud using cached conections (selector: ${db_name})`, function() {
+  describe(`[crud][cache][${config.dialect}] Test crud using cached conections (selector: ${db_name})`, function() {
 
 
-    it('should drop test_01 table if exists', async function() {
+    it(`[crud][cache][${config.dialect}] should drop test_01 table if exists`, async function() {
       const conn = getConnection(config, options)
       const query = `DROP TABLE IF EXISTS test_01`
       await conn.execute(query)
     })
 
-    it('should create test_01 table', async function() {
+    it(`[crud][cache][${config.dialect}] should create test_01 table`, async function() {
       const conn = getConnection(db_name)
       const query = `
         CREATE TABLE test_01 (
@@ -26,7 +26,7 @@ function test_crud_cached_conn(config, options, data, close= false) {
       await conn.execute(query)
     })
 
-    it('should create test records', async function() {
+    it(`[crud][cache][${config.dialect}] should create test records`, async function() {
       const conn = getConnection(db_name)
 
       for (const rec of data) {
@@ -40,7 +40,7 @@ function test_crud_cached_conn(config, options, data, close= false) {
       }
     })
 
-    it('should update one record', async function() {
+    it(`[crud][cache][${config.dialect}] should update one record`, async function() {
       const conn = getConnection(db_name)
 
       const query = `
@@ -52,7 +52,7 @@ function test_crud_cached_conn(config, options, data, close= false) {
       expect(cnt).to.equal(1)
     })
 
-    it('should update several records', async function() {
+    it(`[crud][cache][${config.dialect}] should update several records`, async function() {
       const conn = getConnection(db_name)
       const query = `
           UPDATE test_01
@@ -63,7 +63,7 @@ function test_crud_cached_conn(config, options, data, close= false) {
       expect(cnt).to.equal(2)
     })
 
-    it('should delete one record', async function() {
+    it(`[crud][cache][${config.dialect}] should delete one record`, async function() {
       const conn = getConnection(db_name)
       const query = `
           DELETE
@@ -74,7 +74,7 @@ function test_crud_cached_conn(config, options, data, close= false) {
       expect(cnt).to.equal(1)
     })
 
-    it('should count 3 records', async function() {
+    it(`[crud][cache][${config.dialect}] should count 3 records`, async function() {
       const conn = getConnection(db_name)
       const query = `
         SELECT CAST(COUNT(1) AS int) as cnt
@@ -84,7 +84,7 @@ function test_crud_cached_conn(config, options, data, close= false) {
       expect(res.cnt).to.equal(3)
     })
 
-    it('should count 2 records with name Frederic', async function() {
+    it(`[crud][cache][${config.dialect}] should count 2 records with name Frederic`, async function() {
       const conn = getConnection(db_name)
       const query = `
       SELECT CAST(COUNT(1) AS int) as cnt
@@ -96,7 +96,7 @@ function test_crud_cached_conn(config, options, data, close= false) {
     })
     
 
-    it('should count 2 distinct names, Frederic and Peter', async function() {
+    it(`[crud][cache][${config.dialect}] should count 2 distinct names, Frederic and Peter`, async function() {
       const conn = getConnection(db_name)
       const query = `
         SELECT CAST(COUNT(DISTINCT name) AS int) as cnt
@@ -106,7 +106,7 @@ function test_crud_cached_conn(config, options, data, close= false) {
       expect(res.cnt).to.equal(2)
     })
 
-    it('should return distinct names, Frederic and Peter', async function() {
+    it(`[crud][cache][${config.dialect}] should return distinct names, Frederic and Peter`, async function() {
       const conn = getConnection(db_name)
       const query = `
         SELECT DISTINCT name as cnt
@@ -116,7 +116,7 @@ function test_crud_cached_conn(config, options, data, close= false) {
       expect(res.length).to.equal(2)
     })
 
-    it('should delete other records', async function() {
+    it(`[crud][cache][${config.dialect}] should delete other records`, async function() {
       const conn = getConnection(db_name)
       const query = `
           DELETE
@@ -126,20 +126,21 @@ function test_crud_cached_conn(config, options, data, close= false) {
       expect(cnt).to.equal(3)
     })
 
-    it('should drop test_01', async function() {
+    it(`[crud][cache][${config.dialect}] should drop test_01`, async function() {
       const conn = getConnection(db_name)
       const query = `DROP TABLE test_01`
       await conn.execute(query)
     })  
 
-    it(`should ${close ? 'close' : 'uncache'} connection`, async function() {
-      const conn = getConnection(db_name)
-      if (close) {
-        conn.close()
-      } else {
-        conn.uncache()
-      }
-    })      
+
+    if (close) {
+      it(`[crud][cache][${config.dialect}]should ${close ? 'close' : 'uncache'} connection`, async function() {
+        const conn = getConnection(db_name)
+        if (close) {
+          conn.close()
+        }
+      })  
+    }    
   })
 
 }

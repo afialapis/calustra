@@ -28,66 +28,78 @@ class CalustraConnPG extends CalustraConnBase {
   }
 
   async execute (query, values, options) {
+    const that = this
 
-    const callback = async () => {
+    const callback = function () {
+      return new Promise(function (resolve, reject) {
+        const transaction = options?.transaction!=undefined 
+        ? options?.transaction 
+        : that.openTransaction()
 
-      const transaction = options?.transaction!=undefined 
-      ? options?.transaction 
-      : this.openTransaction()
-
-      const action = (t) => {
-        return t.oneOrNone(query, values)
-      }
-
-      const data = await transaction(action)
-      return data      
+        transaction(t => {
+          return t.oneOrNone(query, values)
+        }).then(data => {
+          return resolve(data)
+        })
+        .catch(error => {
+          return reject(error)
+        });
+      })
     }
 
     return this._execute (query, values, options, callback) 
   }
 
   async executeAndCount (query, values, options) {
+    const that = this
 
-    const callback = async () => {
+    const callback = function () {
+      return new Promise(function (resolve, reject) {
+        const transaction = options?.transaction!=undefined 
+        ? options?.transaction 
+        : that.openTransaction()
 
-      const transaction = options?.transaction!=undefined 
-      ? options?.transaction 
-      : this.openTransaction()
+        transaction(t => {
+          const cquery = `
+            WITH rows as (
+              ${query}
+              RETURNING 1
+            ) SELECT count(*)::int AS cnt FROM rows`
 
-      const action = (t) => {
+          const res= t.oneOrNone(cquery, values)
+          return res
 
-        const cquery = `
-          WITH rows as (
-            ${query}
-            RETURNING 1
-          ) SELECT count(*)::int AS cnt FROM rows`
-
-        const res= t.oneOrNone(cquery, values)
-
-        return res
-      }
-
-      const data = await transaction(action)
-      return data.cnt
+        }).then(data => {
+          const cnt = data.cnt
+          return resolve(cnt)
+        })
+        .catch(error => {
+          return reject(error)
+        });
+      })
     }
 
     return this._executeAndCount (query, values, options, callback) 
   }
 
   async select (query, values, options) {
+    const that = this
 
-    const callback = async () => {
+    const callback = function () {
+      return new Promise(function (resolve, reject) {
+        const transaction = options?.transaction!=undefined 
+        ? options?.transaction 
+        : that.openTransaction()
 
-      const transaction = options?.transaction!=undefined 
-      ? options?.transaction 
-      : this.openTransaction()
-
-      const action = (t) => {
-        return t.any(query, values)
-      }
-
-      const data = await transaction(action)
-      return data      
+        transaction(t => {
+          return t.any(query, values)
+        }).then(data => {
+          return resolve(data)
+        })
+        .catch(error => {
+          return reject(error)
+        });
+      })
     }
 
     return this._select (query, values, options, callback) 

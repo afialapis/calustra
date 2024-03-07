@@ -38,7 +38,7 @@ export default {
     }
   },
   options: {
-    log: 'warn',
+    log: 'silly',
     tables
   }
 }
