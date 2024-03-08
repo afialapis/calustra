@@ -29,7 +29,7 @@ class CalustraConnBase {
     this.options= options
     this.log = _initLogger(options)
     
-    this.log.debug(`[calustra] Opening database: ${JSON.stringify(this.config)}`)
+    this.log.debug(`[calustra] Opening database ${this.configDescription}${this.options?.reset==true ? ' (reset)' : ''}${this.options?.nocache==true ? ' (nocache)' : ''}`)
     this.db = this.openDb(this.config)
     
     this.log.info(`[calustra] Using database ${config?.database}`)
@@ -38,6 +38,10 @@ class CalustraConnBase {
 
   get dialect() {
     return this.config?.dialect || 'unknown'
+  }
+
+  get configDescription() {
+    return this.dialect
   }
 
   openDb() {

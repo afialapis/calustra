@@ -11,6 +11,11 @@ class CalustraConnPG extends CalustraConnBase {
     super(config, options)
   }
 
+  get configDescription() {
+    const c = this.config
+    return `${c.dialect}: ${c.database} at ${c.user}@${c.host}:${c.port}`
+  }
+
   openDb() {
     const config = merge(defaults, this.config || {})
     const pgp = pgPromise()

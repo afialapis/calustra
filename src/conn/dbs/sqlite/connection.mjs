@@ -12,6 +12,11 @@ class CalustraConnLT extends CalustraConnBase {
     super(config, options)
   }
 
+  get configDescription() {
+    const c = this.config
+    return `${c.dialect}: ${c.filename}${c.cached ? ' (cached)' : ''}`
+  }
+
   openDb() {
     const config = merge(defaults, this.config || {})
 
