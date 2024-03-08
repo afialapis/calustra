@@ -95,10 +95,10 @@ class CalustraConnBase {
 
       return data
     } catch (error) {
-      if (options?.silent_fail === false) {
+      if (options?.silent_fail !== true) {
         throw error
       }
-
+      
       if (options?.log!==false) {
         this.log.error(`[calustra] ${this.formatQuery(query, values)}`)
         this.log.error(`[calustra] ${error.constructor.name}`)
