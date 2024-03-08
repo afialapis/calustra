@@ -24,7 +24,6 @@ function _getSelectorCacheKey(selector) {
     .find((key) => key.indexOf(selector)>=0)
 
   return cache_key
-
 }
 
 

@@ -1,4 +1,4 @@
-import {getConnection} from '../../../src/conn/index.mjs'
+import {getConnection, dropConnection, dropConnections} from '../../../src/conn/index.mjs'
 const expect= global.expect
 
 function test_conn_off(config, options, data) {
@@ -106,13 +106,11 @@ function test_conn_off(config, options, data) {
       expect(cnt).to.equal(1)
     })
 
-    it(`[conn_reset][${config.dialect}] should uncache but not close connection`, async function() {
-      const conn = getConnection(db_name)
-      conn.uncache()
-      expect(conn.isOpen).to.deep.equal(true)
+    it(`[conn_reset][${config.dialect}] should drop all conns`, async function() {
+      dropConnections()
     })    
 
-    it(`[conn_reset][${config.dialect}] should see conn unavailable after conn is uncached`, async function() {
+    it(`[conn_reset][${config.dialect}] should see conn unavailable after all conns are dopeed`, async function() {
       try {
         const _conn = getConnection(db_name)
       } catch(e) {
@@ -149,6 +147,28 @@ function test_conn_off(config, options, data) {
       
       expect(res.cnt).to.equal(2)
     })
+
+    it(`[conn_reset][${config.dialect}] should drop this connection`, async function() {
+      dropConnection(db_name)
+    })    
+
+    it(`[conn_reset][${config.dialect}] should see conn unavailable after conn is dropped`, async function() {
+      try {
+        const _conn = getConnection(db_name)
+      } catch(e) {
+        expect(e.message.indexOf('Could not get connection')>0).to.deep.equal(true)
+      }
+    })    
+
+    it(`[conn_reset][${config.dialect}] should reset the conn`, function(done) {
+      const conn = getConnection(config, {
+        ...options,
+        reset: true
+      })
+      expect(conn.isOpen).to.deep.equal(true)
+      done()
+    })
+
 
     it(`[conn_reset][${config.dialect}] should count 2 distinct names, Frederic and Peter`, async function() {
       const conn = getConnection(db_name)

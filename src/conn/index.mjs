@@ -1,3 +1,6 @@
-import getConnection from './getConnection.mjs'
+export { 
+  getConnection,
+  dropConnection,
+  dropConnections
+} from './api.mjs'
 
-export { getConnection }

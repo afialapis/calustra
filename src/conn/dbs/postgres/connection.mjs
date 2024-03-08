@@ -15,6 +15,8 @@ class CalustraConnPG extends CalustraConnBase {
     const config = merge(defaults, this.config || {})
     const pgp = pgPromise()
     const db  = pgp(config)
+
+    this._pgp = pgp
     return db
   } 
 
@@ -25,6 +27,7 @@ class CalustraConnPG extends CalustraConnBase {
   closeDb () {
     // Gotta do nothing if we use .query() ?
     this.db.$pool.end()
+    this._pgp.end()
   }
 
   async execute (query, values, options) {

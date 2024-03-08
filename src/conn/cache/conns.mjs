@@ -1,8 +1,9 @@
+import { isCalustraConnection } from '../checks.mjs'
 import { getConnectionCacheKey, getModelCacheKey } from './keys.mjs'
 import cache from './store.mjs'
 
 
-function removeConnectionFromCache(configOrSelector) {
+export function removeConnectionFromCache(configOrSelector) {
 
   const cacheKey = getConnectionCacheKey(configOrSelector)
   if (cacheKey) {
@@ -10,24 +11,32 @@ function removeConnectionFromCache(configOrSelector) {
   }
 }
 
-function getConnectionFromCache(configOrSelector) {
+export function getConnectionFromCache(configOrSelector) {
 
   const cacheKey = getConnectionCacheKey(configOrSelector)
 
   const cachedConn = cache.getItem(cacheKey)
 
-  if (cachedConn) {
-    if (cachedConn.isOpen) {
-      return cachedConn
-    } else {
-      cache.unsetItem(cacheKey)
-    }
-  }
-
-  return undefined
+  return cachedConn
 }
 
-function saveConnectionToCache(connection) {
+export function getConnectionsFromCache() {
+  const cacheKeys = cache.getKeys()
+
+  const conns = cacheKeys
+    .map(ck => cache.getItem(ck))
+    .filter(conn => isCalustraConnection(conn))
+
+  return conns
+}
+
+export function clearCache() {
+  const cacheKeys = cache.getKeys()
+
+  cacheKeys.map(ck => cache.unsetItem(ck))
+}
+
+export function saveConnectionToCache(connection) {
   const cacheKey= getConnectionCacheKey(connection.config)
 
   connection.uncache = () => {
@@ -40,7 +49,7 @@ function saveConnectionToCache(connection) {
   return connection  
 }
 
-function getOrSetModelFromCache(connection, modelOptions, initModelCallback) {
+export function getOrSetModelFromCache(connection, modelOptions, initModelCallback) {
   const logger= connection.log
   const cache_key = getModelCacheKey(connection, modelOptions)
 
@@ -65,14 +74,5 @@ function getOrSetModelFromCache(connection, modelOptions, initModelCallback) {
     })
   
     return model
-
 }
 
-
-
-export {
-  getConnectionFromCache, 
-  saveConnectionToCache, 
-  removeConnectionFromCache,
-  getOrSetModelFromCache
-}
