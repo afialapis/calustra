@@ -59,7 +59,7 @@ function test_conn_off(config, options, data) {
       try {
         const _conn = getConnection(db_name)
       } catch(e) {
-        expect(e.message.indexOf('Could not get connection')>0).to.deep.equal(true)
+        expect(e.message.indexOf('Could not get cached connection')>0).to.deep.equal(true)
       }
     })    
 
@@ -114,7 +114,7 @@ function test_conn_off(config, options, data) {
       try {
         const _conn = getConnection(db_name)
       } catch(e) {
-        expect(e.message.indexOf('Could not get connection')>0).to.deep.equal(true)
+        expect(e.message.indexOf('Could not get cached connection')>0).to.deep.equal(true)
       }
     })    
 
@@ -156,7 +156,7 @@ function test_conn_off(config, options, data) {
       try {
         const _conn = getConnection(db_name)
       } catch(e) {
-        expect(e.message.indexOf('Could not get connection')>0).to.deep.equal(true)
+        expect(e.message.indexOf('Could not get cached connection')>0).to.deep.equal(true)
       }
     })    
 

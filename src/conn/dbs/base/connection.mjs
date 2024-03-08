@@ -2,24 +2,9 @@
 
 import formatQuery from '../../../query/format.mjs'
 import getQueryDescription from '../../../query/getDescription.mjs'
-import {getOrSetQueryResultsFromCache} from '../../cache/results.mjs'
-import Logger from '../../util/logger.mjs'
 import {intre_now} from 'intre'
 import merge from "../../util/merge.mjs"
-import { getOrSetModelFromCache } from '../../cache/conns.mjs'
-
-
-
-function _initLogger(options) {
-  let logger
-  if ( (options?.log==undefined) || (typeof options?.log == 'string')) {
-    logger= new Logger(options?.log || 'info')
-  } else {
-    logger = options.log
-  }
-
-  return logger
-}
+import {initLogger} from '../../logger/index.mjs'
 
 
 class CalustraConnBase {
@@ -27,13 +12,32 @@ class CalustraConnBase {
   constructor (config, options) {
     this.config= config
     this.options= options
-    this.log = _initLogger(options)
+    this.log = initLogger(options?.log)
     
     this.log.debug(`[calustra] Opening database ${this.configDescription}${this.options?.reset==true ? ' (reset)' : ''}${this.options?.nocache==true ? ' (nocache)' : ''}`)
     this.db = this.openDb(this.config)
     
     this.log.info(`[calustra] Using database ${config?.database}`)
     this.is_open= true
+    
+    // internally cached objects
+    this.cached_models = {}
+    this.cached_results = {}
+  }
+  
+  updateOptions(options) {
+    if (!options) {
+      return
+    }
+
+    this.options = {
+      ...this.options,
+      ...options||{}
+    }
+    
+    if ('log' in options) {
+      this.log = initLogger(options?.log)
+    }
   }
 
   get dialect() {
@@ -47,6 +51,7 @@ class CalustraConnBase {
   openDb() {
     throw new Error ('CalustraConnBase: openDb() not implemented"')
   }
+  
 
   closeDb () {
     throw new Error ('CalustraConnBase: closeDb() not implemented"')
@@ -60,13 +65,17 @@ class CalustraConnBase {
     throw new Error ('CalustraConnBase: openTransaction() not implemented"')
   }  
 
-  // method assigned on the fly
-  uncache() {}
 
   close () {
     this.is_open= false
     this.closeDb()
-    this.uncache()
+    this.cached_models = {}
+    this.cached_results = {}
+    
+    try {
+      // uncache method may be dynamically assigned when caching connection
+      this.uncache()
+    } catch(_) {}
   }
 
 
@@ -174,26 +183,17 @@ class CalustraConnBase {
     throw new Error ('CalustraConnBase: select() not implemented"')
   }
 
-  // async getOrSetCachedTableNames(callback, schema= 'public') {
-  //   if (this._table_names == undefined) {
-  //     this._table_names= await callback(schema)
-  //   }
-  //   return this._table_names
-  // }
-
   async getTableNamesFromDb(schema= 'public') {
     throw new Error ('CalustraConnBase: getTableNamesFromDb() not implemented"')
   }  
   
   async getTableNames(schema= 'public') {
     const queryName = `${schema}.tablenames`
-
-    const data= await getOrSetQueryResultsFromCache(this.config, queryName, this.log, async () => {
-      const results= await this.getTableNamesFromDb(schema)
-      return results
-    })
-
-    return data
+    
+    if (Object.keys(this.cached_results).indexOf(queryName)<0) {
+      this.cached_results[queryName] = await this.getTableNamesFromDb(schema)
+    }
+    return this.cached_results[queryName]    
   }  
 
   async getTableDetailsFromDb(tableName, schema= 'public') {
@@ -201,17 +201,13 @@ class CalustraConnBase {
   }    
 
   async getTableDetails(tableName, schema= 'public') {
-    const queryName = `${schema}.${tableName}.details`
+    if (Object.keys(this.cached_results).indexOf(tableName)<0) {
+      this.cached_results[tableName] = await this.getTableDetailsFromDb(tableName, schema)
+    }
+    return this.cached_results[tableName]
+  }
 
-    const data= await getOrSetQueryResultsFromCache(this.config, queryName, this.log, async () => {
-      const results= await this.getTableDetailsFromDb(tableName, schema)
-      return results
-    })
-
-    return data
-  }  
-
-  getModel(tableName, schema= 'public') {
+  _makeModelOptions(tableName) {
 
     const modelOptionsDef= {
       name: '',
@@ -244,8 +240,6 @@ class CalustraConnBase {
       */  
     }
     
-
-  
     let modelOptions= undefined
   
     for (const t of this.options?.tables || []) {
@@ -282,13 +276,25 @@ class CalustraConnBase {
       checkBeforeDelete: modelOptions?.checkBeforeDelete || false,
       useDateFields
     }
-  
-    const model= getOrSetModelFromCache(this, mergedModelOptions, () => {
-      return this.initModel(mergedModelOptions)
-    }) 
     
-    return model
+  
+    return mergedModelOptions
+  }
 
+  _makeModel(tableName, schema= 'public') {
+
+    const modelOptions= this._makeModelOptions(tableName)
+  
+    const model = this.initModel(modelOptions)
+
+    return model
+  }
+
+  getModel(tableName, schema= 'public') {
+    if (Object.keys(this.cached_models).indexOf(tableName)<0) {
+      this.cached_models[tableName] = this._makeModel(tableName)
+    }
+    return this.cached_models[tableName]
   }
 
   initModel(options) {
