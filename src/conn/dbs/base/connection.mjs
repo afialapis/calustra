@@ -90,7 +90,8 @@ class CalustraConnBase {
     
     try {
       if (! this.isOpen) {
-        throw new Error('Connection is closed')
+        this.log.error(`[calustra][${this.connid}] Connection is closed`)
+        throw new Error(`[calustra][${this.connid}] Connection is closed`)
       }
 
       const data= await run_callback()

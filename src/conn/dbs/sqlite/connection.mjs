@@ -41,7 +41,7 @@ class CalustraConnLT extends CalustraConnBase {
   } 
 
   openTransaction() {
-    throw new Error ('CalustraConnLT: SQLite connections does not support transactions"')
+    throw new Error (`[calustra][${this.connid}] CalustraConnLT: SQLite connections does not support transactions"`)
   }  
 
   closeDb () {
