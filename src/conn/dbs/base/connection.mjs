@@ -69,6 +69,7 @@ class CalustraConnBase {
 
 
   close () {
+    this.log.info(`[calustra][${this.connid}] Closing database ${this.configDescription}`)
     this.is_open= false
     this.closeDb()
     this.cached_models = {}
