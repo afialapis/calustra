@@ -26,7 +26,7 @@ export function getConnection (configOrSelector, options) {
     //  -- options.reset is true
     if ((! alreadyConn.isOpen) || (reset)) {
 
-      log.silly(`[calustra] getConnection() called using an actual connection. Let's reinit it. Still open? ${alreadyConn.isOpen}. Reset ${reset}.`)
+      log.silly(`[calustra] getConnection() called using an actual connection (${alreadyConn.connid}). Let's reinit it. Still open? ${alreadyConn.isOpen}. Reset ${reset}.`)
       
       // insist to actually close it
       try { 
@@ -43,7 +43,7 @@ export function getConnection (configOrSelector, options) {
       })
     }
 
-    log.silly(`[calustra] getConnection() called using an actual connection. Reusing it.`)
+    log.silly(`[calustra] getConnection() called using an actual connection (${alreadyConn.connid}). Reusing it.`)
 
     // update connection and refresh cache
     if (options) {
@@ -66,7 +66,7 @@ export function getConnection (configOrSelector, options) {
     //  -- options.nocache is true
     if ((!cachedConn.isOpen) || nocache || reset) {
 
-      log.silly(`[calustra] getConnection() cached connection found, but, let's reinit it. Still open? ${cachedConn.isOpen}. Reset ${reset}. NoCache? ${nocache}`)
+      log.silly(`[calustra] getConnection() cached connection found (${cachedConn.connid}), but, let's reinit it. Still open? ${cachedConn.isOpen}. Reset ${reset}. NoCache? ${nocache}`)
       
       // insist to actually close it
       try { 
@@ -76,7 +76,7 @@ export function getConnection (configOrSelector, options) {
       uncacheConnection(cachedConn)
     } else {
 
-      log.silly(`[calustra] getConnection() cached connection found. Reusing it.`)
+      log.silly(`[calustra] getConnection() cached connection found (${cachedConn.connid}). Reusing it.`)
 
 
       // update connection and refresh cache
@@ -98,10 +98,10 @@ export function getConnection (configOrSelector, options) {
   const conn= initConnection(configOrSelector, options)
   if (nocache!==true) {
     const cacheKey = cacheConnectionSet(conn)
-    log.silly(`[calustra] getConnection() Initing a new connection and cached it with cache key ${cacheKey}`)
+    log.silly(`[calustra] getConnection() Initing a new connection (${conn.connid}) and cached it with cache key ${cacheKey}`)
     
   } else {
-    log.silly(`[calustra] getConnection() Initing a new connection but not caching it.`)
+    log.silly(`[calustra] getConnection() Initing a new connection (${conn.connid}) but not caching it.`)
   }
 
   return conn

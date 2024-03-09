@@ -6,18 +6,20 @@ import {intre_now} from 'intre'
 import merge from "../../util/merge.mjs"
 import {initLogger} from '../../logger/index.mjs'
 
+let _conn_counter = 0
 
 class CalustraConnBase {
  
   constructor (config, options) {
+    this.connid = ++_conn_counter
     this.config= config
     this.options= options
     this.log = initLogger(options?.log)
     
-    this.log.debug(`[calustra] Opening database ${this.configDescription}${this.options?.reset==true ? ' (reset)' : ''}${this.options?.nocache==true ? ' (nocache)' : ''}`)
+    this.log.debug(`[calustra][${this.connid}] Opening database ${this.configDescription}${this.options?.reset==true ? ' (reset)' : ''}${this.options?.nocache==true ? ' (nocache)' : ''}`)
     this.db = this.openDb(this.config)
     
-    this.log.info(`[calustra] Using database ${config?.database}`)
+    this.log.info(`[calustra][${this.connid}] Using database ${config?.database}`)
     this.is_open= true
     
     // internally cached objects
@@ -95,14 +97,14 @@ class CalustraConnBase {
 
       if (options?.log!==false) {
         const elapsed = parseFloat( (Date.now() - started) / 1000.0 ).toFixed(2)
-        this.log.silly(`[calustra] ${this.formatQuery(query, values)}`)
+        this.log.silly(`[calustra][${this.connid}] ${this.formatQuery(query, values)}`)
         const msg= msg_callback(data, elapsed)
         if (options?.log === 'silly') {
-          this.log.silly(`[calustra] ${msg}`)
+          this.log.silly(`[calustra][${this.connid}] ${msg}`)
         } else if (options?.log === 'debug') {
-          this.log.debug(`[calustra] ${msg}`)
+          this.log.debug(`[calustra][${this.connid}] ${msg}`)
         } else {
-          this.log.info(`[calustra] ${msg}`)
+          this.log.info(`[calustra][${this.connid}] ${msg}`)
         }
       }
 
@@ -113,8 +115,8 @@ class CalustraConnBase {
       }
       
       if (options?.log!==false) {
-        this.log.error(`[calustra] ${this.formatQuery(query, values)}`)
-        this.log.error(`[calustra] ${error.constructor.name}`)
+        this.log.error(`[calustra][${this.connid}] ${this.formatQuery(query, values)}`)
+        this.log.error(`[calustra][${this.connid}] ${error.constructor.name}`)
         this.log.error(error.stack)
       }
     }
@@ -162,7 +164,7 @@ class CalustraConnBase {
     }
 
     if (data.length>1 && !omitWarning) {
-      this.log.warn('[calustra] Returned ' + data.length + ' rows, but expected just 1')
+      this.log.warn('[calustra][${this.connid}] Returned ' + data.length + ' rows, but expected just 1')
     }
   
     if (data.length>0)

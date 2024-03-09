@@ -34,10 +34,10 @@ class CalustraModelSQLite extends CalustraModelBase {
 
     if (id == null) {
       const msg = this.name + ': cannot save ' + JSON.stringify(data)
-      this.connection.log.error(`[calustra] ${msg}`)
+      this.connection.log.error(`[calustra][${this.connid}] ${msg}`)
     } else {
       if (options?.log!==false) {
-        this.connection.log.debug(`[calustra] Created with Id ${id}`)
+        this.connection.log.debug(`[calustra][${this.connid}] Created with Id ${id}`)
       }
     }
 
