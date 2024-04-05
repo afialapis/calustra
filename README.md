@@ -1,4 +1,18 @@
 ![Calustra logo](https://www.afialapis.com/os/calustra/logo.png)
+[![NPM Version](https://badge.fury.io/js/calustra.svg)](https://www.npmjs.com/package/calustra)
+[![NPM Downloads](https://img.shields.io/npm/dm/calustra.svg?style=flat)](https://www.npmjs.com/package/calustra)
+
+
+---
+
+> **calustra**. substantivo femenino:
+
+> **Construción rural, de forma xeralmente rectangular, feita sobre columnas e con moitas aberturas nas paredes para facilitar a ventilación, que se utiliza fundamentalmente para gardar o millo e outros produtos agrícolas.**
+
+> _Gardan o millo na calustra._
+
+---
+
 
 # Intro
 
@@ -39,9 +53,11 @@ const config= {
 }
 const options= {
   log: 'debug',
-  tables: ['screw_stock']
+  tables: ['screw_stock'],
+  cache: {type: 'memory'},
+  reset: true
 }
-const conn = getConnection(config, options)
+const conn = await getConnection(config, options)
 
 // create a table
 const q_drop = `DROP TABLE IF EXISTS screw_stock`
@@ -115,7 +131,7 @@ const del_rows = await ScrewStock.delete(del_filter)
 
 # API
 
-## `getConnection(configOrSelector, options)`
+## `await getConnection(configOrSelector, options)`
 
 Initializes and returns a [connection object](#connection-object). 
 
@@ -204,8 +220,10 @@ const options= {
 }
 ```
 
-#### `nocache`
-If `true`, connections are not cached. Default is `false`.
+#### `cache`
+Options to be passed to [`cacheiro`](https://github.com/afialapis/cacheiro). Default cache type is `memory`.
+
+If `false`, connections are not cached.
 
 #### `reset`
 If `true`, cached connections will be ignored. Connection will be re-created. Default is `false`.
@@ -255,7 +273,7 @@ It only affects to deletions which are filtered by `id`. For example:
 
 ```js
 
-const conn = getConnection(config, {
+const conn = await getConnection(config, {
   tables: [{
     name: 'screw_stock',
     checkBeforeDelete: ['screw_stats.screw_stock_id']
@@ -283,7 +301,7 @@ Here you can specify an object like this:
 ```js
 import {intre_now} from 'intre'
 
-const conn = getConnection(config, {
+const conn = await getConnection(config, {
   tables: [{
     name: 'screw_stock',
     useDateFields: {
@@ -497,7 +515,7 @@ Notice that `calustra` keeps a simple cache of connections once they are initial
 
 ```js
 import {getConnection} from 'calustra'
-const conn = getConnection(`calustra`)
+const conn = await getConnection(`calustra`)
 ```
 
 `selector` is just a string matching some part of the `config` you passed the first time to init the connection. 
@@ -508,10 +526,10 @@ Closing a connection destroys and uncaches it, but [closing connections](#closin
 conn.close()
 ```
 
-You can disable caching of a connection by specifying the option `nocache`:
+You can disable caching of a connection by specifying the option `cache: false`:
 
 ```js
-const conn = getConnection(config, {nocache: true})
+const conn = await getConnection(config, {cache: false})
 // connection will not be available later trough getConnection(selector)
 ```
 
@@ -519,7 +537,7 @@ When creating a connection, you may force to re-init it (and ignore previous cac
 by specifying the option `reset`:
 
 ```js
-const conn = getConnection(config, {reset: true})
+const conn = await getConnection(config, {reset: true})
 // previous cached connection will be ignored and overwritten
 ```
 
@@ -536,3 +554,13 @@ notice that the database's pool will be removed, being no longer available. Even
 So, use it with care!
 
 
+
+
+# Changelog
+
+## 0.11.0
+
+Upgraded `cacheiro` to `0.1.1`:
+- `getConnection` is now async.
+- added `options.cache` to customize `calustra`'s cache usage
+- removed `options.nocache` accordingly (now it is `cache: false`)

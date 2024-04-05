@@ -1,4 +1,3 @@
-import cache from './store.mjs'
 import { isCalustraSelector } from '../checks.mjs'
 
 function _getConfigCacheKey(config) {
@@ -12,8 +11,8 @@ function _getConfigCacheKey(config) {
 }
 
 
-function _getSelectorCacheKey(selector) {
-  const current_keys = cache.getKeys()
+async function _getSelectorCacheKey(cache, selector) {
+  const current_keys = await cache.getKeys()
 
   if ( (!current_keys) || (current_keys.length==0)) {
     return undefined
@@ -27,10 +26,11 @@ function _getSelectorCacheKey(selector) {
 }
 
 
-function getConnectionCacheKey(configOrSelector) {
+async function getConnectionCacheKey(cache, configOrSelector) {
 
   if (isCalustraSelector(configOrSelector)) {
-    return _getSelectorCacheKey(configOrSelector)
+    const k = await _getSelectorCacheKey(cache, configOrSelector)
+    return k
   }
   
   return _getConfigCacheKey(configOrSelector)

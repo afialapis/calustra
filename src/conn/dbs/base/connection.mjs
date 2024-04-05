@@ -16,7 +16,7 @@ class CalustraConnBase {
     this.options= options
     this.log = initLogger(options?.log)
     
-    this.log.debug(`[calustra][${this.connid}] Opening database ${this.configDescription}${this.options?.reset==true ? ' (reset)' : ''}${this.options?.nocache==true ? ' (nocache)' : ''}`)
+    this.log.debug(`[calustra][${this.connid}] Opening database ${this.configDescription}${this.options?.reset==true ? ' (reset)' : ''}${this.options?.cache===false ? ' (nocache)' : ''}`)
     this.db = this.openDb(this.config)
     
     this.log.info(`[calustra][${this.connid}] Using database ${config?.database}`)

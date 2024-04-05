@@ -1,9 +1,9 @@
 import {
   cacheConnectionGet, 
   cacheConnectionSet, 
-  uncacheConnection,
+  cacheConnectionUnset,
   cacheConnectionGetAll,
-  clearCache
+  cacheConnectionUnsetAll
 } from './cache/index.mjs'
 
 import {initLogger} from './logger/index.mjs'
@@ -11,10 +11,10 @@ import {initConnection} from './dbs/index.mjs'
 import { isCalustraConnection, isCalustraSelector } from './checks.mjs'
 
 
-export function getConnection (configOrSelector, options) {
+export async function getConnection (configOrSelector, options) {
   const log = initLogger(options?.log)
-  const nocache = options?.nocache === true
-  const reset = options?.reset === true
+  const nocache = options?.cache === false
+  const reset = (options?.reset === true) || (options?.cache?.clean === true)
 
   // is it already a connection?
   if (isCalustraConnection(configOrSelector)) {
@@ -24,11 +24,11 @@ export function getConnection (configOrSelector, options) {
   
   // check if connection is already cached
   if (! nocache) {
-    const cachedConn= cacheConnectionGet(configOrSelector)
+    const cachedConn= await cacheConnectionGet(configOrSelector)
     if (cachedConn) {
       // Lets ignore and rebuild the connection if:
       //  -- it is closed
-      //  -- options.reset is true
+      //  -- options.reset is true (in this cache, cache store is inited in clean mode)
       if ((!cachedConn.isOpen)  || reset) {
 
         log.silly(`[calustra] getConnection() cached connection found (${cachedConn.connid}), but, let's reinit it. Still open? ${cachedConn.isOpen}. Reset ${reset}. NoCache? ${nocache}`)
@@ -38,7 +38,7 @@ export function getConnection (configOrSelector, options) {
           cachedConn.close() 
         } catch(_) {}
 
-        uncacheConnection(cachedConn)
+        await cacheConnectionUnset(cachedConn)
       } else {
 
         log.silly(`[calustra] getConnection() cached connection found (${cachedConn.connid}). Reusing it.`)
@@ -46,9 +46,9 @@ export function getConnection (configOrSelector, options) {
 
         // update connection and refresh cache
         if (options) {
-          uncacheConnection(cachedConn)
+          await cacheConnectionUnset(cachedConn)
           cachedConn.updateOptions(options)
-          cacheConnectionSet(cachedConn)
+          await cacheConnectionSet(cachedConn)
         }
 
         return cachedConn
@@ -63,7 +63,7 @@ export function getConnection (configOrSelector, options) {
   
   const conn= initConnection(configOrSelector, options)
   if (nocache!==true) {
-    const cacheKey = cacheConnectionSet(conn)
+    const cacheKey = await cacheConnectionSet(conn)
     log.silly(`[calustra] getConnection() Initing a new connection (${conn.connid}) and cached it with cache key ${cacheKey}`)
   } else {
     log.silly(`[calustra] getConnection() Initing a new connection (${conn.connid}) but not caching it.`)
@@ -74,67 +74,20 @@ export function getConnection (configOrSelector, options) {
 
 
 
-export function dropConnection(configOrSelector) {
-  const conn = cacheConnectionGet(configOrSelector) 
+export async function dropConnection(configOrSelector) {
+  const conn = await cacheConnectionGet(configOrSelector) 
   if (conn) {
     conn.close()
-    uncacheConnection(conn)
+    await cacheConnectionUnset(conn)
   }
 }
 
-export function dropConnections() {
-  const conns = cacheConnectionGetAll()
+export async function dropConnections() {
+  const conns = await cacheConnectionGetAll()
   conns.map(c => {
     c.close()
     //removeConnectionFromCache(c.config)
   })
-  clearCache()
+  await cacheConnectionUnsetAll()
 }
 
-
-
-
-
-/*
-
-  // is it already a connection?
-  if (isCalustraConnection(configOrSelector)) {
-    
-    const alreadyConn= configOrSelector
-
-    // Lets ignore and rebuild the connection if:
-    //  -- it is closed
-    //  -- options.reset is true
-    if ((! alreadyConn.isOpen) || (reset)) {
-
-      log.silly(`[calustra] getConnection() called using an actual connection (${alreadyConn.connid}). Let's reinit it. Still open? ${alreadyConn.isOpen}. Reset ${reset}.`)
-      
-      // insist to actually close it
-      try { 
-        alreadyConn.close() 
-      } catch(_) {}
-      
-      // clean cache
-      uncacheConnection(alreadyConn)
-      
-      // reinit it using its own config
-      return getConnection(alreadyConn.config, {
-        ...alreadyConn.options,
-        ...options || {}
-      })
-    }
-
-    log.silly(`[calustra] getConnection() called using an actual connection (${alreadyConn.connid}). Reusing it.`)
-
-    // update connection and refresh cache
-    if (options) {
-      uncacheConnection(alreadyConn)
-      alreadyConn.updateOptions(options)
-      if (! nocache) {
-        cacheConnectionSet(alreadyConn)
-      }
-    }
-
-    return alreadyConn
-  }
-*/

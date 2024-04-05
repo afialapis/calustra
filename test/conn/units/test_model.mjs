@@ -8,13 +8,12 @@ async function test_model(config, options, data) {
 
     let conn 
 
-    it(`[model][${config.dialect}] should init connection`, function(done) {
-      conn = getConnection(config, {
+    it(`[model][${config.dialect}] should init connection`, async function() {
+      conn = await getConnection(config, {
         ...options,
         reset: true,
-        nocache: true
+        cache: false
       })
-      done()
     })
 
     it(`[model][${config.dialect}] should prepare the database for testing`, async function() {

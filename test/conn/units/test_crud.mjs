@@ -7,13 +7,12 @@ function test_crud(config, options, data) {
 
     let conn 
 
-    it(`[crud][cache][${config.dialect}] should init connection`, function(done) {
-      conn = getConnection(config, {
+    it(`[crud][cache][${config.dialect}] should init connection`, async function() {
+      conn = await getConnection(config, {
         ...options,
         reset: true,
-        nocache: true
+        cache: false
       })
-      done()
     })
 
     it(`[crud][${config.dialect}] should drop test_01 table if exists`, async function() {

@@ -5,13 +5,12 @@ function test_inspector(config, options) {
   describe(`[inspector][${config.dialect}] Test inspectors`, function() {
     let conn
 
-    it(`[inspector][${config.dialect}] should init and cache the conn`, function(done) {
-      conn = getConnection(config, {
+    it(`[inspector][${config.dialect}] should init and cache the conn`, async function() {
+      conn = await getConnection(config, {
         ...options,
         reset: true,
-        nocache: true
+        cache: false
       })
-      done()
     })
 
     it(`[inspector][${config.dialect}] should drop test_01 table if exists`, async function() {

@@ -1,50 +1,70 @@
-import { getConnectionCacheKey} from './keys.mjs'
-import cache from './store.mjs'
+import { getConnectionCacheKey } from './keys.mjs'
+import { cacheConnectionStoreInit,
+         cacheConnectionStoreGet } from './store.mjs'
 
-
-
-export function cacheConnectionGet(configOrSelector) {
-
-  const cacheKey = getConnectionCacheKey(configOrSelector)
+export async function cacheConnectionGet(configOrSelector, options) {
+  const cache = await cacheConnectionStoreInit(options)
+  
+  const cacheKey = await getConnectionCacheKey(cache, configOrSelector)
 
   const cachedConn = cache.getItem(cacheKey)
 
   return cachedConn
 }
 
-export function cacheConnectionGetAll() {
-  const cacheKeys = cache.getKeys()
+export async function cacheConnectionGetAll() {
+  const cache = cacheConnectionStoreGet()
+  if (! cache) {
+    return []
+  }
 
-  const connections = cacheKeys
-    .map(ck => cache.getItem(ck))
+  const cacheKeys = await cache.getKeys()
+
+  let connections = []
+  for (const key of cacheKeys) {
+    connections.push(
+      await cache.getItem(key)
+    )
+  }
 
   return connections
 }
 
-export function cacheConnectionSet(connection) {
-  const cacheKey= getConnectionCacheKey(connection.config)
-  cache.setItem(cacheKey, connection)
+export async function cacheConnectionSet(connection) {
 
-  connection.uncache = () => {
-    cache.unsetItem(cacheKey)
+  const cache = await cacheConnectionStoreInit(connection.options)
+  
+  const cacheKey= await getConnectionCacheKey(cache, connection.config)
+  await cache.setItem(cacheKey, connection)
+
+  connection.uncache = async () => {
+    await cache.unsetItem(cacheKey)
   }
 
   return cacheKey
 }
 
-export function uncacheConnection(connection) {
-  const cacheKey = getConnectionCacheKey(connection.config)
+export async function cacheConnectionUnset(connection) {
+  const cache = cacheConnectionStoreGet()
+  if (! cache) {
+    return []
+  }
+
+  const cacheKey = await getConnectionCacheKey(cache, connection.config)
   if (cacheKey) {
-    cache.unsetItem(cacheKey)
+    await cache.unsetItem(cacheKey)
   }
   return cacheKey
 }
 
 
-export function clearCache() {
-  const cacheKeys = cache.getKeys()
+export async function cacheConnectionUnsetAll() {
+  const cache = cacheConnectionStoreGet()
+  if (! cache) {
+    return []
+  }
 
-  cacheKeys.map(ck => cache.unsetItem(ck))
+  await cache.unsetAll()
 }
 
 
