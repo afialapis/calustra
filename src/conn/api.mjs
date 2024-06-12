@@ -9,6 +9,7 @@ import {
 import {initLogger} from './logger/index.mjs'
 import {initConnection} from './dbs/index.mjs'
 import { isCalustraConnection, isCalustraSelector } from './checks.mjs'
+import {objAreEqual} from 'farrapa/objects'
 
 
 export async function getConnection (configOrSelector, options) {
@@ -45,7 +46,7 @@ export async function getConnection (configOrSelector, options) {
 
 
         // update connection and refresh cache
-        if (options) {
+        if (! objAreEqual(options, cachedConn.options)) {
           await cacheConnectionUnset(cachedConn)
           cachedConn.updateOptions(options)
           await cacheConnectionSet(cachedConn)
