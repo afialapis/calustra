@@ -73,7 +73,7 @@
     "cacheiro": "^0.2.0",
     "farrapa": "^2.1.0",
     "intre": "^2.3.0",
-    "pg-promise": "^11.5.5",
+    "pg-promise": "^11.8.0",
     "sqlite3": "^5.1.7",
     "tinguir": "^0.0.4"
   },
