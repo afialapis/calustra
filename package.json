@@ -1,6 +1,6 @@
 {
   "name": "calustra",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "Database to Web",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -72,7 +72,7 @@
   "dependencies": {
     "cacheiro": "^0.2.0",
     "farrapa": "^2.1.0",
-    "intre": "^2.2.6",
+    "intre": "^2.3.0",
     "pg-promise": "^11.5.5",
     "sqlite3": "^5.1.7",
     "tinguir": "^0.0.4"
