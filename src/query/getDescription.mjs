@@ -3,7 +3,7 @@ import getMainAction from './getMainAction.mjs'
 
 const _rows = (rows) => {
   if (isNaN(rows)) {
-    return ' '
+    return ' -null- rows '
   }
   return ` ${rows} rows `
 }

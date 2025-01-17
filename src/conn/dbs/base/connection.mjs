@@ -16,10 +16,9 @@ class CalustraConnBase {
     this.options= options
     this.log = initLogger(options?.log)
     
-    this.log.debug(`[calustra][${this.connid}] Opening database ${this.configDescription}${this.options?.reset==true ? ' (reset)' : ''}${this.options?.cache===false ? ' (nocache)' : ''}`)
+    this.log.debug(`[calustra][${this.connid}] Opening database ${config?.database}: ${this.configDescription}${this.options?.reset==true ? ' (reset)' : ''}${this.options?.cache===false ? ' (nocache)' : ''}`)
     this.db = this.openDb(this.config)
     
-    this.log.info(`[calustra][${this.connid}] Using database ${config?.database}`)
     this.is_open= true
     
     // internally cached objects
@@ -69,7 +68,7 @@ class CalustraConnBase {
 
 
   close () {
-    this.log.info(`[calustra][${this.connid}] Closing database ${this.configDescription}`)
+    this.log.debug(`[calustra][${this.connid}] Closing database ${this.configDescription}`)
     this.is_open= false
     this.closeDb()
     this.cached_models = {}
@@ -101,13 +100,7 @@ class CalustraConnBase {
         const elapsed = parseFloat( (Date.now() - started) / 1000.0 ).toFixed(2)
         this.log.silly(`[calustra][${this.connid}] ${this.formatQuery(query, values)}`)
         const msg= msg_callback(data, elapsed)
-        if (options?.log === 'silly') {
-          this.log.silly(`[calustra][${this.connid}] ${msg}`)
-        } else if (options?.log === 'debug') {
-          this.log.debug(`[calustra][${this.connid}] ${msg}`)
-        } else {
-          this.log.info(`[calustra][${this.connid}] ${msg}`)
-        }
+        this.log.debug(`[calustra][${this.connid}] ${msg}`)
       }
 
       return data
@@ -166,7 +159,7 @@ class CalustraConnBase {
     }
 
     if (data.length>1 && !omitWarning) {
-      this.log.warn('[calustra][${this.connid}] Returned ' + data.length + ' rows, but expected just 1')
+      this.log.warn(`[calustra][${this.connid}] Returned ${data.length} rows, but expected just 1`)
     }
   
     if (data.length>0)

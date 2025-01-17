@@ -146,6 +146,20 @@ export default [
      WHERE id = $18
     `,
     tables: ['articles']
+  },
+  {
+    query: `
+        SELECT c.id, s.id_team, s.id_season, cs.id_club, s.id AS id_season_team,
+            c.name, c.shortname, c.three_name, 
+            d.year_from, d.year_to
+      FROM team       AS c
+      JOIN season_team     AS s ON s.id_team = c.id
+      JOIN season AS d ON s.id_season = d.id
+      JOIN club_section AS cs ON cs.id = c.id_club_section
+      JOIN club AS cl ON cl.id = cs.id_club
+    WHERE 1=1
+      AND s.selected IS TRUE`,
+    tables: ['team', 'season_team', 'season', 'club_section', 'club']
   }
   
 ]
