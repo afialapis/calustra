@@ -1,11 +1,12 @@
-![Calustra logo](https://www.afialapis.com/os/calustra/logo.png)
+# calustra
 [![NPM Version](https://badge.fury.io/js/calustra.svg)](https://www.npmjs.com/package/calustra)
 [![NPM Downloads](https://img.shields.io/npm/dm/calustra.svg?style=flat)](https://www.npmjs.com/package/calustra)
 
+![Calustra logo](https://www.afialapis.com/os/calustra/logo.png)
 
 ---
 
-> **calustra**. substantivo femenino:
+> **[calustra](https://academia.gal/dicionario/-/termo/calustra)**. substantivo femenino:
 
 > **Construción rural, de forma xeralmente rectangular, feita sobre columnas e con moitas aberturas nas paredes para facilitar a ventilación, que se utiliza fundamentalmente para gardar o millo e outros produtos agrícolas.**
 
@@ -14,23 +15,24 @@
 ---
 
 
-# Intro
+## Intro
 
 [`calustra`](https://www.afialapis.com/os/calustra) is a database connector.
 
 Currently, supported databases are:
-- PostgreSQL (through [pg-promise](https://github.com/vitaly-t/pg-promise)). 
-- SQLite (through [sqlite3](https://github.com/TryGhost/node-sqlite3)). 
 
-We may add support for other databases (MySql, MsSql, ...) in the future... or may not.
+ * PostgreSQL (through [pg-promise](https://github.com/vitaly-t/pg-promise)). 
+ * SQLite (through [sqlite3](https://github.com/TryGhost/node-sqlite3)). 
 
-# Install
+We may add support for other databases (`MySql`, `MsSql`, ...) in the future. Or may not.
+
+## Install
 
 ```
 npm install calustra
 ```
 
-# Getting Started
+## Getting Started
 
 `calustra` exposes just the method `getConnection` which returns a [Connection object](#connection-object).
 With that connection, you may `select(query)`, `selectOne(query)`, `execute(query)` or `executeAndCount(query)` some `SQL` query.
@@ -129,15 +131,15 @@ const del_rows = await ScrewStock.delete(del_filter)
 ```
 
 
-# API
+## API
 
-## `await getConnection(configOrSelector, options)`
+### `await getConnection(configOrSelector, options)`
 
 Initializes and returns a [connection object](#connection-object). 
 
 Connections are cached. The first time you init the connection, you have to pass a [`config`](#config) object. But for further usages of the connection, you can take the cached connection just by passing a [`selector`](#selector).
 
-### `config` 
+#### `config` 
 
 Contains the connection parameters (which depend on the database).
 
@@ -182,15 +184,15 @@ For `SQLite`:
   }
 ```
 
-### `selector`
+#### `selector`
 
 It will be matched against the `config` object you had initialized the connection with. 
 
 Given this, the most easy thing to do is to just specify the `database` as the selector if using PostgreSQL, or the `filename` if using SQLite. But that's up to you!
 
-### `options`
+#### `options`
 
-#### `log`
+##### `log`
 
 It can be a string with the log level (`silly`, `debug`, `info`, `warn`, `error`) or a class exposing methods named as those log levels.
 
@@ -220,16 +222,16 @@ const options= {
 }
 ```
 
-#### `cache`
+##### `cache`
 Options to be passed to [`cacheiro`](https://github.com/afialapis/cacheiro). Default cache type is `memory`.
 
 If `false`, connections are not cached.
 
-#### `reset`
+##### `reset`
 If `true`, cached connections will be ignored. Connection will be re-created. Default is `false`.
 
 
-#### `tables`
+##### `tables`
 
 List of tables in the database which will be accessible trough [`getModel()`](#connectiongetmodeltablename). Each item in the list may be an `string` (the table name) or an object like this:
 
@@ -263,7 +265,7 @@ List of tables in the database which will be accessible trough [`getModel()`](#c
 }
 ```
 
-##### `table.checkBeforeDelete`
+###### `table.checkBeforeDelete`
 
 An array of db fields like `['table_one.field_two', 'table_three.field_one']`.
 
@@ -291,7 +293,7 @@ If some record exists in `screw_stats` table with `screw_stock_id= 1`, then
 the `ScrewStock.delete` will fail.
 
 
-##### `table.useDateFields`
+###### `table.useDateFields`
 
 `calustra` knows that a very extended approach is to have fields like
 `created_at` or `last_update_at` in your tables. This option will help with that.
@@ -322,7 +324,7 @@ As you can imagine, `calustra` will automatically update this fields after every
 (`created_at` field) or update (`last_update_at` field).
 
 
-##### `table.triggers`
+###### `table.triggers`
 
 Triggers are used to customize every query phase. A `trigger` is a function containing specific parameters
 and returning specific array of values. Available ones are:
@@ -338,9 +340,9 @@ You can use them to abort queries (`allow=false`), to customize `params` on the 
 the query is executed, to customize the returning results, etc.
 
 
-## Connection object
+### Connection object
 
-### `async connection.select(query, values, options)`
+#### `async connection.select(query, values, options)`
 
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
@@ -351,7 +353,7 @@ the query is executed, to customize the returning results, etc.
 
 Returns an array of objects with the result of the query.
 
-### `async connection.selectOne(query, values, options)`
+#### `async connection.selectOne(query, values, options)`
 
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
@@ -363,7 +365,7 @@ Returns an array of objects with the result of the query.
 
 Returns an object with the result of the query.
 
-### `async connection.execute(query, values, options)`
+#### `async connection.execute(query, values, options)`
 
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
@@ -375,7 +377,7 @@ Returns an object with the result of the query.
 Returns an array of objects with the result of the query.
 
 
-### `async connection.executeAndCount(query, values, options)`
+#### `async connection.executeAndCount(query, values, options)`
 
 - `query`: string with SQL query. It may contain wildcards (`$1`, `$2`...) or (`?`, `?`...).
 - `values`: array of values if query contains wildcards
@@ -386,14 +388,14 @@ Returns an array of objects with the result of the query.
 Returns an integer with the number of rows affected by the query.
 
 
-### `async connection.getTableNames(schema= 'public')`
+#### `async connection.getTableNames(schema= 'public')`
 
 Returns an array with the table names present in the specified database `schema`:
 
 Notice the results of this method will be in-memory cached: so query runs just once per connection.
 
 
-### `async connection.getTableDetails(tableName, schema= 'public')`
+#### `async connection.getTableDetails(tableName, schema= 'public')`
 
 Returns an object with the details of a database table definition, like:
 
@@ -410,21 +412,21 @@ Returns an object with the details of a database table definition, like:
 
 Notice the results of this method will be in-memory cached: so query runs just once per connection and table.
 
-### `async connection.getModel(table_name, schema= 'public')`
+#### `async connection.getModel(table_name, schema= 'public')`
 
 - `table_name`: name of a table which was included on `options.tables` value.
 
 Returns a [Model object](#model-object).
 
 
-## Model object
+### Model object
 
 In `calustra`, a Model object always refers to the database table; it never refers to a single record.
 
 In other words: unlike other ORMs, you will not do `const model= Model.create(); model.fieldA= 'value'; model.save()`.
 In `calustra` you will do `Model.insert({data})` or `Model.update({data}, {filter})`.
 
-### `model.insert(data, options)`
+#### `model.insert(data, options)`
 
 - `data`: an object with "what to insert". Fields that do not exist on Model definition will be discarded.
 - `options`: 
@@ -432,7 +434,7 @@ In `calustra` you will do `Model.insert({data})` or `Model.update({data}, {filte
 
 It returns an `int` with the `.id` of the newly created record.
 
-### `model.update(data, filter, options)`
+#### `model.update(data, filter, options)`
 
 - `data`: an object with "what to update". Fields that do not exist on Model definition will be discarded.
 - `filter`: an object with "which records to update". Fields that do not exist on Model definition will be discarded.
@@ -441,7 +443,7 @@ It returns an `int` with the `.id` of the newly created record.
 
 It returns an `int` with the number of affected records by the update.
 
-### `model.delete(filter, options)`
+#### `model.delete(filter, options)`
 
 - `filter`: an object with "which records to delete". Fields that do not exist on Model definition will be discarded.
 - `options`: 
@@ -449,7 +451,7 @@ It returns an `int` with the number of affected records by the update.
 
 It returns an `int` with the number of deleted records.
 
-### `model.read(filter, options)`
+#### `model.read(filter, options)`
 
 - `filter`: an object with "which records to read". Fields that do not exist on Model definition will be discarded.
 - `options`: 
@@ -461,7 +463,7 @@ It returns an `int` with the number of deleted records.
 
 It returns an Array of objects, empty if no record was found with the specified filter.
 
-### `model.find(id, options)`
+#### `model.find(id, options)`
 
 - `id`: an `int` with the `.id` to look for
 - `options`: 
@@ -469,29 +471,29 @@ It returns an Array of objects, empty if no record was found with the specified 
 
 It returns an object with the desired record, empty if none was found.
 
-## Query tools
+### Query tools
 
 At `calustra/query` these are a small -yet powerful- set of utils over `SQL` queries.
 
 
-### `getTableNamesFromQuery (query)`
+#### `getTableNamesFromQuery (query)`
 
 Returns an array of the table names involved in `query`.
 
-### `removeComments (query)`
+#### `removeComments (query)`
 
 Cleans comments from `query`.
 
-### `cleanAndInline (query)`
+#### `cleanAndInline (query)`
 
 Cleans comments from `query`, also compacting it in a single line if multiline.
 
-### `queryMainAction (query)`
+#### `queryMainAction (query)`
 
 Checks what the main action of the `query` is, even for the hard ones.
 Possible return values are: `create`, `alter`, `drop`, `insert`, `update`, `delete`, `select`.
 
-### `queryDescription (query, rows, time)`
+#### `queryDescription (query, rows, time)`
 
 Returns a human readable description of the `query`.
 
@@ -501,15 +503,15 @@ Examples:
 - `Inserted <rows> rows into cars (time: <time>)`
 
 
-## `formatQuery (qry, params)`
+### `formatQuery (qry, params)`
 
 Clean and colorize a query with logging in mind.
 
 
-# Notes
+## Notes
 
 
-## Cached connections
+### Cached connections
 
 Notice that `calustra` keeps a simple cache of connections once they are initialized. You can get them using `getConnection(selector)`:
 
@@ -541,7 +543,7 @@ const conn = await getConnection(config, {reset: true})
 // previous cached connection will be ignored and overwritten
 ```
 
-## Closing connections
+### Closing connections
 
 If you close a connection:
 
@@ -556,11 +558,6 @@ So, use it with care!
 
 
 
-# Changelog
+## Changelog
 
-## 0.11.0
-
-Upgraded `cacheiro` to `0.1.1`:
-- `getConnection` is now async.
-- added `options.cache` to customize `calustra`'s cache usage
-- removed `options.nocache` accordingly (now it is `cache: false`)
+See [changelog here](https://github.com/afialapis/calustra/blob/main/CHANGELOG.md)
