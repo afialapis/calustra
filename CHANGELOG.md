@@ -1,3 +1,8 @@
+# 0.13.1
+
+Upgraded `cacheiro` to `0.3.1`
+
+
 # 0.11.0
 
 Upgraded `cacheiro` to `0.1.1`:

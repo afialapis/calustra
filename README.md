@@ -556,8 +556,6 @@ notice that the database's pool will be removed, being no longer available. Even
 So, use it with care!
 
 
-
-
 ## Changelog
 
 See [changelog here](https://github.com/afialapis/calustra/blob/main/CHANGELOG.md)
