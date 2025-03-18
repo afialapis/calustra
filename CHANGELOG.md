@@ -1,3 +1,7 @@
+# 0.14
+
+Upgraded `xeira`, which means Node >= 21
+
 # 0.13.1
 
 Upgraded `cacheiro` to `0.3.1`
