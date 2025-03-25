@@ -1,4 +1,4 @@
-# 0.15.00-beta.1
+# 0.15.0
 
 Reorganised `dist` files: splitted `postgres` and `sqlite`.
 `calustra` will import `postgres` by default.

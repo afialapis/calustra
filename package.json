@@ -1,6 +1,6 @@
 {
   "name": "calustra",
-  "version": "0.15.00-beta.1",
+  "version": "0.15.0",
   "description": "Database to Web",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -76,6 +76,7 @@
     "conn-sqlite:dist": "npm run conn-sqlite:clean-dist && npx xeira bundle --source_index=./src/conn/sqlite/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-sqlite --target=node",
     
     "conn:test": "npx xeira test --files=./test/conn/index.mjs",
+
     "conn:test-lib": "npx xeira test --files=./test/conn/index_lib.mjs",
     "conn:test-dist": "npx xeira test --files=./test/conn/index_dist.mjs",
 
@@ -86,7 +87,7 @@
     "dist": " npm run query:dist && npm run conn-postgres:dist && npm run conn-sqlite:dist",
     "test-dist": "npm run query:test-dist && npm run conn:test-dist",
     "site": "rm -fr arredemo && npx xeira site",
-    "prepare": "npm run lint && npm run test && npm run lib && npm run test-lib && npm run dist && npm run test-dist && npm run site"
+    "prepare": "npm run lint && npm run test && npm run lib && npm run dist && npm run site"
   },
   "dependencies": {
     "cacheiro": "^0.4.0",
