@@ -1,6 +1,6 @@
 {
   "name": "calustra",
-  "version": "0.14.0",
+  "version": "0.15.00-beta.1",
   "description": "Database to Web",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -17,19 +17,24 @@
   "type": "module",
   "license": "MIT",
  
-  "main": "./lib/conn/index.cjs",
-  "cjs": "./lib/conn/index.cjs",
-  "module": "./dist/conn/calustra.mjs",
+  "main": "./lib/conn/postgres/index.cjs",
+  "cjs": "./lib/conn/postgres/index.cjs",
+  "module": "./dist/conn/calustra-postgres.mjs",
   "exports": {
     ".": {
-      "import": "./dist/conn/calustra.mjs",
-      "require": "./lib/conn/index.cjs",
-      "default": "./lib/conn/index.cjs"
+      "import": "./dist/conn/calustra-postgres.mjs",
+      "require": "./lib/conn/postgres/index.cjs",
+      "default": "./lib/conn/postgres/index.cjs"
     },
-    "./conn": {
-      "import": "./dist/conn/calustra.mjs",
-      "require": "./lib/conn/index.cjs",
-      "default": "./lib/conn/index.cjs"
+    "./conn-postgres": {
+      "import": "./dist/conn/calustra-postgres.mjs",
+      "require": "./lib/conn/postgres/index.cjs",
+      "default": "./lib/conn/postgres/index.cjs"
+    },    
+    "./conn-sqlite": {
+      "import": "./dist/conn/calustra-sqlite.mjs",
+      "require": "./lib/conn/sqlite/index.cjs",
+      "default": "./lib/conn/sqlite/index.cjs"
     },    
     "./query": {
       "import": "./dist/query/calustra-query.mjs",
@@ -52,22 +57,36 @@
     "query:lint": "npx xeira lint --folder=./src/query",
     "query:test": "npx xeira test --files=./test/query/index.mjs",
     "query:lib": "npm run query:clean-lib && npx xeira transpile --source_index=./src/query/index.mjs --transpile_folder=./lib --minifier=none",
+    "query:test-lib": "npx xeira test --files=./test/query/index_lib.mjs",
     "query:dist": "npm run query:clean-dist && npx xeira bundle --source_index=./src/query/index.mjs --bundle_folder=./dist/query --bundle_name=calustra-query --target=node",
-    "query:prepare": "npm run query:lint && npm run query:test && npm run query:lib && npm run query:dist",    
+    "query:test-dist": "npx xeira test --files=./test/query/index_dist.mjs",
 
-    "conn:clean-lib": "rm -fr lib/conn && mkdir lib/conn",
-    "conn:clean-dist": "rm -fr dist/conn && mkdir dist/conn",
-    "conn:clean": "npm run conn:clean-lib && npm run conn:clean-dist",
-    "conn:lint": "npx xeira lint --folder=./src/conn",
+    "conn-postgres:clean-lib": "rm -fr lib/conn/postgres/*",
+    "conn-postgres:clean-dist": "rm -fr dist/conn/*postgres*",
+    "conn-postgres:clean": "npm run conn-postgres:clean-lib && npm run conn-postgres:clean-dist",
+    "conn-postgres:lint": "npx xeira lint --folder=./src/conn",
+    "conn-postgres:lib": "npm run conn-postgres:clean-lib && npx xeira transpile --source_index=./src/conn/postgres/index.mjs --transpile_folder=./lib --minifier=none",
+    "conn-postgres:dist": "npm run conn-postgres:clean-dist && npx xeira bundle --source_index=./src/conn/postgres/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-postgres --target=node",
+    
+    "conn-sqlite:clean-lib": "rm -fr lib/conn/sqlite/*",
+    "conn-sqlite:clean-dist": "rm -fr dist/conn/*sqlite*",
+    "conn-sqlite:clean": "npm run conn-sqlite:clean-lib && npm run conn-sqlite:clean-dist",
+    "conn-sqlite:lint": "npx xeira lint --folder=./src/conn",
+    "conn-sqlite:lib": "npm run conn-sqlite:clean-lib && npx xeira transpile --source_index=./src/conn/sqlite/index.mjs --transpile_folder=./lib --minifier=none",
+    "conn-sqlite:dist": "npm run conn-sqlite:clean-dist && npx xeira bundle --source_index=./src/conn/sqlite/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-sqlite --target=node",
+    
     "conn:test": "npx xeira test --files=./test/conn/index.mjs",
-    "conn:lib": "npm run conn:clean-lib && npx xeira transpile --source_index=./src/conn/index.mjs --transpile_folder=./lib --minifier=none",
-    "conn:dist": "npm run conn:clean-dist && npx xeira bundle --source_index=./src/conn/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra --target=node",
-    "conn:prepare": "npm run conn:lint && npm run conn:test && npm run conn:lib && npm run conn:dist",  
+    "conn:test-lib": "npx xeira test --files=./test/conn/index_lib.mjs",
+    "conn:test-dist": "npx xeira test --files=./test/conn/index_dist.mjs",
 
-    "lint": "npm run query:lint && npm run conn:lint",
+    "lint": "npm run query:lint && npm run conn-postgres:lint && npm run conn-sqlite:lint",
     "test": "npm run query:test && npm run conn:test",
+    "lib": "npm run query:lib && npm run conn-postgres:lib && npm run conn-sqlite:lib",
+    "test-lib": "npm run query:test-lib && npm run conn:test-lib",
+    "dist": " npm run query:dist && npm run conn-postgres:dist && npm run conn-sqlite:dist",
+    "test-dist": "npm run query:test-dist && npm run conn:test-dist",
     "site": "rm -fr arredemo && npx xeira site",
-    "prepare": "npm run query:prepare && npm run conn:prepare && npm run site"
+    "prepare": "npm run lint && npm run test && npm run lib && npm run test-lib && npm run dist && npm run test-dist && npm run site"
   },
   "dependencies": {
     "cacheiro": "^0.4.0",

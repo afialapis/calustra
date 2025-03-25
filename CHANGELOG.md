@@ -1,4 +1,15 @@
-# 0.14
+# 0.15.00-beta.1
+
+Reorganised `dist` files: splitted `postgres` and `sqlite`.
+`calustra` will import `postgres` by default.
+
+```js
+import {getConnection} from 'calustra' // imports postgres
+import {getConnection} from 'calustra/postgres'
+import {getConnection} from 'calustra/sqlite'
+```
+
+# 0.14.0
 
 Upgraded `xeira`, which means Node >= 21
 

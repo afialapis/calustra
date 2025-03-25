@@ -1,11 +1,11 @@
 import { getConnection as getConnectionPG,
-        getConnectionFromCache as getConnectionFromCachePG,
-        dropConnection as dropConnectionPG,
-        dropConnections,
-        isCalustraConnection } from '../../src/conn/postgres/index.mjs'
+  getConnectionFromCache as getConnectionFromCachePG,
+  dropConnection as dropConnectionPG,
+  dropConnections,
+  isCalustraConnection } from '../../dist/conn/calustra-postgres.mjs'
 import { getConnection as getConnectionLT,
-         getConnectionFromCache as getConnectionFromCacheLT,
-         dropConnection as dropConnectionLT} from '../../src/conn/sqlite/index.mjs'
+   getConnectionFromCache as getConnectionFromCacheLT,
+   dropConnection as dropConnectionLT} from '../../dist/conn/calustra-sqlite.mjs'
 
 
 import configPG from './postgres/config.mjs'
