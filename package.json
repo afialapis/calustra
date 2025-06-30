@@ -1,6 +1,6 @@
 {
   "name": "calustra",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "description": "Database to Web",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -19,25 +19,25 @@
  
   "main": "./lib/conn/postgres/index.cjs",
   "cjs": "./lib/conn/postgres/index.cjs",
-  "module": "./dist/conn/calustra-postgres.mjs",
+  "module": "./dist/conn/calustra-postgres.node.mjs",
   "exports": {
     ".": {
-      "import": "./dist/conn/calustra-postgres.mjs",
+      "import": "./dist/conn/calustra-postgres.node.mjs",
       "require": "./lib/conn/postgres/index.cjs",
       "default": "./lib/conn/postgres/index.cjs"
     },
     "./conn-postgres": {
-      "import": "./dist/conn/calustra-postgres.mjs",
+      "import": "./dist/conn/calustra-postgres.node.mjs",
       "require": "./lib/conn/postgres/index.cjs",
       "default": "./lib/conn/postgres/index.cjs"
     },    
     "./conn-sqlite": {
-      "import": "./dist/conn/calustra-sqlite.mjs",
+      "import": "./dist/conn/calustra-sqlite.node.mjs",
       "require": "./lib/conn/sqlite/index.cjs",
       "default": "./lib/conn/sqlite/index.cjs"
     },    
     "./query": {
-      "import": "./dist/query/calustra-query.mjs",
+      "import": "./dist/query/calustra-query.node.mjs",
       "require": "./lib/query/index.cjs",
       "default": "./lib/query/index.cjs"
     }
