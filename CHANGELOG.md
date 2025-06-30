@@ -1,3 +1,7 @@
+# 0.15.1
+
+Upgraded dependencies
+
 # 0.15.0
 
 Reorganised `dist` files: splitted `postgres` and `sqlite`.

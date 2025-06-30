@@ -8,8 +8,8 @@ import { getConnection as getConnectionLT,
          dropConnection as dropConnectionLT} from '../../src/conn/sqlite/index.mjs'
 
 
-import configPG from './postgres/config.mjs'
-import configLT from './sqlite/config.mjs'
+import {postgres as configPG} from './postgres/config.mjs'
+import {sqlite as configLT} from './sqlite/config.mjs'
 
 import { calustra_conn_test_run } from './run.mjs'
 
