@@ -8,8 +8,8 @@ import { getConnection as getConnectionLT,
          dropConnection as dropConnectionLT} from '../../src/conn/sqlite/index.mjs'
 
 
-import {postgres as configPG} from './postgres/config.mjs'
-import {sqlite as configLT} from './sqlite/config.mjs'
+import postgres from './postgres/config.mjs'
+import sqlite from './sqlite/config.mjs'
 
 import { calustra_conn_test_run } from './run.mjs'
 
@@ -19,8 +19,8 @@ const testContextPG = {
   getConnectionFromCache: getConnectionFromCachePG,
   dropConnection: dropConnectionPG,
   dropConnections,
-  config: configPG,
-  dbName: configPG.database,
+  config: postgres,
+  dbName: postgres.database,
   dialect: 'postgres'
 }
 
@@ -30,8 +30,8 @@ const testContextLT = {
   getConnectionFromCache: getConnectionFromCacheLT,
   dropConnection: dropConnectionLT,
   dropConnections,
-  config: configLT,
-  dbName: configLT.filename,
+  config: sqlite,
+  dbName: sqlite.filename,
   dialect: 'sqlite'
 }
 

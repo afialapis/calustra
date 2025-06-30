@@ -1,4 +1,4 @@
-export const postgres = {
+const postgres = {
   dialect:  'postgres',
   host:     'localhost',
   port:     5432,
@@ -6,3 +6,4 @@ export const postgres = {
   user:     'postgres',
   password: 'postgres'
 }
+export default postgres
