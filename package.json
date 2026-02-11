@@ -1,6 +1,6 @@
 {
   "name": "calustra",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.7",
   "description": "Database to Web",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -13,10 +13,9 @@
   "bugs": {
     "url": "https://github.com/afialapis/calustra/issues"
   },
-  "homepage": "https://www.afialapis.com/os/calustra",  
+  "homepage": "https://www.afialapis.com/os/calustra",
   "type": "module",
   "license": "MIT",
- 
   "main": "./lib/conn/postgres/index.cjs",
   "cjs": "./lib/conn/postgres/index.cjs",
   "module": "./dist/conn/calustra-postgres.node.mjs",
@@ -30,19 +29,18 @@
       "import": "./dist/conn/calustra-postgres.node.mjs",
       "require": "./lib/conn/postgres/index.cjs",
       "default": "./lib/conn/postgres/index.cjs"
-    },    
+    },
     "./conn-sqlite": {
       "import": "./dist/conn/calustra-sqlite.node.mjs",
       "require": "./lib/conn/sqlite/index.cjs",
       "default": "./lib/conn/sqlite/index.cjs"
-    },    
+    },
     "./query": {
       "import": "./dist/query/calustra-query.node.mjs",
       "require": "./lib/query/index.cjs",
       "default": "./lib/query/index.cjs"
     }
   },
-
   "files": [
     "lib",
     "dist"
@@ -50,7 +48,6 @@
   "scripts": {
     "purge": "rm -fr node_modules package-lock.json npm-lock.yaml",
     "reset": "rm -fr purge && npm i",
-
     "query:clean-lib": "rm -fr lib/query && mkdir lib/query",
     "query:clean-dist": "rm -fr dist/query && mkdir dist/query",
     "query:clean": "npm run query:clean-lib && npm run query:clean-dist",
@@ -60,26 +57,21 @@
     "query:test-lib": "npx xeira test --files=./test/query/index_lib.mjs",
     "query:dist": "npm run query:clean-dist && npx xeira bundle --source_index=./src/query/index.mjs --bundle_folder=./dist/query --bundle_name=calustra-query --target=node",
     "query:test-dist": "npx xeira test --files=./test/query/index_dist.mjs",
-
     "conn-postgres:clean-lib": "rm -fr lib/conn/postgres/*",
     "conn-postgres:clean-dist": "rm -fr dist/conn/*postgres*",
     "conn-postgres:clean": "npm run conn-postgres:clean-lib && npm run conn-postgres:clean-dist",
     "conn-postgres:lint": "npx xeira lint --folder=./src/conn",
     "conn-postgres:lib": "npm run conn-postgres:clean-lib && npx xeira transpile --source_index=./src/conn/postgres/index.mjs --transpile_folder=./lib --minifier=none",
     "conn-postgres:dist": "npm run conn-postgres:clean-dist && npx xeira bundle --source_index=./src/conn/postgres/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-postgres --target=node",
-    
     "conn-sqlite:clean-lib": "rm -fr lib/conn/sqlite/*",
     "conn-sqlite:clean-dist": "rm -fr dist/conn/*sqlite*",
     "conn-sqlite:clean": "npm run conn-sqlite:clean-lib && npm run conn-sqlite:clean-dist",
     "conn-sqlite:lint": "npx xeira lint --folder=./src/conn",
     "conn-sqlite:lib": "npm run conn-sqlite:clean-lib && npx xeira transpile --source_index=./src/conn/sqlite/index.mjs --transpile_folder=./lib --minifier=none",
     "conn-sqlite:dist": "npm run conn-sqlite:clean-dist && npx xeira bundle --source_index=./src/conn/sqlite/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-sqlite --target=node",
-    
     "conn:test": "npx xeira test --files=./test/conn/index.mjs",
-
     "conn:test-lib": "npx xeira test --files=./test/conn/index_lib.mjs",
     "conn:test-dist": "npx xeira test --files=./test/conn/index_dist.mjs",
-
     "lint": "npm run query:lint && npm run conn-postgres:lint && npm run conn-sqlite:lint",
     "test": "npm run query:test && npm run conn:test",
     "lib": "npm run query:lib && npm run conn-postgres:lib && npm run conn-sqlite:lib",
@@ -90,14 +82,18 @@
     "prepare": "npm run lint && npm run test && npm run lib && npm run dist && npm run site"
   },
   "dependencies": {
-    "cacheiro": "^0.5.0-beta.4",
-    "farrapa": "^3.0.0-beta.2",
-    "intre": "^3.0.0-beta.2",
-    "pg-promise": "^12.2.0",
+    "cacheiro": "^0.5.0-beta.5",
+    "farrapa": "^3.0.0-beta.3",
+    "intre": "^3.0.0-beta.3",
+    "pg-promise": "^12.6.0",
     "sqlite3": "^5.1.7",
     "tinguir": "^0.0.7"
   },
   "devDependencies": {
-    "xeira": "^2.0.0-beta.8"
+    "xeira": "^2.0.0-beta.10"
+  },
+  "overrides": {
+    "node-gyp": "^12.2.0",
+    "tar": "^7.5.7"
   }
 }
