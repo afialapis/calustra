@@ -10,8 +10,6 @@ import {
 import {initLogger} from '../logger/index.mjs'
 import { isCalustraConnection, isCalustraSelector } from './checks.mjs'
 
-
-
 async function getConnectionBase (configOrSelector, options, initConnection) {
   const log = initLogger(options?.log)
   const nocache = options?.cache === false
@@ -73,8 +71,6 @@ async function getConnectionBase (configOrSelector, options, initConnection) {
   return conn
 }
 
-
-
 async function dropConnection(configOrSelector) {
   const conn = await cacheConnectionGet(configOrSelector) 
   if (conn) {
@@ -91,7 +87,6 @@ async function dropConnections() {
   })
   await cacheConnectionUnsetAll()
 }
-
 
 export {
   getConnectionBase,

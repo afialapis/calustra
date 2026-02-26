@@ -1,22 +1,18 @@
+import test from 'node:test'
+import assert from 'node:assert'
 import test_queries from '../queries.mjs'
-const expect = global.expect
+import getTableNames from '../../../src/query/getTableNames.mjs'
 
-function test_table_names(getTableNames) {
+test(`[query] Test getTableNames`, async function(t) {
 
+  t.test('[query] should parse and test several queries', async function() {
 
-  describe(`[query] Test getTableNames`, function() {
+    test_queries.map(q => {
+      const expected = q.tables
+      const parsed= getTableNames(q.query)
 
-    it('[query] should parse and test several queries', function() {
-
-      test_queries.map(q => {
-        const expected = q.tables
-        const parsed= getTableNames(q.query)
-
-        expect(parsed).to.deep.equal(expected)
-      })
+      assert.deepEqual(parsed, expected)
     })
-
   })
-}
 
-export default test_table_names
+})
