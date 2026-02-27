@@ -4,7 +4,7 @@ import {
   cacheConnectionSet, 
   cacheConnectionUnset,
   cacheConnectionGetAll,
-  cacheConnectionUnsetAll
+  cacheConnectionUnsetAllAndClose
 } from '../cache/index.mjs'
 
 import {initLogger} from '../logger/index.mjs'
@@ -85,7 +85,7 @@ async function dropConnections() {
     c.close()
     //removeConnectionFromCache(c.config)
   })
-  await cacheConnectionUnsetAll()
+  await cacheConnectionUnsetAllAndClose()
 }
 
 export {

@@ -58,13 +58,14 @@ export async function cacheConnectionUnset(connection) {
 }
 
 
-export async function cacheConnectionUnsetAll() {
+export async function cacheConnectionUnsetAllAndClose() {
   const cache = cacheConnectionStoreGet()
   if (! cache) {
-    return []
+    return
   }
 
   await cache.unsetAll()
+  await cache.close()
 }
 
 
