@@ -1,8 +1,8 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "schema|tableName|^_" }]*/
 import sqlite3 from 'sqlite3'
-import CalustraConnBase from '../base/conn/connection.mjs'
+import CalustraConnBase from '#conn-base/conn/connection.mjs'
+import merge from '#conn-base/util/merge.mjs'
 import defaults from './defaults.mjs'
-import merge from '../base/util/merge.mjs'
 import CalustraModelSQLite from './model.mjs'
 
 class CalustraConnLT extends CalustraConnBase {

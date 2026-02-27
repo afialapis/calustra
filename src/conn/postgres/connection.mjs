@@ -1,6 +1,8 @@
 import pgPromise  from  'pg-promise'
-import CalustraConnBase from '../base/conn/connection.mjs'
-import merge from '../base/util/merge.mjs'
+
+import CalustraConnBase from '#conn-base/conn/connection.mjs'
+import merge from '#conn-base/util/merge.mjs'
+
 import defaults from './defaults.mjs'
 import CalustraModelPostgres from './model.mjs'
 

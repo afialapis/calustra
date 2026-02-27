@@ -43,6 +43,12 @@
     "src",
     "dist"
   ],
+  "imports": {
+    "#conn-base/*": "./src/conn/base/*",
+    "#conn-postgres/*": "./src/conn/postgres/*",
+    "#conn-sqlite/*": "./src/conn/sqlite/*",
+    "#query/*": "./src/query/*"
+  },
   "scripts": {
     "purge": "rm -fr node_modules package-lock.json npm-lock.yaml",
     "reset": "rm -fr purge && npm i",

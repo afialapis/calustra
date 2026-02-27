@@ -4,7 +4,7 @@ import {
   getConnectionFromCache,
   dropConnections,
   dropConnection
-} from '../../../src/conn/postgres/index.mjs'
+} from '#conn-postgres/index.mjs'
 
 import { calustra_postgres_conn_init } from '../conn.mjs'
 import data from '../data.mjs'

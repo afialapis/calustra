@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert'
 import {
   isCalustraConnection
-} from '../../../src/conn/sqlite/index.mjs'
+} from '#conn-sqlite/index.mjs'
 import { calustra_sqlite_conn_init } from '../conn.mjs'
 import data from '../data.mjs'
 

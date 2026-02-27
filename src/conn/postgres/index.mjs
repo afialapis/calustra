@@ -1,5 +1,5 @@
-import { getConnectionBase, getConnectionFromCache, dropConnection, dropConnections, isCalustraConnection } from "./base/api/base.mjs"
-import CalustraConnPG from './conn/connection.mjs'
+import { getConnectionBase, getConnectionFromCache, dropConnection, dropConnections, isCalustraConnection } from "#conn-base/api/base.mjs"
+import CalustraConnPG from './connection.mjs'
 
 async function getConnection (configOrSelector, options) {
   const conn = await getConnectionBase(configOrSelector, options, () => {

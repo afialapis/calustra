@@ -1,10 +1,10 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "opt|filter|params" }]*/
-import filterObj from '../util/filterObj.mjs'
+import filterObj from '#conn-base/util/filterObj.mjs'
 import { prepare_query_select, 
          prepare_query_insert,
          prepare_query_update,
          prepare_query_delete,
-         prepare_queries_before_delete } from '../util/query/index.mjs'
+         prepare_queries_before_delete } from '#conn-base/util/query/index.mjs'
 import {CalustraModelOptions} from './options.mjs'
 
 class CalustraModelBase extends CalustraModelOptions {

@@ -1,6 +1,6 @@
-import CalustraModelBase from '../base/conn/model.mjs'
-import filterObj from '../base/util/filterObj.mjs'
-import prepare_query_insert from '../base/util/query/insert.mjs'
+import CalustraModelBase from '#conn-base/conn/model.mjs'
+import filterObj from '#conn-base/util/filterObj.mjs'
+import prepare_query_insert from '#conn-base/util/query/insert.mjs'
 
 
 class CalustraModelSQLite extends CalustraModelBase {

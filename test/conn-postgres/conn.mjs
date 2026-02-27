@@ -1,14 +1,14 @@
 
 import {
   getConnection
-} from '../../src/conn/sqlite/index.mjs'
+} from '#conn-postgres/index.mjs'
 
 
 import config from './config.mjs'
 
 let conn
 
-export async function calustra_sqlite_conn_init(opts) {
+export async function calustra_postgres_conn_init(opts) {
 
   conn = await getConnection({
     ...config.config,
@@ -18,10 +18,10 @@ export async function calustra_sqlite_conn_init(opts) {
 }
 
 
-export function calustra_sqlite_conn_get() {
+export function calustra_postgres_conn_get() {
   return conn
 }
 
-export async function calustra_sqlite_conn_close() {
+export async function calustra_postgres_conn_close() {
   await conn.close()
 }

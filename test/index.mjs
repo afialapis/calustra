@@ -1,3 +1,3 @@
-import './postgres/index.mjs'
-import './sqlite/index.mjs'
+import './conn-postgres/index.mjs'
+import './conn-sqlite/index.mjs'
 import './query/index.mjs'

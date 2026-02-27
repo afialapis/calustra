@@ -1,9 +1,9 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "query|value|options|schema|tableName|^_" }]*/
 import {intre_now} from 'intre'
-import formatQuery from '../query/format.mjs'
-import getQueryDescription from '../query/getDescription.mjs'
-import merge from "../util/merge.mjs"
-import {initLogger} from '../logger/index.mjs'
+import formatQuery from '#query/format.mjs'
+import getQueryDescription from '#query/getDescription.mjs'
+import merge from '#conn-base/util/merge.mjs'
+import {initLogger} from '#conn-base/logger/index.mjs'
 
 let _conn_counter = 0
 

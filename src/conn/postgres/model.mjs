@@ -1,4 +1,4 @@
-import CalustraModelBase from '../base/conn/model.mjs'
+import CalustraModelBase from '#conn-base/conn/model.mjs'
 
 class CalustraModelPostgres extends CalustraModelBase {
   constructor(connection, options) {

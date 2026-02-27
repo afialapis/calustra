@@ -1,4 +1,4 @@
-import { isCalustraSelector } from '../api/checks.mjs'
+import { isCalustraSelector } from '#conn-base/api/checks.mjs'
 
 function _getConfigCacheKey(config) {
   const cache_key= config.dialect=='postgres'
