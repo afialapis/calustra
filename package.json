@@ -1,6 +1,6 @@
 {
   "name": "calustra",
-  "version": "1.0.0-beta.8",
+  "version": "1.0.0-beta.10",
   "description": "Database connections",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -54,18 +54,18 @@
     "reset": "rm -fr purge && npm i",
     "lint": "npx xeira lint --folder=./src",
     "query:clean": "rm -fr dist/query && mkdir dist/query",
-    "query:dist": "npm run query:clean && npx xeira bundle --source_index=./src/query/index.mjs --bundle_folder=./dist/query --bundle_name=calustra-query --target=node",
+    "query:dist": "npm run query:clean && npx xeira bundle --source_index=./src/query/index.mjs --bundle_folder=./dist/query --bundle_name=calustra-query --target=node --bundle_extension=mjs,mjs.min",
     "conn-postgres:clean": "rm -fr dist/conn/*postgres*",
-    "conn-postgres:dist": "npm run conn-postgres:clean && npx xeira bundle --source_index=./src/conn/postgres/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-postgres --target=node",
+    "conn-postgres:dist": "npm run conn-postgres:clean && npx xeira bundle --source_index=./src/conn/postgres/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-postgres --target=node --bundle_extension=mjs,mjs.min",
     "conn-sqlite:clean": "rm -fr dist/conn/*sqlite*",
-    "conn-sqlite:dist": "npm run conn-sqlite:clean && npx xeira bundle --source_index=./src/conn/sqlite/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-sqlite --target=node",
+    "conn-sqlite:dist": "npm run conn-sqlite:clean && npx xeira bundle --source_index=./src/conn/sqlite/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-sqlite --target=node --bundle_extension=mjs,mjs.min",
     "test": "node --test ./test/index.mjs",
     "dist": " npm run query:dist && npm run conn-postgres:dist && npm run conn-sqlite:dist",
     "site": "rm -fr arredemo && npx xeira site",
     "prepare": "npm run lint && npm run test && npm run dist && npm run site"
   },
   "dependencies": {
-    "cacheiro": "^0.5.0-beta.8",
+    "cacheiro": "^0.5.0-beta.10",
     "farrapa": "^3.0.0-beta.3",
     "intre": "^3.0.0-beta.3",
     "pg-promise": "^12.6.1",
