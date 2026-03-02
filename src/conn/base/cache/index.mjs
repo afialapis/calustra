@@ -31,16 +31,11 @@ export async function cacheConnectionGetAll() {
 }
 
 export async function cacheConnectionSet(connection) {
-
   const cache = await cacheConnectionStoreInit(connection.options, connection.log)
   
   const cacheKey= await getConnectionCacheKey(cache, connection.config)
   await cache.setItem(cacheKey, connection)
-
-  connection.uncache = async () => {
-    await cache.unsetItem(cacheKey)
-  }
-
+  
   return cacheKey
 }
 

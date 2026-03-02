@@ -33,7 +33,7 @@ class CalustraConnPG extends CalustraConnBase {
 
   closeDb () {
     // Gotta do nothing if we use .query() ?
-    this.db.$pool.end()
+    //this.db.$pool.end()
     this._pgp.end()
   }
 

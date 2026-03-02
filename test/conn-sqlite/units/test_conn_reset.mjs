@@ -1,7 +1,9 @@
 import test from 'node:test'
 import assert from 'node:assert'
 import {
-  getConnectionFromCache,
+  cacheConnectionGet
+} from '#conn-base/cache/index.mjs'
+import {
   dropConnections,
   dropConnection
 } from '#conn-sqlite/index.mjs'
@@ -23,13 +25,13 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[sqlite][conn_reset] should drop test_01 table if exists`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `DROP TABLE IF EXISTS test_01`
     await cached_conn.execute(query)
   })
 
   t.test(`[sqlite][conn_reset] should create test_01 table`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
       CREATE TABLE test_01 (
         id           serial,
@@ -41,7 +43,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[sqlite][conn_reset] should create test records`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
 
     for (const rec of data) {
       const query= `
@@ -55,14 +57,14 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[sqlite][conn_reset] should close connection`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     cached_conn.close()
     assert.strictEqual(cached_conn.isOpen, false)
   })    
 
   t.test(`[sqlite][conn_reset] should see conn unavailable after conn is closed`, async function() {
     try {
-      const _cached_conn = await getConnectionFromCache(DB_SELECTOR)
+      const _cached_conn = await cacheConnectionGet(DB_SELECTOR)
     } catch(e) {
       assert.strictEqual(e.message.indexOf('Could not get cached connection')>0, true)
     }
@@ -76,7 +78,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[sqlite][conn_reset] should update one record`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
 
     const query = `
         UPDATE test_01
@@ -88,7 +90,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[sqlite][conn_reset] should update several records`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
         UPDATE test_01
             SET name = $1
@@ -99,7 +101,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[sqlite][conn_reset] should delete one record`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
         DELETE
           FROM test_01
@@ -115,7 +117,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
 
   t.test(`[sqlite][conn_reset] should see conn unavailable after all conns are dopeed`, async function() {
     try {
-      const _cached_conn = await getConnectionFromCache(DB_SELECTOR)
+      const _cached_conn = await cacheConnectionGet(DB_SELECTOR)
     } catch(e) {
       assert.strictEqual(e.message.indexOf('Could not get cached connection')>0, true)
     }
@@ -129,7 +131,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[sqlite][conn_reset] should count 3 records`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
       SELECT CAST(COUNT(1) AS int) as cnt
         FROM test_01`
@@ -139,7 +141,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[sqlite][conn_reset] should count 2 records with name Frederic`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
     SELECT CAST(COUNT(1) AS int) as cnt
         FROM test_01
@@ -155,7 +157,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
 
   t.test(`[sqlite][conn_reset] should see conn unavailable after conn is dropped`, async function() {
     try {
-      const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+      const cached_conn = await cacheConnectionGet(DB_SELECTOR)
       assert.strictEqual(cached_conn, undefined)
     } catch(e) {
       assert.strictEqual(e.message.indexOf('Could not get cached connection')>0, true)
@@ -171,7 +173,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
 
 
   t.test(`[sqlite][conn_reset] should count 2 distinct names, Frederic and Peter`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
       SELECT CAST(COUNT(DISTINCT name) AS int) as cnt
         FROM test_01`
@@ -181,7 +183,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[sqlite][conn_reset] should return distinct names, Frederic and Peter`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
       SELECT DISTINCT name as cnt
         FROM test_01`
@@ -191,7 +193,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[sqlite][conn_reset] should delete other records`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
         DELETE
           FROM test_01`
@@ -201,7 +203,7 @@ test(`[sqlite][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[sqlite][conn_reset] should close connection`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     cached_conn.close()
   }) 
 })

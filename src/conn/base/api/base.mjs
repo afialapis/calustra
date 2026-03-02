@@ -31,11 +31,6 @@ async function getConnectionBase (configOrSelector, options, initConnection) {
       if ((!cachedConn.isOpen)  || reset) {
 
         log.silly(`[calustra] getConnection() cached connection found (${cachedConn.connid}), but, let's reinit it. Still open? ${cachedConn.isOpen}. Reset ${reset}. NoCache? ${nocache}`)
-        
-        // insist to actually close it
-        try { 
-          cachedConn.close() 
-        } catch(_) {}
 
         await cacheConnectionUnset(cachedConn)
       } else {
@@ -74,23 +69,21 @@ async function getConnectionBase (configOrSelector, options, initConnection) {
 async function dropConnection(configOrSelector) {
   const conn = await cacheConnectionGet(configOrSelector) 
   if (conn) {
-    conn.close()
+    await conn.close()
     await cacheConnectionUnset(conn)
   }
 }
 
 async function dropConnections() {
   const conns = await cacheConnectionGetAll()
-  conns.map(c => {
-    c.close()
-    //removeConnectionFromCache(c.config)
-  })
+  for (const conn of conns) {
+    await conn.close()
+  }
   await cacheConnectionUnsetAllAndClose()
 }
 
 export {
   getConnectionBase,
-  cacheConnectionGet as getConnectionFromCache,
   dropConnection,
   dropConnections,
   isCalustraConnection

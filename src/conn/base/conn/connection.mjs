@@ -58,25 +58,19 @@ class CalustraConnBase {
   }  
 
   get isOpen () {
-    return this.is_open==true
+    return this.is_open===true
   }
 
   openTransaction() {
     throw new Error ('CalustraConnBase: openTransaction() not implemented"')
   }  
 
-
-  close () {
+  async close () {
     this.log.debug(`[calustra][${this.connid}] Closing database ${this.configDescription}`)
     this.is_open= false
     this.closeDb()
     this.cached_models = {}
     this.cached_results = {}
-    
-    try {
-      // uncache method may be dynamically assigned when caching connection
-      this.uncache()
-    } catch(_) {}
   }
 
 

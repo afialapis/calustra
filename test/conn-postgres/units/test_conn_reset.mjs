@@ -1,35 +1,40 @@
 import test from 'node:test'
 import assert from 'node:assert'
 import {
-  getConnectionFromCache,
   dropConnections,
-  dropConnection
+  dropConnection,
+  getConnection
 } from '#conn-postgres/index.mjs'
+import {
+  cacheConnectionGet
+} from '#conn-base/cache/index.mjs'
 
 import { calustra_postgres_conn_init } from '../conn.mjs'
 import data from '../data.mjs'
-
 
 const DB_SELECTOR = 'calustra'
 
 test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
   let conn
+  let connid_prev = 0
   
   t.test(`[postgres][conn_reset] should init and cache the conn`, async function() {
     conn = await calustra_postgres_conn_init({
-      reset: true
-    })      
+      reset: true,
+      cache: true
+    })
     assert.strictEqual(conn.isOpen, true)
+    connid_prev = conn.connid
   })
 
   t.test(`[postgres][conn_reset] should drop test_01 table if exists`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `DROP TABLE IF EXISTS test_01`
     await cached_conn.execute(query)
   })
 
   t.test(`[postgres][conn_reset] should create test_01 table`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
       CREATE TABLE test_01 (
         id           serial,
@@ -41,7 +46,7 @@ test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[postgres][conn_reset] should create test records`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
 
     for (const rec of data) {
       const query= `
@@ -55,28 +60,38 @@ test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[postgres][conn_reset] should close connection`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
-    cached_conn.close()
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
+    await cached_conn.close()
     assert.strictEqual(cached_conn.isOpen, false)
   })    
 
-  t.test(`[postgres][conn_reset] should see conn unavailable after conn is closed`, async function() {
+  t.test(`[postgres][conn_reset] should still find conn directly from cache`, async function() {
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
+    assert.strictEqual(cached_conn.connid, connid_prev)
+    assert.strictEqual(cached_conn.isOpen, false)
+  })
+
+  t.test(`[postgres][conn_reset] calling getConnection() with selector should raise error`, async function() {
     try {
-      const _cached_conn = await getConnectionFromCache(DB_SELECTOR)
+      const _conn = await getConnection(DB_SELECTOR)
+      throw new Error('Should not get here')
     } catch(e) {
       assert.strictEqual(e.message.indexOf('Could not get cached connection')>0, true)
     }
-  })    
+  })      
 
   t.test(`[postgres][conn_reset] should reset the conn`, async function() {
     conn = await calustra_postgres_conn_init({
-      reset: true
-    })      
+      reset: true,
+      cache: true
+    })
     assert.strictEqual(conn.isOpen, true)
+    assert.strictEqual(conn.connid, connid_prev+1)
+    connid_prev = conn.connid
   })
 
   t.test(`[postgres][conn_reset] should update one record`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
 
     const query = `
         UPDATE test_01
@@ -88,7 +103,7 @@ test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[postgres][conn_reset] should update several records`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
         UPDATE test_01
             SET name = $1
@@ -99,7 +114,7 @@ test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[postgres][conn_reset] should delete one record`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
         DELETE
           FROM test_01
@@ -113,9 +128,15 @@ test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
     await dropConnections()
   })    
 
-  t.test(`[postgres][conn_reset] should see conn unavailable after all conns are dopeed`, async function() {
+  t.test(`[postgres][conn_reset] should not find connection in cache`, async function() {
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
+    assert.strictEqual(cached_conn, undefined)
+  })
+
+  t.test(`[postgres][conn_reset] calling getConnection() with selector should raise error`, async function() {
     try {
-      const _cached_conn = await getConnectionFromCache(DB_SELECTOR)
+      const _conn = await getConnection(DB_SELECTOR)
+      throw new Error('Should not get here')
     } catch(e) {
       assert.strictEqual(e.message.indexOf('Could not get cached connection')>0, true)
     }
@@ -123,13 +144,16 @@ test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
 
   t.test(`[postgres][conn_reset] should reset the conn`, async function() {
     conn = await calustra_postgres_conn_init({
-      reset: true
-    })      
+      reset: true,
+      cache: true
+    })
     assert.strictEqual(conn.isOpen, true)
+    assert.strictEqual(conn.connid, connid_prev+1)
+    connid_prev = conn.connid
   })
 
   t.test(`[postgres][conn_reset] should count 3 records`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
       SELECT CAST(COUNT(1) AS int) as cnt
         FROM test_01`
@@ -139,7 +163,7 @@ test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[postgres][conn_reset] should count 2 records with name Frederic`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
     SELECT CAST(COUNT(1) AS int) as cnt
         FROM test_01
@@ -153,25 +177,33 @@ test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
     await dropConnection(DB_SELECTOR)
   })    
 
-  t.test(`[postgres][conn_reset] should see conn unavailable after conn is dropped`, async function() {
+  t.test(`[postgres][conn_reset] should not find connection in cache`, async function() {
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
+    assert.strictEqual(cached_conn, undefined)
+  })
+
+  t.test(`[postgres][conn_reset] calling getConnection() with selector should raise error`, async function() {
     try {
-      const cached_conn = await getConnectionFromCache(DB_SELECTOR)
-      assert.strictEqual(cached_conn, undefined)
+      const _conn = await getConnection(DB_SELECTOR)
+      throw new Error('Should not get here')
     } catch(e) {
       assert.strictEqual(e.message.indexOf('Could not get cached connection')>0, true)
     }
-  })    
+  }) 
 
   t.test(`[postgres][conn_reset] should reset the conn`, async function() {
     conn = await calustra_postgres_conn_init({
-      reset: true
-    })      
+      reset: true,
+      cache: true
+    })
     assert.strictEqual(conn.isOpen, true)
+    assert.strictEqual(conn.connid, connid_prev+1)
+    connid_prev = conn.connid
   })
 
 
   t.test(`[postgres][conn_reset] should count 2 distinct names, Frederic and Peter`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
       SELECT CAST(COUNT(DISTINCT name) AS int) as cnt
         FROM test_01`
@@ -181,7 +213,7 @@ test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[postgres][conn_reset] should return distinct names, Frederic and Peter`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
       SELECT DISTINCT name as cnt
         FROM test_01`
@@ -191,7 +223,7 @@ test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
   })
 
   t.test(`[postgres][conn_reset] should delete other records`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
+    const cached_conn = await cacheConnectionGet(DB_SELECTOR)
     const query = `
         DELETE
           FROM test_01`
@@ -200,8 +232,7 @@ test(`[postgres][conn_reset] Test conn resets and so`, async function(t) {
     assert.strictEqual(cnt, 3)
   })
 
-  t.test(`[postgres][conn_reset] should close connection`, async function() {
-    const cached_conn = await getConnectionFromCache(DB_SELECTOR)
-    cached_conn.close()
+  t.test(`[postgres][conn_reset] should drop connections`, async function() {
+    await dropConnections()
   }) 
 })

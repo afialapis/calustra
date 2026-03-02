@@ -11,9 +11,11 @@ let conn
 export async function calustra_postgres_conn_init(opts) {
 
   conn = await getConnection({
-    ...config.config,
+    ...config.config
+  }, {
+    ...config.options,
     ...opts
-  }, config.options)
+})
   return conn 
 }
 

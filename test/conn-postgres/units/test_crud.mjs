@@ -1,17 +1,21 @@
 import test from 'node:test'
 import assert from 'node:assert'
 import { calustra_postgres_conn_init } from '../conn.mjs'
+
 import data from '../data.mjs'
 
 test(`[postgres][crud] Test crud`, async function(t) {
 
   let conn 
+  let connid_prev = 0
 
   t.test(`[postgres][crud] should init connection`, async function() {
     conn = await calustra_postgres_conn_init({
-      reset: true,
+      reset: false,
       cache: false
     })
+    assert.strictEqual(conn.isOpen, true)
+    connid_prev = conn.connid
   })
 
   t.test(`[postgres][crud] should drop test_01 table if exists`, async function() {
@@ -72,6 +76,20 @@ test(`[postgres][crud] Test crud`, async function(t) {
     assert.strictEqual(cnt, 1)
   })
 
+  t.test(`[postgres][crud] should close connection`, async function() {
+    conn.close()
+  })   
+
+  t.test(`[postgres][crud] should re-init connection`, async function() {
+    conn = await calustra_postgres_conn_init({
+      reset: false,
+      cache: false
+    })
+    assert.strictEqual(conn.isOpen, true)
+    assert.strictEqual(conn.connid, connid_prev+1)
+    connid_prev = conn.connid
+  })
+
   t.test(`[postgres][crud] should count 3 records`, async function() {
     const query = `
       SELECT CAST(COUNT(1) AS int) as cnt
@@ -91,7 +109,6 @@ test(`[postgres][crud] Test crud`, async function(t) {
     assert.strictEqual(res.cnt, 2)
   })
   
-
   t.test(`[postgres][crud] should count 2 distinct names, Frederic and Peter`, async function() {
     const query = `
       SELECT CAST(COUNT(DISTINCT name) AS int) as cnt
