@@ -1,13 +1,13 @@
 const filterObj = (obj, onlyFields) => {
-  if (obj == undefined || onlyFields == undefined) {
+  if (obj === undefined || onlyFields === undefined) {
     return obj
   }
 
-  let out = {}
-  
+  const out = {}
+
   Object.keys(obj)
-    .filter((k) => onlyFields.indexOf(k) >=0)
-    .map((k) => {
+    .filter((k) => onlyFields.indexOf(k) >= 0)
+    .forEach((k) => {
       out[k] = obj[k]
     })
 

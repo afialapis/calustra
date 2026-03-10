@@ -1,10 +1,9 @@
-import { getConnectionCacheKey } from './keys.mjs'
-import { cacheConnectionStoreInit,
-         cacheConnectionStoreGet } from './store.mjs'
+import { getConnectionCacheKey } from "./keys.mjs"
+import { cacheConnectionStoreGet, cacheConnectionStoreInit } from "./store.mjs"
 
 export async function cacheConnectionGet(configOrSelector, options) {
   const cache = await cacheConnectionStoreInit(options)
-  
+
   const cacheKey = await getConnectionCacheKey(cache, configOrSelector)
 
   const cachedConn = cache.getItem(cacheKey)
@@ -14,17 +13,15 @@ export async function cacheConnectionGet(configOrSelector, options) {
 
 export async function cacheConnectionGetAll() {
   const cache = cacheConnectionStoreGet()
-  if (! cache) {
+  if (!cache) {
     return []
   }
 
   const cacheKeys = await cache.getKeys()
 
-  let connections = []
+  const connections = []
   for (const key of cacheKeys) {
-    connections.push(
-      await cache.getItem(key)
-    )
+    connections.push(await cache.getItem(key))
   }
 
   return connections
@@ -32,16 +29,16 @@ export async function cacheConnectionGetAll() {
 
 export async function cacheConnectionSet(connection) {
   const cache = await cacheConnectionStoreInit(connection.options, connection.log)
-  
-  const cacheKey= await getConnectionCacheKey(cache, connection.config)
+
+  const cacheKey = await getConnectionCacheKey(cache, connection.config)
   await cache.setItem(cacheKey, connection)
-  
+
   return cacheKey
 }
 
 export async function cacheConnectionUnset(connection) {
   const cache = cacheConnectionStoreGet()
-  if (! cache) {
+  if (!cache) {
     return []
   }
 
@@ -52,23 +49,12 @@ export async function cacheConnectionUnset(connection) {
   return cacheKey
 }
 
-
 export async function cacheConnectionUnsetAllAndClose() {
   const cache = cacheConnectionStoreGet()
-  if (! cache) {
+  if (!cache) {
     return
   }
 
   await cache.unsetAll()
   await cache.close()
 }
-
-
-
-
-
-
-
-
-
-

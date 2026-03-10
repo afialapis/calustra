@@ -1,9 +1,0 @@
-{
-  "product": "package",
-  "linter": "eslint",
-  "transpiler": "babel",
-  "minifier": "none",
-  "bundler": "rollup",
-  "demo_mode": null,
-  "demo_demoer": null
-}

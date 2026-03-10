@@ -1,6 +1,6 @@
 {
   "name": "calustra",
-  "version": "1.0.0-beta.11",
+  "version": "1.0.0-beta.14",
   "description": "Database connections",
   "author": "Donato Lorenzo <donato@afialapis.com>",
   "contributors": [
@@ -16,32 +16,17 @@
   "homepage": "https://www.afialapis.com/os/calustra",
   "type": "module",
   "license": "MIT",
-  "main": "./src/conn/postgres/index.mjs",
   "exports": {
-    ".": {
-      "import": "./dist/conn/calustra-postgres.node.mjs",
-      "node": "./src/conn/postgres/index.mjs",
-      "default": "./src/conn/postgres/index.mjs"
-    },
-    "./conn-postgres": {
-      "import": "./dist/conn/calustra-postgres.node.mjs",
-      "node": "./src/conn/postgres/index.mjs",
-      "default": "./src/conn/postgres/index.mjs"
-    },
-    "./conn-sqlite": {
-      "import": "./dist/conn/calustra-sqlite.node.mjs",
-      "node": "./src/conn/sqlite/index.mjs",
-      "default": "./src/conn/sqlite/index.mjs"
-    },
-    "./query": {
-      "import": "./dist/query/calustra-query.node.mjs",
-      "node": "./src/query/index.mjs",
-      "default": "./src/query/index.mjs"
-    }
+    ".": "./src/conn/postgres/index.mjs",
+    "./conn-postgres": "./src/conn/postgres/index.mjs",
+    "./conn-sqlite": "./src/conn/sqlite/index.mjs",
+    "./query": "./src/query/index.mjs"
   },
   "files": [
     "src",
-    "dist"
+    "package.json",
+    "LICENSE",
+    "README.md"
   ],
   "imports": {
     "#conn-base/*": "./src/conn/base/*",
@@ -50,33 +35,28 @@
     "#query/*": "./src/query/*"
   },
   "scripts": {
-    "purge": "rm -fr node_modules package-lock.json npm-lock.yaml",
-    "reset": "rm -fr purge && npm i",
-    "lint": "npx xeira lint --folder=./src",
-    "query:clean": "rm -fr dist/query && mkdir dist/query",
-    "query:dist": "npm run query:clean && npx xeira bundle --source_index=./src/query/index.mjs --bundle_folder=./dist/query --bundle_name=calustra-query --target=node --bundle_extension=mjs,mjs.min",
-    "conn-postgres:clean": "rm -fr dist/conn/*postgres*",
-    "conn-postgres:dist": "npm run conn-postgres:clean && npx xeira bundle --source_index=./src/conn/postgres/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-postgres --target=node --bundle_extension=mjs,mjs.min",
-    "conn-sqlite:clean": "rm -fr dist/conn/*sqlite*",
-    "conn-sqlite:dist": "npm run conn-sqlite:clean && npx xeira bundle --source_index=./src/conn/sqlite/index.mjs --bundle_folder=./dist/conn --bundle_name=calustra-sqlite --target=node --bundle_extension=mjs,mjs.min",
+    "reset": "rm -fr arredemo node_modules package-lock.json && npm i",
+    "lint": "biome check ./src ./test --reporter=github",
+    "lint:fix": "biome check --write ./src ./test --reporter=github",
     "test": "node --test ./test/index.mjs",
-    "dist": " npm run query:dist && npm run conn-postgres:dist && npm run conn-sqlite:dist",
-    "site": "rm -fr arredemo && npx xeira site",
-    "prepare": "npm run lint && npm run test && npm run dist && npm run site"
+    "site": "npx arredemo build",
+    "prepublishOnly": "npm run lint && npm run test && npm run site"
   },
   "dependencies": {
-    "cacheiro": "^0.5.0-beta.10",
-    "farrapa": "^3.0.0-beta.3",
-    "intre": "^3.0.0-beta.3",
-    "pg-promise": "^12.6.1",
+    "cacheiro": "^0.5.0-beta.11",
+    "farrapa": "^3.0.0-beta.10",
+    "intre": "^3.0.0-beta.4",
+    "pg-promise": "^12.6.2",
     "sqlite3": "^5.1.7",
     "tinguir": "^0.0.7"
   },
   "devDependencies": {
-    "xeira": "^2.0.0-beta.10"
+    "@biomejs/biome": "^2.4.6"
   },
   "overrides": {
-    "node-gyp": "^12.2.0",
     "tar": "^7.5.8"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

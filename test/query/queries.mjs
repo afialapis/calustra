@@ -4,7 +4,7 @@ export default [
     SELECT * 
       FROM articles
     `,
-    tables: ['articles']
+    tables: ["articles"]
   },
   {
     query: `
@@ -14,7 +14,7 @@ export default [
         ON authors.id = articles.author_id 
     WHERE author.name = 'John Doe'
     `,
-    tables: ['articles', 'authors']
+    tables: ["articles", "authors"]
   },
   {
     query: `
@@ -26,7 +26,7 @@ export default [
             WHERE author.name = 'John Doe'
           ) AS sub
     `,
-    tables: ['articles', 'authors']
+    tables: ["articles", "authors"]
   },
   {
     query: `
@@ -40,7 +40,7 @@ export default [
       JOIN stars    AS s ON s.author = a.author
     WHERE s.source = 'github'
   `,
-    tables: ['articles', 'stars']
+    tables: ["articles", "stars"]
   },
   {
     query: `
@@ -84,25 +84,25 @@ export default [
             AND f.attnum > 0 
         ORDER BY number
     `,
-    tables: ['pg_attribute', 'pg_class', 'pg_type', 'pg_attrdef', 'pg_namespace', 'pg_constraint']
+    tables: ["pg_attribute", "pg_class", "pg_type", "pg_attrdef", "pg_namespace", "pg_constraint"]
   },
   {
     query: `
     DROP TABLE articles
     `,
-    tables: ['articles']
+    tables: ["articles"]
   },
   {
     query: `
     DROP TABLE IF EXISTS articles
     `,
-    tables: ['articles']
+    tables: ["articles"]
   },
   {
     query: `
     ALTER TABLE articles ADD COLUMN created_at date
     `,
-    tables: ['articles']
+    tables: ["articles"]
   },
   {
     query: `
@@ -118,7 +118,7 @@ export default [
         ON m.name <> p.name
      WHERE m.name = ?
   ORDER BY tableName, number`,
-  tables: ['sqlite_master', 'pragma_table_info']  
+    tables: ["sqlite_master", "pragma_table_info"]
   },
   {
     query: `
@@ -128,7 +128,7 @@ export default [
        AND name NOT LIKE 'sqlite_%'
  ORDER BY 1 
     `,
-    tables: ['sqlite_schema']
+    tables: ["sqlite_schema"]
   },
   {
     query: `
@@ -137,7 +137,7 @@ export default [
     VALUES
       ($1, $2, $3)
     `,
-    tables: ['articles']
+    tables: ["articles"]
   },
   {
     query: `
@@ -145,7 +145,7 @@ export default [
        SET name = 'table'
      WHERE id = $18
     `,
-    tables: ['articles']
+    tables: ["articles"]
   },
   {
     query: `
@@ -159,7 +159,6 @@ export default [
       JOIN club AS cl ON cl.id = cs.id_club
     WHERE 1=1
       AND s.selected IS TRUE`,
-    tables: ['team', 'season_team', 'season', 'club_section', 'club']
+    tables: ["team", "season_team", "season", "club_section", "club"]
   }
-  
 ]

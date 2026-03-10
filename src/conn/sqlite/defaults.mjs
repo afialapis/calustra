@@ -1,12 +1,12 @@
 export default {
-  dialect:  'sqlite',
-  filename: ':memory:',
+  dialect: "sqlite",
+  filename: ":memory:",
 
-  verbose:   true,
-  
+  verbose: true,
+
   // https://github.com/mapbox/node-sqlite3/wiki/Caching
-  cached:    false, // calustra will handle the caching
-  
+  cached: false, // calustra will handle the caching
+
   /*user:     'sqlite',
   password: 'sqlite'*/
 

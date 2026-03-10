@@ -1,24 +1,21 @@
+import { getConnection } from "#conn-postgres/index.mjs"
 
-import {
-  getConnection
-} from '#conn-postgres/index.mjs'
-
-
-import config from './config.mjs'
+import config from "./config.mjs"
 
 let conn
 
 export async function calustra_postgres_conn_init(opts) {
-
-  conn = await getConnection({
-    ...config.config
-  }, {
-    ...config.options,
-    ...opts
-})
-  return conn 
+  conn = await getConnection(
+    {
+      ...config.config
+    },
+    {
+      ...config.options,
+      ...opts
+    }
+  )
+  return conn
 }
-
 
 export function calustra_postgres_conn_get() {
   return conn

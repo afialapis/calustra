@@ -1,27 +1,28 @@
 export default {
   config: {
-    dialect:  'postgres',
-    host:     'localhost',
-    port:     5432,
-    database: 'calustra',
-    user:     'postgres',
-    password: 'postgres',
+    dialect: "postgres",
+    host: "localhost",
+    port: 5432,
+    database: "calustra",
+    user: "postgres",
+    password: "postgres"
   },
   options: {
-    log: 'warn',
+    log: "warn",
     tables: [
       {
-        name: 'test_01',
-        schema: 'public',
+        name: "test_01",
+        schema: "public",
         useDateFields: {
           use: true,
           fieldNames: {
-            created_at: 'created_at', 
-            last_update_at: 'last_update_at'
+            created_at: "created_at",
+            last_update_at: "last_update_at"
           },
           now: () => 999
         },
         triggers: {
+          // biome-ignore lint/correctness/noUnusedFunctionParameters: biome-ignore
           afterInsert: async (conn, id, params, options) => {
             return 777
           }

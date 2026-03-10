@@ -1,52 +1,52 @@
-import {red, blue, cyan, magenta, yellow, gray} from 'tinguir'
+import { blue, cyan, gray, magenta, red, yellow } from "tinguir"
 
-const LEVELS= {
-  none   : 0,
-  error  : 1,
-  warn   : 2,
-  info   : 3,
+const LEVELS = {
+  none: 0,
+  error: 1,
+  warn: 2,
+  info: 3,
   verbose: 4,
-  debug  : 5,
-  silly  : 6
+  debug: 5,
+  silly: 6
 }
 
 class Logger {
-  constructor (level) {
+  constructor(level) {
     this.set_level(level)
   }
 
   set_level(level) {
-    this.level= LEVELS[level != undefined ? level : 'none']
+    this.level = LEVELS[level !== undefined ? level : "none"]
   }
-  
+
   _log(color, lvl, msg) {
-    if (this.level>=lvl) {
+    if (this.level >= LEVELS[lvl]) {
       console.log(color(msg))
     }
   }
 
   silly(msg) {
-    this._log(gray, 6, msg)
+    this._log(gray, "silly", msg)
   }
 
   debug(msg) {
-    this._log(magenta, 5, msg)
+    this._log(magenta, "debug", msg)
   }
 
   verbose(msg) {
-    this._log(cyan, 4, msg)
+    this._log(cyan, "verbose", msg)
   }
 
   info(msg) {
-    this._log(blue, 3, msg)
+    this._log(blue, "info", msg)
   }
 
   warn(msg) {
-    this._log(yellow, 2, msg)
+    this._log(yellow, "warn", msg)
   }
 
   error(msg) {
-    this._log(red, 1, msg)
+    this._log(red, "error", msg)
   }
 }
 

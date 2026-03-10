@@ -1,14 +1,14 @@
 const merge = (one, another) => {
-  let obj = {}
+  const obj = {}
 
-  if (one!=undefined) {
+  if (one !== undefined) {
     Object.assign(obj, one)
   }
 
-  if (another!=undefined) {
+  if (another !== undefined) {
     Object.assign(obj, another)
   }
-  
+
   return obj
 }
 

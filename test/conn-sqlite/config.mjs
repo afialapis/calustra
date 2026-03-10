@@ -1,32 +1,34 @@
-import path from 'path'
-import { fileURLToPath } from 'url'
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+
 const __my_filename = fileURLToPath(import.meta.url)
 const __my_dirname = path.dirname(__my_filename)
 
-const SQLITE_DB = path.join(__my_dirname, 'calustra.sqlite')
+const SQLITE_DB = path.join(__my_dirname, "calustra.sqlite")
 
 export default {
   config: {
-    dialect:  'sqlite',
-    filename: SQLITE_DB, // ':memory:', // 
+    dialect: "sqlite",
+    filename: SQLITE_DB, // ':memory:', //
     verbose: true,
     cached: false
   },
   options: {
-    log: 'warn',
+    log: "warn",
     tables: [
       {
-        name: 'test_01',
-        schema: 'public',
+        name: "test_01",
+        schema: "public",
         useDateFields: {
           use: true,
           fieldNames: {
-            created_at: 'created_at', 
-            last_update_at: 'last_update_at'
+            created_at: "created_at",
+            last_update_at: "last_update_at"
           },
           now: () => 999
         },
         triggers: {
+          // biome-ignore lint/correctness/noUnusedFunctionParameters: biome-ignore
           afterInsert: async (conn, id, params, options) => {
             return 777
           }

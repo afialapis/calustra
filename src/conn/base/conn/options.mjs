@@ -1,12 +1,11 @@
 class CalustraModelOptions {
-
   constructor(options) {
-    this.options    = options
+    this.options = options
     this.definition = undefined // will be inited right before needed
   }
 
   get schema() {
-    return this.options?.schema || 'public'
+    return this.options?.schema || "public"
   }
 
   get name() {
@@ -18,15 +17,15 @@ class CalustraModelOptions {
   }
 
   ensureDefs(data) {
-    if (! data) {
-      return 
+    if (!data) {
+      return
     }
-    data.map((record) => {
-      this.fields.map((fld) => {
-        if (record[fld]===null) {
-          const fdef= this.definition[fld]
-          if (Object.prototype.hasOwnProperty.call(fdef, 'default')) {
-            record[fld]= fdef.default
+    data.forEach((record) => {
+      this.fields.forEach((fld) => {
+        if (record[fld] === null) {
+          const fdef = this.definition[fld]
+          if (Object.hasOwn(fdef, "default")) {
+            record[fld] = fdef.default
           }
         }
       })
@@ -34,7 +33,7 @@ class CalustraModelOptions {
   }
 
   get useDateFieldsOn() {
-    return this.options.useDateFields.use===true
+    return this.options.useDateFields.use === true
   }
 
   get datesCreatedField() {
@@ -49,21 +48,19 @@ class CalustraModelOptions {
       return this.options.useDateFields.fieldNames.last_update_at
     }
     return undefined
-  }  
-  
+  }
+
   getNow() {
     try {
       return this.options.useDateFields.now()
-    } catch(e) {
+    } catch (_) {
       return undefined
     }
   }
 
-
   get triggers() {
     return this.options?.triggers || {}
-  }  
+  }
 }
 
-
-export {CalustraModelOptions}
+export { CalustraModelOptions }

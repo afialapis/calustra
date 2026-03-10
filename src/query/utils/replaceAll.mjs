@@ -1,5 +1,5 @@
 function replaceAll(string, search, replace) {
-  return string.split(search).join(replace);
+  return string.split(search).join(replace)
 }
 
 /*
@@ -11,14 +11,12 @@ function replaceAll (string, search, replace) {
   const re = new RegExp(search, 'g')
   try {
     return string.replace(re, replace)
-  } catch(e) {
+  } catch (_) {
     return string
   }
 }
 
 
 */
-
-
 
 export default replaceAll

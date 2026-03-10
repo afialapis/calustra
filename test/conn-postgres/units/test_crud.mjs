@@ -1,15 +1,14 @@
-import test from 'node:test'
-import assert from 'node:assert'
-import { calustra_postgres_conn_init } from '../conn.mjs'
+import assert from "node:assert"
+import test from "node:test"
+import { calustra_postgres_conn_init } from "../conn.mjs"
 
-import data from '../data.mjs'
+import data from "../data.mjs"
 
-test(`[postgres][crud] Test crud`, async function(t) {
-
-  let conn 
+test(`[postgres][crud] Test crud`, async (t) => {
+  let conn
   let connid_prev = 0
 
-  t.test(`[postgres][crud] should init connection`, async function() {
+  t.test(`[postgres][crud] should init connection`, async () => {
     conn = await calustra_postgres_conn_init({
       reset: false,
       cache: false
@@ -18,12 +17,12 @@ test(`[postgres][crud] Test crud`, async function(t) {
     connid_prev = conn.connid
   })
 
-  t.test(`[postgres][crud] should drop test_01 table if exists`, async function() {
+  t.test(`[postgres][crud] should drop test_01 table if exists`, async () => {
     const query = `DROP TABLE IF EXISTS test_01`
     await conn.execute(query)
   })
 
-  t.test(`[postgres][crud] should create test_01 table`, async function() {
+  t.test(`[postgres][crud] should create test_01 table`, async () => {
     const query = `
       CREATE TABLE IF NOT EXISTS test_01 (
         id           serial,
@@ -34,115 +33,114 @@ test(`[postgres][crud] Test crud`, async function(t) {
     await conn.execute(query)
   })
 
-  t.test(`[postgres][crud] should create test records`, async function() {
+  t.test(`[postgres][crud] should create test records`, async () => {
     for (const rec of data) {
-      const query= `
+      const query = `
         INSERT INTO test_01
           (name, description, counter)
         VALUES
           ($1, $2, $3)
       `
-      await conn.execute(query, [rec.name, rec.description, rec.counter])
+      await conn.execute(query, [rec.name, rec.description, rec.counter], { log: "info" })
     }
   })
 
-  t.test(`[postgres][crud] should update one record`, async function() {
+  t.test(`[postgres][crud] should update one record`, async () => {
     const query = `
         UPDATE test_01
             SET description = $1
           WHERE name = $2`
-    const cnt= await conn.executeAndCount(query, ['A not so simple man', 'Peter'])
+    const cnt = await conn.executeAndCount(query, ["A not so simple man", "Peter"])
 
     assert.strictEqual(cnt, 1)
   })
 
-  t.test(`[postgres][crud] should update several records`, async function() {
+  t.test(`[postgres][crud] should update several records`, async () => {
     const query = `
         UPDATE test_01
             SET name = $1
           WHERE counter = $2`
-    const cnt= await conn.executeAndCount(query, ['Frederic', 99])
+    const cnt = await conn.executeAndCount(query, ["Frederic", 99])
 
     assert.strictEqual(cnt, 2)
   })
 
-  t.test(`[postgres][crud] should delete one record`, async function() {
+  t.test(`[postgres][crud] should delete one record`, async () => {
     const query = `
         DELETE
           FROM test_01
           WHERE name = $1`
-    const cnt= await conn.executeAndCount(query, ['Jonny'])
+    const cnt = await conn.executeAndCount(query, ["Jonny"])
 
     assert.strictEqual(cnt, 1)
   })
 
-  t.test(`[postgres][crud] should close connection`, async function() {
+  t.test(`[postgres][crud] should close connection`, async () => {
     conn.close()
-  })   
+  })
 
-  t.test(`[postgres][crud] should re-init connection`, async function() {
+  t.test(`[postgres][crud] should re-init connection`, async () => {
     conn = await calustra_postgres_conn_init({
       reset: false,
       cache: false
     })
     assert.strictEqual(conn.isOpen, true)
-    assert.strictEqual(conn.connid, connid_prev+1)
+    assert.strictEqual(conn.connid, connid_prev + 1)
     connid_prev = conn.connid
   })
 
-  t.test(`[postgres][crud] should count 3 records`, async function() {
+  t.test(`[postgres][crud] should count 3 records`, async () => {
     const query = `
       SELECT CAST(COUNT(1) AS int) as cnt
         FROM test_01`
-    const res= await conn.selectOne(query)
+    const res = await conn.selectOne(query)
 
     assert.strictEqual(res.cnt, 3)
   })
 
-  t.test(`[postgres][crud] should count 2 records with name Frederic`, async function() {
+  t.test(`[postgres][crud] should count 2 records with name Frederic`, async () => {
     const query = `
     SELECT CAST(COUNT(1) AS int) as cnt
         FROM test_01
         WHERE name = $1`
-    const res= await conn.selectOne(query, ['Frederic'])
+    const res = await conn.selectOne(query, ["Frederic"])
 
     assert.strictEqual(res.cnt, 2)
   })
-  
-  t.test(`[postgres][crud] should count 2 distinct names, Frederic and Peter`, async function() {
+
+  t.test(`[postgres][crud] should count 2 distinct names, Frederic and Peter`, async () => {
     const query = `
       SELECT CAST(COUNT(DISTINCT name) AS int) as cnt
         FROM test_01`
-    const res= await conn.selectOne(query)
+    const res = await conn.selectOne(query)
 
     assert.strictEqual(res.cnt, 2)
   })
 
-  t.test(`[postgres][crud] should return distinct names, Frederic and Peter`, async function() {
+  t.test(`[postgres][crud] should return distinct names, Frederic and Peter`, async () => {
     const query = `
       SELECT DISTINCT name as cnt
         FROM test_01`
-    const res= await conn.select(query)
-    
+    const res = await conn.select(query)
+
     assert.strictEqual(res.length, 2)
   })
 
-  t.test(`[postgres][crud] should delete other records`, async function() {
+  t.test(`[postgres][crud] should delete other records`, async () => {
     const query = `
         DELETE
           FROM test_01`
-      const cnt= await conn.executeAndCount(query)
-    
+    const cnt = await conn.executeAndCount(query)
+
     assert.strictEqual(cnt, 3)
   })
 
-  t.test(`[postgres][crud] should drop test_01`, async function() {
+  t.test(`[postgres][crud] should drop test_01`, async () => {
     const query = `DROP TABLE test_01`
     await conn.execute(query)
-  })  
+  })
 
-  t.test(`[postgres][crud] should close connection`, async function() {
+  t.test(`[postgres][crud] should close connection`, async () => {
     conn.close()
-  })      
+  })
 })
-

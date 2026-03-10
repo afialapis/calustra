@@ -1,13 +1,13 @@
 export default {
-  INTEGER     : 20,
-  FLOAT       : 701,
-  TEXT        : 1015,
-  BOOL        : 16,
-  BYTEA       : 17,
-  DATE        : 1982,
-  TIMESTAMP   : 1144,
+  INTEGER: 20,
+  FLOAT: 701,
+  TEXT: 1015,
+  BOOL: 16,
+  BYTEA: 17,
+  DATE: 1982,
+  TIMESTAMP: 1144,
   TIMESTAMP_TZ: 1184,
-  JSON        : 114,
+  JSON: 114
 }
 
 /*

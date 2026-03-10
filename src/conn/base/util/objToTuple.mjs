@@ -1,5 +1,6 @@
 function objToTuple(obj, onlyFields) {
-  let fields = [], values = []
+  const fields = [],
+    values = []
   for (const fld in obj) {
     if (onlyFields.indexOf(fld) >= 0) {
       fields.push(fld)

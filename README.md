@@ -551,7 +551,7 @@ If you close a connection:
 connection.close()
 ```
 
-notice that the database's pool will be removed, being no longer available. Even if recreating the [Connection object](#connection-object) you will get errors. 
+notice that the database's pool will be removed, being no longer available. Even recreating the [Connection object](#connection-object), you will get errors. 
 
 So, use it with care!
 

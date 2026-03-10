@@ -1,24 +1,21 @@
-import cleanAndInline from './cleanAndInline.mjs'
-import findAdjacents from './utils/findAdjacents.mjs'
+import cleanAndInline from "./cleanAndInline.mjs"
+import findAdjacents from "./utils/findAdjacents.mjs"
 
-function getTableNames (query) {
+function getTableNames(query) {
   const q = cleanAndInline(query)
 
-  let ignore = ['(', ')', 'select', 'with', 'if']
-  const aliases = findAdjacents(q, 'with', ignore)
+  let ignore = ["(", ")", "select", "with", "if"]
+  const aliases = findAdjacents(q, "with", ignore)
   if (aliases.length) {
-    ignore= [
-      ...ignore,
-      ...aliases
-    ]
+    ignore = [...ignore, ...aliases]
   }
   return [
-    ...findAdjacents(q, 'from', ignore),
-    ...findAdjacents(q, 'join', ignore),
-    ...findAdjacents(q, 'into', ignore),
-    ...findAdjacents(q, 'update', ignore),
-    ...findAdjacents(q, 'table if exists', ignore),
-    ...findAdjacents(q, 'table', ignore)
+    ...findAdjacents(q, "from", ignore),
+    ...findAdjacents(q, "join", ignore),
+    ...findAdjacents(q, "into", ignore),
+    ...findAdjacents(q, "update", ignore),
+    ...findAdjacents(q, "table if exists", ignore),
+    ...findAdjacents(q, "table", ignore)
   ]
 }
 
@@ -29,6 +26,4 @@ function getTableNames (query) {
   https://stackoverflow.com/questions/32949259/how-to-parse-sql-query-to-get-table-names-involved-in-that-query-in-access
 */
 
-
 export default getTableNames
-

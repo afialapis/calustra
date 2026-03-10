@@ -1,28 +1,28 @@
-import test from 'node:test'
-import assert from 'node:assert'
-import { calustra_postgres_conn_init } from '../conn.mjs'
+import assert from "node:assert"
+import test from "node:test"
+import { calustra_postgres_conn_init } from "../conn.mjs"
 
-test(`[postgres][inspector] Test inspectors`, async function(t) {
+test(`[postgres][inspector] Test inspectors`, async (t) => {
   let conn
 
-  t.test(`[postgres][inspector] should init and cache the conn`, async function() {
+  t.test(`[postgres][inspector] should init and cache the conn`, async () => {
     conn = await calustra_postgres_conn_init({
       reset: true,
       cache: false
     })
   })
 
-  t.test(`[postgres][inspector] should drop test_01 table if exists`, async function() {
+  t.test(`[postgres][inspector] should drop test_01 table if exists`, async () => {
     const query = `DROP TABLE IF EXISTS test_01`
     await conn.execute(query)
   })
-  
-  t.test(`[postgres][inspector] should drop test_02 table if exists`, async function() {
+
+  t.test(`[postgres][inspector] should drop test_02 table if exists`, async () => {
     const query = `DROP TABLE IF EXISTS test_02`
     await conn.execute(query)
   })
-  
-  t.test(`[postgres][inspector] should create test_01 table`, async function() {
+
+  t.test(`[postgres][inspector] should create test_01 table`, async () => {
     const query = `
       CREATE TABLE test_01 (
         id           serial,
@@ -33,7 +33,7 @@ test(`[postgres][inspector] Test inspectors`, async function(t) {
     await conn.execute(query)
   })
 
-  t.test(`[postgres][inspector] should create test_02 table`, async function() {
+  t.test(`[postgres][inspector] should create test_02 table`, async () => {
     const query = `
       CREATE TABLE test_02 (
         id           serial,
@@ -43,23 +43,23 @@ test(`[postgres][inspector] Test inspectors`, async function(t) {
     await conn.execute(query)
   })
 
-  t.test(`[postgres][inspector] should list table names`, async function() {
-    const res= await conn.getTableNames()
+  t.test(`[postgres][inspector] should list table names`, async () => {
+    const res = await conn.getTableNames()
 
-    assert.deepStrictEqual(res, ['test_01', 'test_02'])
+    assert.deepStrictEqual(res, ["test_01", "test_02"])
   })
 
-  t.test(`[postgres][inspector] should drop test_01`, async function() {
+  t.test(`[postgres][inspector] should drop test_01`, async () => {
     const query = `DROP TABLE test_01`
     await conn.execute(query)
   })
 
-  t.test(`[postgres][inspector] should drop test_02`, async function() {
+  t.test(`[postgres][inspector] should drop test_02`, async () => {
     const query = `DROP TABLE test_02`
     await conn.execute(query)
   })
 
-  t.test(`[postgres][inspector] should close connection`, async function() {
+  t.test(`[postgres][inspector] should close connection`, async () => {
     conn.close()
-  })            
+  })
 })
