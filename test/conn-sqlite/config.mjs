@@ -9,9 +9,7 @@ const SQLITE_DB = path.join(__my_dirname, "calustra.sqlite")
 export default {
   config: {
     dialect: "sqlite",
-    filename: SQLITE_DB, // ':memory:', //
-    verbose: true,
-    cached: false
+    filename: SQLITE_DB // ':memory:', //
   },
   options: {
     log: "warn",

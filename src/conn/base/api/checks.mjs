@@ -16,4 +16,4 @@ function isCalustraModel(obj) {
   return false
 }
 
-export { isCalustraConnection, isCalustraSelector, isCalustraModel }
+export { isCalustraConnection, isCalustraModel, isCalustraSelector }

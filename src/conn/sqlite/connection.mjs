@@ -1,5 +1,5 @@
 /*eslint no-unused-vars: ["warn", { "argsIgnorePattern": "schema|tableName|^_" }]*/
-import sqlite3 from "sqlite3"
+import { DatabaseSync } from "node:sqlite"
 import CalustraConnBase from "#conn-base/conn/connection.mjs"
 import merge from "#conn-base/util/merge.mjs"
 import defaults from "./defaults.mjs"
@@ -8,26 +8,32 @@ import CalustraModelSQLite from "./model.mjs"
 class CalustraConnLT extends CalustraConnBase {
   get configDescription() {
     const c = this.config
-    return `${c.dialect}: ${c.filename}${c.cached ? " (cached)" : ""}`
+    return `${c.dialect}: ${c.filename}`
   }
 
   openDb() {
     const config = merge(defaults, this.config || {})
 
-    if (config.verbose) {
-      sqlite3.verbose()
+    const dbOptions = {}
+    const supportedOptions = [
+      "readOnly",
+      "enableForeignKeyConstraints",
+      "enableDoubleQuotedStringLiterals",
+      "allowExtension",
+      "timeout"
+    ]
+
+    for (const opt of supportedOptions) {
+      if (config[opt] !== undefined) {
+        dbOptions[opt] = config[opt]
+      }
     }
 
-    const driver = config.cached ? sqlite3.cached.Database : sqlite3.Database
+    if (dbOptions.timeout === undefined && config.busyTimeout !== undefined) {
+      dbOptions.timeout = config.busyTimeout
+    }
 
-    const db = new driver(config.filename)
-
-    const extra = ["trace", "profile", "buyTimeout"]
-    extra.forEach((opt) => {
-      if (config[opt] !== undefined) {
-        db.configure(opt, config[opt])
-      }
-    })
+    const db = new DatabaseSync(config.filename, dbOptions)
     return db
   }
 
@@ -38,66 +44,76 @@ class CalustraConnLT extends CalustraConnBase {
   }
 
   closeDb() {
-    this.db.close()
+    if (this.db?.isOpen) {
+      this.db.close()
+    }
   }
 
   _normalize_query_flags(query) {
     if (query.indexOf("$") >= 0) {
-      query = query.replace(/\$/g, "?")
+      query = query.replace(/\$(\d+)/g, "?$1")
     }
     return query
   }
 
-  async execute(query, values, options) {
-    const callback = () =>
-      new Promise((resolve, reject) => {
-        const cquery = this._normalize_query_flags(query)
+  _normalize_param_value(value) {
+    if (value === undefined) {
+      return null
+    }
+    if (typeof value === "boolean") {
+      return value ? 1 : 0
+    }
+    if (value instanceof Date) {
+      return value.getTime()
+    }
+    return value
+  }
 
-        this.db.run(cquery, values, (err, data) => {
-          if (err) {
-            return reject(err)
-          }
-          return resolve(data)
-        })
-      })
+  _normalize_values(values) {
+    if (values === undefined || values === null) {
+      return []
+    }
+    if (Array.isArray(values)) {
+      return values.map((v) => this._normalize_param_value(v))
+    }
+    if (typeof values === "object" && !ArrayBuffer.isView(values) && !(values instanceof Date)) {
+      const normalized = {}
+      for (const [k, v] of Object.entries(values)) {
+        normalized[k] = this._normalize_param_value(v)
+      }
+      return [normalized]
+    }
+    return [this._normalize_param_value(values)]
+  }
+
+  async execute(query, values, options) {
+    const callback = () => {
+      const cquery = this._normalize_query_flags(query)
+      const stmt = this.db.prepare(cquery)
+      return stmt.run(...this._normalize_values(values))
+    }
 
     return this._execute(query, values, options, callback)
   }
 
   async executeAndCount(query, values, options) {
-    const callback = () =>
-      new Promise((resolve, reject) => {
-        const cquery = this._normalize_query_flags(query)
-
-        this.db.run(cquery, values, (err) => {
-          if (err) {
-            return reject(err)
-          }
-          this.db.get("SELECT changes() AS affected_row_count", (err, data) => {
-            if (err) {
-              return reject(err)
-            }
-
-            resolve(data.affected_row_count)
-          })
-        })
-      })
+    const callback = () => {
+      const cquery = this._normalize_query_flags(query)
+      const stmt = this.db.prepare(cquery)
+      const res = stmt.run(...this._normalize_values(values))
+      return Number(res.changes)
+    }
 
     return this._executeAndCount(query, values, options, callback)
   }
 
   async select(query, values, options) {
-    const callback = () =>
-      new Promise((resolve, reject) => {
-        const cquery = this._normalize_query_flags(query)
-
-        this.db.all(cquery, values, (err, data) => {
-          if (err) {
-            return reject(err)
-          }
-          return resolve(data)
-        })
-      })
+    const callback = () => {
+      const cquery = this._normalize_query_flags(query)
+      const stmt = this.db.prepare(cquery)
+      const data = stmt.all(...this._normalize_values(values))
+      return data.map((row) => ({ ...row }))
+    }
 
     return this._select(query, values, options, callback)
   }

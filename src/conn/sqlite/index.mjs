@@ -13,4 +13,4 @@ async function getConnection(configOrSelector, options) {
   return conn
 }
 
-export { getConnection, dropConnection, dropConnections, isCalustraConnection }
+export { dropConnection, dropConnections, getConnection, isCalustraConnection }

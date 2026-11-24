@@ -88,4 +88,4 @@ async function dropConnections() {
   await cacheConnectionUnsetAllAndClose()
 }
 
-export { getConnectionBase, dropConnection, dropConnections, isCalustraConnection }
+export { dropConnection, dropConnections, getConnectionBase, isCalustraConnection }

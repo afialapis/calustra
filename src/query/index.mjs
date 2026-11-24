@@ -5,4 +5,4 @@ import getMainAction from "./getMainAction.mjs"
 import getTableNames from "./getTableNames.mjs"
 import removeComments from "./removeComments.mjs"
 
-export { format, getTableNames, removeComments, cleanAndInline, getMainAction, getDescription }
+export { cleanAndInline, format, getDescription, getMainAction, getTableNames, removeComments }

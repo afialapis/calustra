@@ -5,9 +5,9 @@ import prepare_query_select from "./select.mjs"
 import prepare_query_update from "./update.mjs"
 
 export {
-  prepare_query_select,
-  prepare_query_insert,
-  prepare_query_update,
+  prepare_queries_before_delete,
   prepare_query_delete,
-  prepare_queries_before_delete
+  prepare_query_insert,
+  prepare_query_select,
+  prepare_query_update
 }

@@ -22,7 +22,7 @@
 Currently, supported databases are:
 
  * PostgreSQL (through [pg-promise](https://github.com/vitaly-t/pg-promise)). 
- * SQLite (through [sqlite3](https://github.com/TryGhost/node-sqlite3)). 
+ * SQLite (through Node's built-in [node:sqlite](https://nodejs.org/api/sqlite.html)). 
 
 We may add support for other databases (`MySql`, `MsSql`, ...) in the future. Or may not.
 
@@ -170,17 +170,11 @@ For `SQLite`:
     dialect:  'sqlite',
     filename: ':memory:',
 
-    verbose:   true,
-    
-    // https://github.com/mapbox/node-sqlite3/wiki/Caching
-    cached:    true,
-    
-    /*user:     'sqlite',
-    password: 'sqlite'*/
-
-    trace: undefined,
-    profile: undefined,
-    busyTimeout: undefined
+    readOnly: undefined,
+    enableForeignKeyConstraints: undefined,
+    enableDoubleQuotedStringLiterals: undefined,
+    allowExtension: undefined,
+    timeout: undefined
   }
 ```
 
